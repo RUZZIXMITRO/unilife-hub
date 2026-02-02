@@ -1,1 +1,23 @@
-<p>preloader works!</p>
+<div class="preloader" [class.fade-out]="!isLoading" *ngIf="isLoading">
+    <div class="preloader-content">
+        <div class="preloader-logo-container">
+            <div class="preloader-circle"></div>
+            <div class="preloader-logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+        </div>
+        <h2 class="preloader-title">UniLife Hub</h2>
+        <div class="preloader-bar-container">
+            <div class="preloader-bar"></div>
+        </div>
+        <p class="preloader-text">Préparation de votre expérience...</p>
+    </div>
+    <div class="preloader-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+</div>
