@@ -7,19 +7,4 @@ import { Component } from '@angular/core';
 })
 export class StatsComponent {
 
-  stats = [
-    {
-      value: '10K+',
-      label: 'Étudiants inscrits'
-    },
-    {
-      value: '50+',
-      label: 'Universités partenaires'
-    },
-    {
-      value: '100%',
-      label: 'Plateforme gratuite'
-    }
-  ];
-
 }
