@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
+
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',

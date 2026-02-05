@@ -3,8 +3,8 @@
         <h2 class="section-title">Pourquoi Choisir UniLife Hub ?</h2>
         <p class="section-subtitle">Les raisons qui font de nous votre meilleur partenaire</p>
         <div class="why-cards">
-            <div class="why-card" ngFor="let card of whyCards; let i = index"
-                 [style.animation-delay]="(i 0.1) + 's'">
+            <div class="why-card" *ngFor="let card of whyCards; let i = index"
+                 [style.animation-delay]="(i * 0.1) + 's'">
                 <div class="why-icon"><i [class]="card.icon"></i></div>
                 <h3>{{ card.title }}</h3>
                 <p>{{ card.description }}</p>
