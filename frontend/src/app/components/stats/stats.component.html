@@ -1,1 +1,10 @@
-<p>stats works!</p>
+<section class="stats">
+    <div class="stats-grid">
+        <div class="stat-item" ngFor="let stat of stats; let i = index" 
+             [style.animation-delay]="(i 0.1) + 's'">
+            <div class="stat-icon"><i [class]="stat.icon"></i></div>
+            <div class="stat-number">{{ stat.number }}</div>
+            <div class="stat-label">{{ stat.label }}</div>
+        </div>
+    </div>
+</section>
