@@ -1,1 +1,20 @@
-<p>testimonials works!</p>
+<section class="testimonials">
+    <div class="container">
+        <h2 class="section-title">Ce que disent nos étudiants</h2>
+        <p class="section-subtitle">Des milliers d'étudiants nous font confiance</p>
+        <div class="testimonials-grid">
+            <div class="testimonial-card" *ngFor="let testimonial of testimonials; let i = index"
+                 [style.animation-delay]="(i * 0.1) + 's'">
+                <div class="testimonial-quote"><i class="fas fa-quote-left"></i></div>
+                <p class="testimonial-text">{{ testimonial.quote }}</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">{{ testimonial.avatar }}</div>
+                    <div class="author-info">
+                        <h4>{{ testimonial.name }}</h4>
+                        <p>{{ testimonial.role }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
