@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';  // ← AJOUT
+
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PreloaderComponent } from './components/preloader/preloader.component';
@@ -22,6 +25,9 @@ import { FooterComponent } from './components/footer/footer.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { HomeComponent } from './components/home/home.component';
 
+import { AuthInterceptor } from './services/http-interceptor.service';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,15 +47,23 @@ import { HomeComponent } from './components/home/home.component';
     ContactComponent,
     FooterComponent,
     AuthComponent,
-    HomeComponent
+    HomeComponent,
+    
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule  // ← AJOUT
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }  // ← AJOUT
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
