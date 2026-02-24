@@ -27,6 +27,7 @@ import { HomeComponent } from './components/home/home.component';
 
 import { AuthInterceptor } from './services/http-interceptor.service';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { CompleteProfileComponent } from './components/complete-profile/complete-profile.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
     AuthComponent,
     HomeComponent,
     ResetPasswordComponent,
+    CompleteProfileComponent,
     
   ],
   imports: [
