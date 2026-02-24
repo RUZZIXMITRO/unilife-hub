@@ -1,0 +1,230 @@
+<div class="complete-profile-container">
+  <div class="profile-card">
+    <!-- Header -->
+    <div class="profile-header">
+      <div class="header-icon">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <h1>Complétez votre profil</h1>
+      <p class="subtitle">Aidez-nous à mieux vous connaître</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="(currentStep / totalSteps) * 100"></div>
+      </div>
+      <p class="progress-text">Étape {{ currentStep }} sur {{ totalSteps }}</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="error-message">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      {{ errorMessage }}
+    </div>
+
+    <!-- Step 1: Informations personnelles -->
+    <div class="form-step" *ngIf="currentStep === 1">
+      <div class="step-header">
+      
+        <h2>Informations personnelles</h2>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fa-solid fa-id-card label-icon"></i>
+          Nom complet <span class="required">*</span>
+        </label>
+        <input 
+          type="text" 
+          [(ngModel)]="profileData.name" 
+          placeholder="Ex: Yousra Benchouat"
+          [disabled]="isSubmitting">
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fa-solid fa-phone label-icon"></i>
+          Numéro de téléphone <span class="required">*</span>
+        </label>
+        <input 
+          type="tel" 
+          [(ngModel)]="profileData.phone" 
+          placeholder="Ex: +212 6XX XX XX XX"
+          [disabled]="isSubmitting">
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fa-solid fa-calendar label-icon"></i>
+          Date de naissance
+        </label>
+        <input 
+          type="date" 
+          [(ngModel)]="profileData.dateOfBirth"
+          [disabled]="isSubmitting">
+      </div>
+
+      <div class="form-actions">
+        <button 
+          class="next-btn" 
+          (click)="nextStep()" 
+          [disabled]="!isStepValid() || isSubmitting">
+          Suivant
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Informations académiques -->
+    <div class="form-step" *ngIf="currentStep === 2">
+      <div class="step-header">
+        <h2>Informations académiques</h2>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fa-solid fa-building-columns label-icon"></i>
+          Université / École <span class="required">*</span>
+        </label>
+        <input 
+          type="text" 
+          [(ngModel)]="profileData.university" 
+          placeholder="Ex: École HEI Oujda"
+          [disabled]="isSubmitting">
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fa-solid fa-id-badge label-icon"></i>
+          Numéro étudiant <span class="required">*</span>
+        </label>
+        <input 
+          type="text" 
+          [(ngModel)]="profileData.studentId" 
+          placeholder="Ex: STU12345"
+          [disabled]="isSubmitting">
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fa-solid fa-calendar-days label-icon"></i>
+          Année académique
+        </label>
+        <input 
+          type="text" 
+          [(ngModel)]="profileData.academicYear" 
+          placeholder="Ex: 2025-2026"
+          [disabled]="isSubmitting">
+      </div>
+
+      <div class="form-actions">
+        <button 
+          class="prev-btn" 
+          (click)="previousStep()"
+          [disabled]="isSubmitting">
+          <i class="fa-solid fa-arrow-left"></i>
+          Précédent
+        </button>
+        <button 
+          class="next-btn" 
+          (click)="nextStep()" 
+          [disabled]="!isStepValid() || isSubmitting">
+          Suivant
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Informations complémentaires -->
+    <div class="form-step" *ngIf="currentStep === 3">
+      <div class="step-header">
+        <h2>Informations complémentaires</h2>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fa-solid fa-house label-icon"></i>
+          Adresse
+        </label>
+        <input 
+          type="text" 
+          [(ngModel)]="profileData.address" 
+          placeholder="Ex: 123 Rue Mohammed V"
+          [disabled]="isSubmitting">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>
+            <i class="fa-solid fa-city label-icon"></i>
+            Ville
+          </label>
+          <input 
+            type="text" 
+            [(ngModel)]="profileData.city" 
+            placeholder="Ex: Oujda"
+            [disabled]="isSubmitting">
+        </div>
+
+        <div class="form-group">
+          <label>
+            <i class="fa-solid fa-flag label-icon"></i>
+            Pays
+          </label>
+          <input 
+            type="text" 
+            [(ngModel)]="profileData.country" 
+            placeholder="Ex: Maroc"
+            [disabled]="isSubmitting">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fa-solid fa-pen-to-square label-icon"></i>
+          Parlez-nous de vous
+        </label>
+        <textarea 
+          [(ngModel)]="profileData.bio" 
+          rows="4" 
+          placeholder="Ex: Étudiante en 4ème année Computer Engineering passionnée par le développement web..."
+          [disabled]="isSubmitting"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button 
+          class="prev-btn" 
+          (click)="previousStep()"
+          [disabled]="isSubmitting">
+          <i class="fa-solid fa-arrow-left"></i>
+          Précédent
+        </button>
+        <button 
+          class="submit-btn" 
+          (click)="onSubmit()" 
+          [disabled]="isSubmitting">
+          <i class="fa-solid fa-check" *ngIf="!isSubmitting"></i>
+          <i class="fa-solid fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+          {{ isSubmitting ? 'Enregistrement...' : 'Terminer' }}
+        </button>
+      </div>
+
+      <button 
+        class="skip-btn" 
+        (click)="skipForNow()"
+        [disabled]="isSubmitting">
+        <i class="fa-solid fa-forward"></i>
+        Passer pour l'instant
+      </button>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div *ngIf="isSubmitting" class="loading-overlay">
+      <div class="spinner">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+      </div>
+      <p>Création de votre profil...</p>
+    </div>
+  </div>
+</div>
