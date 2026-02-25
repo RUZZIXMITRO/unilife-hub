@@ -5235,11 +5235,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Yousra\\source\\repos\\UserService\\UserService\\UserService.csproj",
+      "projectUniqueName": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\UserService\\UserService\\UserService.csproj",
       "projectName": "UserService",
-      "projectPath": "C:\\Users\\Yousra\\source\\repos\\UserService\\UserService\\UserService.csproj",
+      "projectPath": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\UserService\\UserService\\UserService.csproj",
       "packagesPath": "C:\\Users\\Yousra\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Yousra\\source\\repos\\UserService\\UserService\\obj\\",
+      "outputPath": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\UserService\\UserService\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
