@@ -4,7 +4,7 @@ services:
   # ========== AUTHENTICATION SERVICE ==========
   authservice:
     build:
-      context: ./backend/AuthenticationService1
+      context: ./backend/AuthenticationService
       dockerfile: Dockerfile
     container_name: unilifehub-auth
     ports:
