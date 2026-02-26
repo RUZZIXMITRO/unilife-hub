@@ -24,7 +24,7 @@
       },
       {
         "Name": "request",
-        "Type": "AuthenticationService1.Models.DTOs.BlockUserRequest",
+        "Type": "AuthenticationService1.DTOs.BlockUserRequest",
         "IsRequired": true
       }
     ],
@@ -40,7 +40,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "AuthenticationService1.Models.DTOs.ChangePasswordRequest",
+        "Type": "AuthenticationService1.DTOs.ChangePasswordRequest",
         "IsRequired": true
       }
     ],
@@ -56,7 +56,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -65,7 +65,7 @@
         "StatusCode": 200
       },
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -117,13 +117,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "AuthenticationService1.Models.DTOs.LoginRequest",
+        "Type": "AuthenticationService1.DTOs.LoginRequest",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[AuthenticationService1.Models.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[AuthenticationService1.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -132,7 +132,7 @@
         "StatusCode": 200
       },
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[AuthenticationService1.Models.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[AuthenticationService1.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -152,7 +152,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -204,13 +204,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "AuthenticationService1.Models.DTOs.RefreshTokenRequest",
+        "Type": "AuthenticationService1.DTOs.RefreshTokenRequest",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[AuthenticationService1.Models.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[AuthenticationService1.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -219,7 +219,7 @@
         "StatusCode": 200
       },
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[AuthenticationService1.Models.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[AuthenticationService1.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -239,13 +239,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "AuthenticationService1.Models.DTOs.RegisterRequest",
+        "Type": "AuthenticationService1.DTOs.RegisterRequest",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[AuthenticationService1.Models.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[AuthenticationService1.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -254,7 +254,7 @@
         "StatusCode": 200
       },
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[AuthenticationService1.Models.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[AuthenticationService1.DTOs.AuthResponse, AuthenticationService1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -274,13 +274,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "AuthenticationService1.Models.DTOs.RequestPasswordResetRequest",
+        "Type": "AuthenticationService1.DTOs.RequestPasswordResetRequest",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -300,13 +300,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "AuthenticationService1.Models.DTOs.ResetPasswordRequest",
+        "Type": "AuthenticationService1.DTOs.ResetPasswordRequest",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -315,7 +315,7 @@
         "StatusCode": 200
       },
       {
-        "Type": "AuthenticationService1.Models.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "AuthenticationService1.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

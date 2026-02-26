@@ -1,7 +1,7 @@
 ﻿
 using AuthenticationService1.Data;
-using AuthenticationService1.Models.DTOs;
-using AuthenticationService1.Models.Enums;
+using AuthenticationService1.DTOs;
+using AuthenticationService1.Enums;
 using AuthenticationService1.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

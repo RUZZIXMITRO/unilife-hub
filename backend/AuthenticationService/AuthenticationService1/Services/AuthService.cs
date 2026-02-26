@@ -1,5 +1,5 @@
 ﻿using AuthenticationService1.Data;
-using AuthenticationService1.Models.DTOs;
+using AuthenticationService1.DTOs;
 using AuthenticationService1.Models.Entities;
 using AuthenticationService1.Repositories.Interfaces;
 using AuthenticationService1.Services.Interfaces;

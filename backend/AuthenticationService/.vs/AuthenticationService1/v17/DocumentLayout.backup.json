@@ -1,133 +1,137 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\",
+  "WorkspaceRootPath": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\authenticationservice1.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\authenticationservice1.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\services\\passwordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\passwordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\services\\interfaces\\itokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\interfaces\\itokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\services\\interfaces\\ipasswordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\interfaces\\ipasswordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\services\\interfaces\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\interfaces\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\services\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\repositories\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\repositories\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\repositories\\credentialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\repositories\\credentialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\repositories\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\repositories\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\repositories\\interfaces\\icredentialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\repositories\\interfaces\\icredentialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\enums\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\enums\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\entities\\tokenblacklist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\entities\\tokenblacklist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\entities\\refreshtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\entities\\refreshtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\entities\\passwordreset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\entities\\passwordreset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\entities\\credential.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\entities\\credential.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\dtos\\resetpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\dtos\\resetpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\dtos\\requestpasswordresetrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\dtos\\requestpasswordresetrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\dtos\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\dtos\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\dtos\\refreshtokenrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\dtos\\refreshtokenrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\dtos\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\dtos\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\dtos\\changepasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\dtos\\changepasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\dtos\\blockuserrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\dtos\\blockuserrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\dtos\\authresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\dtos\\authresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\models\\dtos\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\dtos\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\data\\authdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\data\\authdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\authenticationservice1.csproj.backup.tmp||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\dtos\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\dtos\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\services\\passwordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\passwordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\services\\interfaces\\itokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\interfaces\\itokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\services\\interfaces\\ipasswordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\interfaces\\ipasswordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\services\\interfaces\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\interfaces\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\services\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\services\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\repositories\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\repositories\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\repositories\\credentialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\repositories\\credentialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\repositories\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\repositories\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\repositories\\interfaces\\icredentialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\repositories\\interfaces\\icredentialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\enums\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\enums\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\models\\entities\\tokenblacklist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\entities\\tokenblacklist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\models\\entities\\refreshtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\entities\\refreshtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\models\\entities\\passwordreset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\entities\\passwordreset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\models\\entities\\credential.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\models\\entities\\credential.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\dtos\\resetpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\dtos\\resetpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\dtos\\requestpasswordresetrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\dtos\\requestpasswordresetrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\dtos\\refreshtokenrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\dtos\\refreshtokenrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\dtos\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\dtos\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\dtos\\changepasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\dtos\\changepasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\dtos\\blockuserrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\dtos\\blockuserrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\dtos\\authresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\dtos\\authresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\dtos\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\dtos\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\data\\authdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\data\\authdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\authenticationservice1.csproj.backup.tmp||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
       "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\authenticationservice1.csproj.backup.tmp||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilifehub\\backend\\authenticationservice1\\authenticationservice1\\authenticationservice1.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "AbsoluteMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\authenticationservice\\authenticationservice1\\authenticationservice1.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
       "RelativeMoniker": "D:0:0:{25FD95B1-51FE-4270-889D-6AE7CCAF0539}|AuthenticationService1\\AuthenticationService1.csproj|solutionrelative:authenticationservice1\\authenticationservice1.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     }
   ],
@@ -138,28 +142,28 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ITokenService.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\Interfaces\\ITokenService.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\Interfaces\\ITokenService.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\Interfaces\\ITokenService.cs",
-              "RelativeToolTip": "AuthenticationService1\\Services\\Interfaces\\ITokenService.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAwAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:32:20.048Z",
+              "DocumentIndex": 0,
+              "Title": "AuthenticationService1",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\AuthenticationService1.csproj",
+              "RelativeDocumentMoniker": "AuthenticationService1\\AuthenticationService1.csproj",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\AuthenticationService1.csproj",
+              "RelativeToolTip": "AuthenticationService1\\AuthenticationService1.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-02-26T11:11:39.996Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "AuthService.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\AuthService.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\AuthService.cs",
               "RelativeDocumentMoniker": "AuthenticationService1\\Services\\AuthService.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\AuthService.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\AuthService.cs",
               "RelativeToolTip": "AuthenticationService1\\Services\\AuthService.cs",
               "ViewState": "AgIAAHEBAAAAAAAAAAAIwIQBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -168,50 +172,47 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "EmailService.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\EmailService.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\EmailService.cs",
               "RelativeDocumentMoniker": "AuthenticationService1\\Services\\EmailService.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\EmailService.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\EmailService.cs",
               "RelativeToolTip": "AuthenticationService1\\Services\\EmailService.cs",
               "ViewState": "AgIAADgAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:32:23.076Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-08T14:32:23.076Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PasswordService.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\PasswordService.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\PasswordService.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\PasswordService.cs",
+              "RelativeToolTip": "AuthenticationService1\\Services\\PasswordService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:31:21.542Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TokenService.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\TokenService.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\TokenService.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\TokenService.cs",
+              "RelativeToolTip": "AuthenticationService1\\Services\\TokenService.cs",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAYwB0AAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:55:54.621Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "PasswordService.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\PasswordService.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\PasswordService.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\PasswordService.cs",
-              "RelativeToolTip": "AuthenticationService1\\Services\\PasswordService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:31:21.542Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "TokenService.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\TokenService.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\TokenService.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\TokenService.cs",
-              "RelativeToolTip": "AuthenticationService1\\Services\\TokenService.cs",
-              "ViewState": "AgIAAFsAAAAAAAAAAAAYwB0AAABCAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:55:54.621Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Program.cs",
               "RelativeDocumentMoniker": "AuthenticationService1\\Program.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Program.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Program.cs",
               "RelativeToolTip": "AuthenticationService1\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -221,313 +222,39 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\appsettings.json",
-              "RelativeDocumentMoniker": "AuthenticationService1\\appsettings.json",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\appsettings.json",
-              "RelativeToolTip": "AuthenticationService1\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-02-14T14:12:12.569Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "IPasswordService.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\Interfaces\\IPasswordService.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\Interfaces\\IPasswordService.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\Interfaces\\IPasswordService.cs",
-              "RelativeToolTip": "AuthenticationService1\\Services\\Interfaces\\IPasswordService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "AuthenticationService1\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAALcBAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:32:17.841Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "IEmailService.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\Interfaces\\IEmailService.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\Interfaces\\IEmailService.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\Interfaces\\IEmailService.cs",
-              "RelativeToolTip": "AuthenticationService1\\Services\\Interfaces\\IEmailService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:50:03.207Z",
+              "WhenOpened": "2026-02-07T21:40:19.625Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "IAuthService.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\Interfaces\\IAuthService.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\Interfaces\\IAuthService.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Services\\Interfaces\\IAuthService.cs",
-              "RelativeToolTip": "AuthenticationService1\\Services\\Interfaces\\IAuthService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABjAAAAAAAAAA==",
+              "Title": "ITokenService.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\Interfaces\\ITokenService.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\Interfaces\\ITokenService.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\Interfaces\\ITokenService.cs",
+              "RelativeToolTip": "AuthenticationService1\\Services\\Interfaces\\ITokenService.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAAwAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-09T21:55:17.285Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-08T14:32:20.048Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "GenericRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Repositories\\GenericRepository.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Repositories\\GenericRepository.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Repositories\\GenericRepository.cs",
-              "RelativeToolTip": "AuthenticationService1\\Repositories\\GenericRepository.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:56:00.216Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "CredentialRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Repositories\\CredentialRepository.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Repositories\\CredentialRepository.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Repositories\\CredentialRepository.cs",
-              "RelativeToolTip": "AuthenticationService1\\Repositories\\CredentialRepository.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:56:03.999Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "IGenericRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Repositories\\Interfaces\\IGenericRepository.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Repositories\\Interfaces\\IGenericRepository.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Repositories\\Interfaces\\IGenericRepository.cs",
-              "RelativeToolTip": "AuthenticationService1\\Repositories\\Interfaces\\IGenericRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:49:41.169Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "ICredentialRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Repositories\\Interfaces\\ICredentialRepository.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Repositories\\Interfaces\\ICredentialRepository.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Repositories\\Interfaces\\ICredentialRepository.cs",
-              "RelativeToolTip": "AuthenticationService1\\Repositories\\Interfaces\\ICredentialRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:49:38.942Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "UserRole.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\Enums\\UserRole.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\Enums\\UserRole.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\Enums\\UserRole.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\Enums\\UserRole.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-15T19:25:57.442Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "TokenBlacklist.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\Entities\\TokenBlacklist.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\Entities\\TokenBlacklist.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\Entities\\TokenBlacklist.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\Entities\\TokenBlacklist.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:56:11.001Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "RefreshToken.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\Entities\\RefreshToken.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\Entities\\RefreshToken.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\Entities\\RefreshToken.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\Entities\\RefreshToken.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:56:12.527Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "PasswordReset.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\Entities\\PasswordReset.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\Entities\\PasswordReset.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\Entities\\PasswordReset.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\Entities\\PasswordReset.cs",
-              "ViewState": "AgIAAB0AAAAAAAAAAAAswC0AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:31:02.501Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "Credential.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\Entities\\Credential.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\Entities\\Credential.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\Entities\\Credential.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\Entities\\Credential.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAA7wCYAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:49:18.582Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "ResetPasswordRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\ResetPasswordRequest.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\DTOs\\ResetPasswordRequest.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\ResetPasswordRequest.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\DTOs\\ResetPasswordRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:30:48.727Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "RequestPasswordResetRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\RequestPasswordResetRequest.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\DTOs\\RequestPasswordResetRequest.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\RequestPasswordResetRequest.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\DTOs\\RequestPasswordResetRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:56:15.238Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 2,
               "Title": "RegisterRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\RegisterRequest.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\DTOs\\RegisterRequest.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\RegisterRequest.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\DTOs\\RegisterRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\RegisterRequest.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\DTOs\\RegisterRequest.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\RegisterRequest.cs",
+              "RelativeToolTip": "AuthenticationService1\\DTOs\\RegisterRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-08T14:56:16.312Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "RefreshTokenRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\RefreshTokenRequest.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\DTOs\\RefreshTokenRequest.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\RefreshTokenRequest.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\DTOs\\RefreshTokenRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:48:58.175Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "LoginRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\LoginRequest.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\DTOs\\LoginRequest.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\LoginRequest.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\DTOs\\LoginRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:48:51.904Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "ChangePasswordRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\ChangePasswordRequest.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\DTOs\\ChangePasswordRequest.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\ChangePasswordRequest.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\DTOs\\ChangePasswordRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:30:55.228Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "BlockUserRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\BlockUserRequest.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\DTOs\\BlockUserRequest.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\BlockUserRequest.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\DTOs\\BlockUserRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-16T11:46:53.138Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "AuthResponse.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\AuthResponse.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\DTOs\\AuthResponse.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\AuthResponse.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\DTOs\\AuthResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:48:46.262Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "ApiResponse.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\ApiResponse.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\DTOs\\ApiResponse.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Models\\DTOs\\ApiResponse.cs",
-              "RelativeToolTip": "AuthenticationService1\\Models\\DTOs\\ApiResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T14:56:42.661Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "AuthDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Data\\AuthDbContext.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Data\\AuthDbContext.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Data\\AuthDbContext.cs",
-              "RelativeToolTip": "AuthenticationService1\\Data\\AuthDbContext.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAowCMAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-07T21:44:12.056Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 29,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "AuthenticationService1\\Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\Controllers\\AuthController.cs*",
-              "RelativeToolTip": "AuthenticationService1\\Controllers\\AuthController.cs*",
-              "ViewState": "AgIAANQBAAAAAAAAAAAAALcBAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-07T21:40:19.625Z",
               "EditorCaption": ""
             },
             {
@@ -536,11 +263,286 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\appsettings.json",
+              "RelativeDocumentMoniker": "AuthenticationService1\\appsettings.json",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\appsettings.json",
+              "RelativeToolTip": "AuthenticationService1\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-14T14:12:12.569Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IPasswordService.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\Interfaces\\IPasswordService.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\Interfaces\\IPasswordService.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\Interfaces\\IPasswordService.cs",
+              "RelativeToolTip": "AuthenticationService1\\Services\\Interfaces\\IPasswordService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:32:17.841Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "IEmailService.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\Interfaces\\IEmailService.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\Interfaces\\IEmailService.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\Interfaces\\IEmailService.cs",
+              "RelativeToolTip": "AuthenticationService1\\Services\\Interfaces\\IEmailService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T11:50:03.207Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\Interfaces\\IAuthService.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Services\\Interfaces\\IAuthService.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Services\\Interfaces\\IAuthService.cs",
+              "RelativeToolTip": "AuthenticationService1\\Services\\Interfaces\\IAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T21:55:17.285Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "GenericRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Repositories\\GenericRepository.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Repositories\\GenericRepository.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Repositories\\GenericRepository.cs",
+              "RelativeToolTip": "AuthenticationService1\\Repositories\\GenericRepository.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:56:00.216Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CredentialRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Repositories\\CredentialRepository.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Repositories\\CredentialRepository.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Repositories\\CredentialRepository.cs",
+              "RelativeToolTip": "AuthenticationService1\\Repositories\\CredentialRepository.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:56:03.999Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IGenericRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Repositories\\Interfaces\\IGenericRepository.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Repositories\\Interfaces\\IGenericRepository.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Repositories\\Interfaces\\IGenericRepository.cs",
+              "RelativeToolTip": "AuthenticationService1\\Repositories\\Interfaces\\IGenericRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T11:49:41.169Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ICredentialRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Repositories\\Interfaces\\ICredentialRepository.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Repositories\\Interfaces\\ICredentialRepository.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Repositories\\Interfaces\\ICredentialRepository.cs",
+              "RelativeToolTip": "AuthenticationService1\\Repositories\\Interfaces\\ICredentialRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T11:49:38.942Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "UserRole.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Enums\\UserRole.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Enums\\UserRole.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Enums\\UserRole.cs",
+              "RelativeToolTip": "AuthenticationService1\\Enums\\UserRole.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-15T19:25:57.442Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "TokenBlacklist.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Models\\Entities\\TokenBlacklist.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\Entities\\TokenBlacklist.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Models\\Entities\\TokenBlacklist.cs",
+              "RelativeToolTip": "AuthenticationService1\\Models\\Entities\\TokenBlacklist.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:56:11.001Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "RefreshToken.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Models\\Entities\\RefreshToken.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\Entities\\RefreshToken.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Models\\Entities\\RefreshToken.cs",
+              "RelativeToolTip": "AuthenticationService1\\Models\\Entities\\RefreshToken.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:56:12.527Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "PasswordReset.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Models\\Entities\\PasswordReset.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\Entities\\PasswordReset.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Models\\Entities\\PasswordReset.cs",
+              "RelativeToolTip": "AuthenticationService1\\Models\\Entities\\PasswordReset.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAswC0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:31:02.501Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Credential.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Models\\Entities\\Credential.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Models\\Entities\\Credential.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Models\\Entities\\Credential.cs",
+              "RelativeToolTip": "AuthenticationService1\\Models\\Entities\\Credential.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAA7wCYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T11:49:18.582Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "ResetPasswordRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\ResetPasswordRequest.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\DTOs\\ResetPasswordRequest.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\ResetPasswordRequest.cs",
+              "RelativeToolTip": "AuthenticationService1\\DTOs\\ResetPasswordRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:30:48.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "RequestPasswordResetRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\RequestPasswordResetRequest.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\DTOs\\RequestPasswordResetRequest.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\RequestPasswordResetRequest.cs",
+              "RelativeToolTip": "AuthenticationService1\\DTOs\\RequestPasswordResetRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:56:15.238Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "RefreshTokenRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\RefreshTokenRequest.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\DTOs\\RefreshTokenRequest.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\RefreshTokenRequest.cs",
+              "RelativeToolTip": "AuthenticationService1\\DTOs\\RefreshTokenRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T11:48:58.175Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "LoginRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\LoginRequest.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\DTOs\\LoginRequest.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\LoginRequest.cs",
+              "RelativeToolTip": "AuthenticationService1\\DTOs\\LoginRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T11:48:51.904Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "ChangePasswordRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\ChangePasswordRequest.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\DTOs\\ChangePasswordRequest.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\ChangePasswordRequest.cs",
+              "RelativeToolTip": "AuthenticationService1\\DTOs\\ChangePasswordRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:30:55.228Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "BlockUserRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\BlockUserRequest.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\DTOs\\BlockUserRequest.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\BlockUserRequest.cs",
+              "RelativeToolTip": "AuthenticationService1\\DTOs\\BlockUserRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-16T11:46:53.138Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "AuthResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\AuthResponse.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\DTOs\\AuthResponse.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\AuthResponse.cs",
+              "RelativeToolTip": "AuthenticationService1\\DTOs\\AuthResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T11:48:46.262Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "ApiResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\ApiResponse.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\DTOs\\ApiResponse.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\DTOs\\ApiResponse.cs",
+              "RelativeToolTip": "AuthenticationService1\\DTOs\\ApiResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T14:56:42.661Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "AuthDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Data\\AuthDbContext.cs",
+              "RelativeDocumentMoniker": "AuthenticationService1\\Data\\AuthDbContext.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\Data\\AuthDbContext.cs",
+              "RelativeToolTip": "AuthenticationService1\\Data\\AuthDbContext.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAowCMAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-07T21:44:12.056Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
               "Title": "AuthenticationService1.http",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\AuthenticationService1.http",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\AuthenticationService1.http",
               "RelativeDocumentMoniker": "AuthenticationService1\\AuthenticationService1.http",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\AuthenticationService1.http",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\AuthenticationService1.http",
               "RelativeToolTip": "AuthenticationService1\\AuthenticationService1.http",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
@@ -548,11 +550,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 31,
               "Title": "AuthenticationService1.csproj.Backup.tmp",
-              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\AuthenticationService1.csproj.Backup.tmp",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\AuthenticationService1.csproj.Backup.tmp",
               "RelativeDocumentMoniker": "AuthenticationService1\\AuthenticationService1.csproj.Backup.tmp",
-              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilifehub\\backend\\AuthenticationService1\\AuthenticationService1\\AuthenticationService1.csproj.Backup.tmp",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\AuthenticationService\\AuthenticationService1\\AuthenticationService1.csproj.Backup.tmp",
               "RelativeToolTip": "AuthenticationService1\\AuthenticationService1.csproj.Backup.tmp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",

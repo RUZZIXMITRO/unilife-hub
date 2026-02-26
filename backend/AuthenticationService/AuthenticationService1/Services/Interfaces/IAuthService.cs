@@ -1,4 +1,4 @@
-﻿using AuthenticationService1.Models.DTOs;
+﻿using AuthenticationService1.DTOs;
 
 namespace AuthenticationService1.Services.Interfaces
 {

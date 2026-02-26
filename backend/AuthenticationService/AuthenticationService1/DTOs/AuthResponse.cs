@@ -1,4 +1,4 @@
-﻿namespace AuthenticationService1.Models.DTOs
+﻿namespace AuthenticationService1.DTOs
 {
     public class AuthResponse
     {

@@ -1,4 +1,4 @@
-﻿namespace AuthenticationService1.Models.Enums
+﻿namespace AuthenticationService1.Enums
 {
     public enum UserRole
     {

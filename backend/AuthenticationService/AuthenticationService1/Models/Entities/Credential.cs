@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using AuthenticationService1.Models.Enums;
+using AuthenticationService1.Enums;
 
 namespace AuthenticationService1.Models.Entities
 {

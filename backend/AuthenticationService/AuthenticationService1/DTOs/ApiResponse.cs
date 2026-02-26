@@ -1,4 +1,4 @@
-﻿namespace AuthenticationService1.Models.DTOs
+﻿namespace AuthenticationService1.DTOs
 {
     public class ApiResponse<T>
     {
@@ -28,7 +28,7 @@
             {
                 Success = false,
                 Message = message,
-                Data = default(T),  
+                Data = default,  
 
                 Errors = errors ?? new List<string>()
             };
