@@ -1,6 +1,26 @@
-version: '3.8'
-
 services:
+  # ========== SQL SERVER ==========
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: unilifehub-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=UniLife@2024!Strong
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql/data
+      - ./sql-scripts/init-databases.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - unilifehub-network
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P UniLife@2024!Strong -Q "SELECT 1" -C || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+
   # ========== AUTHENTICATION SERVICE ==========
   authservice:
     build:
@@ -34,3 +54,6 @@ services:
 networks:
   unilifehub-network:
     driver: bridge
+
+volumes:
+  sqldata:
