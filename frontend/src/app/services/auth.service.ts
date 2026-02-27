@@ -154,9 +154,27 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  // ✅ MÉTHODE CORRIGÉE
   getCurrentUser(): any {
-    const userStr = localStorage.getItem('user');
-    return userStr ? JSON.parse(userStr) : null;
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      // Décoder le JWT
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      
+      console.log('🔍 JWT Payload complet:', payload);
+      
+      // Extraire les informations avec le chemin Microsoft du rôle
+      return {
+        id: payload.sub || payload.nameid,
+        email: payload.email,
+        role: payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payload.role || 'STUDENT'
+      };
+    } catch (error) {
+      console.error('❌ Erreur décodage token:', error);
+      return null;
+    }
   }
 
   isProfileCompleted(): boolean {
@@ -165,5 +183,21 @@ export class AuthService {
 
   markProfileAsCompleted(): void {
     localStorage.setItem('profile_completed', 'true');
+  }
+
+  // ==================== DELETE ACCOUNT ====================
+  deleteAccount(): Observable<any> {
+    console.log('🗑️ Suppression du compte...');
+    
+    const token = this.getToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    
+    return this.http.delete(
+      `${this.apiUrl}/delete-account`,
+      { headers: headers }
+    );
   }
 }

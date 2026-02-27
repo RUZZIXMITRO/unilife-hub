@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-auth',
@@ -38,6 +39,7 @@ export class AuthComponent implements OnInit {
   constructor(
     private location: Location,
     private authService: AuthService,
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -74,10 +76,13 @@ export class AuthComponent implements OnInit {
         if (response.success) {
           this.successMessage = 'Connexion réussie ! Bienvenue sur UniLife Hub.';
           console.log('✅ Login successful:', response);
-          
-          const userId = response.data.user.id;
-          
-          // Vérifier si le profil existe dans User Service
+
+          const credentialId = response.data.user.id;
+          console.log('🔍 CredentialId:', credentialId);
+
+          // ✅ VÉRIFIER LE VRAI RÔLE DEPUIS USERSERVICE (source de vérité)
+          this.checkRoleAndRedirect(credentialId);
+
         } else {
           this.errorMessage = response.message || 'Erreur de connexion';
         }
@@ -90,7 +95,58 @@ export class AuthComponent implements OnInit {
     });
   }
 
-  
+  // ✅ NOUVELLE MÉTHODE : Vérifie le rôle depuis UserService
+  private checkRoleAndRedirect(credentialId: string): void {
+    console.log('🔍 Vérification rôle pour credentialId:', credentialId);
+
+    this.userService.getUserByCredentialId(credentialId).subscribe({
+      next: (response) => {
+        console.log('✅ Profil trouvé:', response);
+
+        if (response.success && response.data) {
+          const userRole = response.data.role?.toString().toUpperCase();
+          console.log('🎭 Rôle depuis UserService:', userRole);
+
+          this.authService.markProfileAsCompleted();
+
+          // ✅ RÔLE ADMIN → Dashboard Admin
+          if (userRole === 'ADMIN') {
+            console.log('🔑 ADMIN détecté → /admin/dashboard');
+            setTimeout(() => {
+              this.router.navigate(['/admin/dashboard']);
+            }, 1000);
+          } else {
+            // ✅ RÔLE STUDENT → Dashboard Student
+            console.log('👨‍🎓 STUDENT détecté → /student/dashboard');
+            setTimeout(() => {
+              this.router.navigate(['/student/dashboard']);
+            }, 1000);
+          }
+        }
+      },
+      error: (error) => {
+        console.log('❌ Erreur vérification profil:', error.status);
+
+        if (error.status === 404) {
+          // ✅ PAS DE PROFIL → Compléter le profil (nouveau utilisateur)
+          console.log('❌ Profil non trouvé → /complete-profile');
+          setTimeout(() => {
+            this.router.navigate(['/complete-profile']);
+          }, 1000);
+        } else {
+          // ✅ FALLBACK → Utiliser le rôle du token JWT
+          const tokenUser = this.authService.getCurrentUser();
+          console.log('⚠️ Fallback token role:', tokenUser?.role);
+
+          if (tokenUser?.role === 'ADMIN') {
+            setTimeout(() => this.router.navigate(['/admin/dashboard']), 1000);
+          } else {
+            setTimeout(() => this.router.navigate(['/student/dashboard']), 1000);
+          }
+        }
+      }
+    });
+  }
 
   onRegister() {
     this.errorMessage = '';
@@ -125,7 +181,7 @@ export class AuthComponent implements OnInit {
         if (response.success) {
           this.successMessage = 'Inscription réussie ! Complétez votre profil.';
           console.log('✅ Register successful:', response);
-          
+
           setTimeout(() => {
             this.router.navigate(['/complete-profile']);
           }, 1000);
@@ -176,7 +232,7 @@ export class AuthComponent implements OnInit {
         this.isForgotPasswordLoading = false;
         this.forgotPasswordSuccess = '✅ Un email de réinitialisation a été envoyé à votre adresse !';
         console.log('Password reset email sent:', response);
-        
+
         setTimeout(() => {
           this.closeForgotPasswordModal();
         }, 3000);
