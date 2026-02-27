@@ -1,0 +1,160 @@
+<div class="dashboard">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <div class="welcome-text">
+      <h1>{{ getGreeting() }}, {{ userName }}</h1>
+      <p>Voici un aperçu de vos activités</p>
+    </div>
+    <div class="welcome-date">
+      <span class="date">{{ currentDate | date:'EEEE d MMMM y':'':'fr' }}</span>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let stat of stats">
+      <div class="stat-icon-wrapper">
+        <i [class]="stat.icon"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-title">{{ stat.title }}</h3>
+        <p class="stat-value">{{ stat.value }}</p>
+        <span class="stat-change" [class]="'change-' + stat.changeType">
+          {{ stat.change }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Upcoming Tasks -->
+    <div class="card tasks-card">
+      <div class="card-header">
+        <h2><i class="fa-solid fa-list-check"></i> Tâches urgentes</h2>
+        <button class="btn-link" routerLink="/student/agenda">
+          Voir tout <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="task-list">
+          <div class="task-item" *ngFor="let task of upcomingTasks" [class.completed]="task.completed">
+            <div class="task-checkbox">
+              <input 
+                type="checkbox" 
+                [checked]="task.completed"
+                (change)="toggleTaskComplete(task)">
+            </div>
+            <div class="task-info">
+              <p class="task-title">{{ task.title }}</p>
+              <p class="task-due">
+                <i class="fa-solid fa-calendar"></i> {{ task.dueDate | date:'dd/MM/yyyy' }}
+              </p>
+            </div>
+            <span class="task-priority" [style.background-color]="getPriorityColor(task.priority)">
+              {{ task.priority === 'high' ? 'Urgent' : task.priority === 'medium' ? 'Moyen' : 'Faible' }}
+            </span>
+          </div>
+        </div>
+        <div class="empty-state" *ngIf="upcomingTasks.length === 0">
+          <i class="fa-solid fa-circle-check empty-icon"></i>
+          <p>Aucune tâche urgente</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="card events-card">
+      <div class="card-header">
+        <h2><i class="fa-solid fa-calendar-days"></i> Événements à venir</h2>
+        <button class="btn-link" routerLink="/student/agenda">
+          Voir tout <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="event-list">
+          <div class="event-item" *ngFor="let event of upcomingEvents">
+            <div class="event-icon-wrapper">
+              <i [class]="getEventIcon(event.type)"></i>
+            </div>
+            <div class="event-info">
+              <p class="event-title">{{ event.title }}</p>
+              <p class="event-time">
+                <i class="fa-solid fa-clock"></i> {{ event.date | date:'dd/MM' }} • {{ event.time }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="empty-state" *ngIf="upcomingEvents.length === 0">
+          <i class="fa-solid fa-calendar-xmark empty-icon"></i>
+          <p>Aucun événement prévu</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card actions-card">
+      <div class="card-header">
+        <h2><i class="fa-solid fa-bolt"></i> Actions rapides</h2>
+      </div>
+      <div class="card-body">
+        <div class="quick-actions">
+          <button class="action-btn" routerLink="/student/agenda">
+            <i class="fa-solid fa-plus action-icon"></i>
+            <span class="action-label">Ajouter une tâche</span>
+          </button>
+          <button class="action-btn" routerLink="/student/courses">
+            <i class="fa-solid fa-book action-icon"></i>
+            <span class="action-label">Mes cours</span>
+          </button>
+          <button class="action-btn" routerLink="/student/commerce">
+            <i class="fa-solid fa-cart-shopping action-icon"></i>
+            <span class="action-label">Marketplace</span>
+          </button>
+          <button class="action-btn" routerLink="/student/chatbot">
+            <i class="fa-solid fa-robot action-icon"></i>
+            <span class="action-label">Assistant IA</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="card activity-card">
+      <div class="card-header">
+        <h2><i class="fa-solid fa-clock-rotate-left"></i> Activité récente</h2>
+      </div>
+      <div class="card-body">
+        <div class="activity-feed">
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div class="activity-content">
+              <p class="activity-text">
+                <i class="fa-solid fa-book-open"></i> Nouveau cours ajouté : <strong>Algorithmes Avancés</strong>
+              </p>
+              <span class="activity-time">Il y a 2 heures</span>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div class="activity-content">
+              <p class="activity-text">
+                <i class="fa-solid fa-box-open"></i> Commande livrée : <strong>Livre Python</strong>
+              </p>
+              <span class="activity-time">Hier</span>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div class="activity-content">
+              <p class="activity-text">
+                <i class="fa-solid fa-message"></i> Nouveau message dans <strong>Groupe TP</strong>
+              </p>
+              <span class="activity-time">Il y a 3 jours</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

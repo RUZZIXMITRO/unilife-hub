@@ -19,8 +19,10 @@ export class AppComponent implements OnInit {
     this.router.events.pipe(
       filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      // Masquer navbar/footer si on est dans l'espace étudiant
-      this.showPublicLayout = !event.url.startsWith('/student') && !event.url.startsWith('/complete-profile');
+      // Masquer navbar/footer pour student, admin et complete-profile
+      this.showPublicLayout = !event.url.startsWith('/student') && 
+                              !event.url.startsWith('/complete-profile') &&
+                              !event.url.startsWith('/admin');  
       
       console.log('Route actuelle:', event.url);
       console.log('Afficher layout public:', this.showPublicLayout);
