@@ -33,6 +33,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=authentication1_db;User Id=sa;Password=UniLife@2024!Strong;TrustServerCertificate=True;Encrypt=False;
+    depends_on:
+      sqlserver:
+        condition: service_healthy
     networks:
       - unilifehub-network
     restart: unless-stopped
@@ -48,6 +52,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=user_service_db;User Id=sa;Password=UniLife@2024!Strong;TrustServerCertificate=True;Encrypt=False;
+    depends_on:
+      sqlserver:
+        condition: service_healthy
     networks:
       - unilifehub-network
     restart: unless-stopped
