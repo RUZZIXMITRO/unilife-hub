@@ -3,6 +3,7 @@ services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: unilifehub-sqlserver
+    user: "0:0"  
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=UniLife@2024!Strong
