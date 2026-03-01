@@ -1,0 +1,18 @@
+<div class="student-layout">
+  <!-- Sidebar -->
+  <app-sidebar 
+    [collapsed]="sidebarCollapsed"
+    (sidebarToggled)="onSidebarToggle($event)">
+  </app-sidebar>
+
+  <!-- Main Content Area -->
+  <div class="main-content" [class.sidebar-collapsed]="sidebarCollapsed">
+    <!-- Topbar -->
+    <app-topbar></app-topbar>
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

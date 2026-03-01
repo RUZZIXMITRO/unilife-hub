@@ -1,0 +1,33 @@
+<div class="sidebar" [class.collapsed]="collapsed">
+  <!-- Logo / Header -->
+  <div class="sidebar-header">
+    <div class="logo">
+      <i class="fa-solid fa-graduation-cap logo-icon"></i>
+      <span class="logo-text" *ngIf="!collapsed">UniLife Hub</span>
+    </div>
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <i class="fa-solid" [class.fa-chevron-left]="!collapsed" [class.fa-chevron-right]="collapsed"></i>
+    </button>
+  </div>
+
+  <!-- Menu Items -->
+  <nav class="sidebar-nav">
+    <a 
+      *ngFor="let item of menuItems" 
+      [routerLink]="item.route"
+      class="nav-item"
+      [class.active]="isActive(item.route)"
+      [title]="collapsed ? item.label : ''">
+      
+      <i [class]="item.icon + ' nav-icon'"></i>
+      <span class="nav-label" *ngIf="!collapsed">{{ item.label }}</span>
+      <span class="nav-badge" *ngIf="item.badge && !collapsed">{{ item.badge }}</span>
+    </a>
+  </nav>
+
+  <!-- Footer -->
+  <div class="sidebar-footer" *ngIf="!collapsed">
+    <p>© 2025 UniLife Hub</p>
+    <p>Version 1.0.0</p>
+  </div>
+</div>

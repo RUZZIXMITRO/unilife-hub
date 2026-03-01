@@ -1,0 +1,94 @@
+<div class="topbar">
+  <!-- Left Section : Search -->
+  <div class="topbar-left">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input type="text" placeholder="Rechercher..." />
+    </div>
+  </div>
+
+  <!-- Right Section : Notifications + Theme + Profile -->
+  <div class="topbar-right">
+    <!-- Toggle Dark/Light Mode -->
+    <button class="icon-btn theme-toggle" (click)="toggleTheme()" [title]="isDarkMode ? 'Mode clair' : 'Mode sombre'">
+      <i class="fa-solid" [class.fa-moon]="!isDarkMode" [class.fa-sun]="isDarkMode"></i>
+    </button>
+
+    <!-- Notifications -->
+    <button class="icon-btn notifications">
+      <i class="fa-solid fa-bell"></i>
+      <span class="badge">3</span>
+    </button>
+
+    <!-- Profile Dropdown -->
+    <div class="profile-dropdown">
+      <button class="profile-btn" (click)="toggleProfileMenu()">
+        <div class="avatar">
+          <span>{{ userName.charAt(0).toUpperCase() }}</span>
+        </div>
+        <div class="profile-info">
+          <span class="profile-name">{{ userName }}</span>
+          <span class="profile-role">Étudiant</span>
+        </div>
+        <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div class="dropdown-menu" *ngIf="showProfileMenu">
+        <div class="dropdown-header">
+          <div class="avatar-large">
+            <span>{{ userName.charAt(0).toUpperCase() }}</span>
+          </div>
+          <div>
+            <p class="dropdown-name">{{ userName }}</p>
+            <p class="dropdown-email">{{ userEmail }}</p>
+          </div>
+        </div>
+
+        <div class="dropdown-divider"></div>
+
+        <!-- ✅ Mon Profil -->
+        <button class="dropdown-item" (click)="openProfileModal()">
+          <i class="fa-solid fa-user item-icon"></i>
+          <span>Mon Profil</span>
+        </button>
+
+        <!-- ✅ Paramètres -->
+        <button class="dropdown-item" (click)="openSettingsModal()">
+          <i class="fa-solid fa-gear item-icon"></i>
+          <span>Paramètres</span>
+        </button>
+
+        <button class="dropdown-item" (click)="openHelpModal()">
+          <i class="fa-solid fa-circle-question item-icon"></i>
+          <span>Aide</span>
+        </button>
+
+        <div class="dropdown-divider"></div>
+
+        <button class="dropdown-item logout" (click)="logout()">
+          <i class="fa-solid fa-arrow-right-from-bracket item-icon"></i>
+          <span>Déconnexion</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ MODAL DE PROFIL -->
+<app-profile-modal 
+  *ngIf="showProfileModal"
+  (closeModal)="closeProfileModal()"
+  (profileUpdated)="loadUserProfile()">
+</app-profile-modal>
+
+<!-- ✅ MODAL DE PARAMÈTRES -->
+<app-settings-modal 
+  *ngIf="showSettingsModal"
+  (closeModal)="closeSettingsModal()">
+</app-settings-modal>
+
+<app-help-modal 
+  *ngIf="showHelpModal"
+  (closeModal)="closeHelpModal()">
+</app-help-modal>

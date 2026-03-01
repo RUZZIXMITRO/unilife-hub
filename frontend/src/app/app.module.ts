@@ -29,6 +29,9 @@ import { AuthInterceptor } from './services/http-interceptor.service';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { CompleteProfileComponent } from './components/complete-profile/complete-profile.component';
 import { StudentDashboardComponent } from './components/student/dashboard/student-dashboard/student-dashboard.component';
+import { StudentLayoutComponent } from './components/student/layout/student-layout/student-layout.component';
+import { SidebarComponent } from './components/student/layout/sidebar/sidebar.component';
+import { TopbarComponent } from './components/student/layout/topbar/topbar.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,9 @@ import { StudentDashboardComponent } from './components/student/dashboard/studen
     ResetPasswordComponent,
     CompleteProfileComponent,
     StudentDashboardComponent,
+    StudentLayoutComponent,
+    SidebarComponent,
+    TopbarComponent,
     
   ],
   imports: [
