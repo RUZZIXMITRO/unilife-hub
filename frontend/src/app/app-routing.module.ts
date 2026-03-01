@@ -4,7 +4,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { CompleteProfileComponent } from './components/complete-profile/complete-profile.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
-
+import { StudentLayoutComponent } from './components/student/layout/student-layout/student-layout.component';
 import { StudentDashboardComponent } from './components/student/dashboard/student-dashboard/student-dashboard.component';
 
 
