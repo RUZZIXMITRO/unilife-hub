@@ -52,3 +52,7 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Environnements locaux (ne pas commiter)
+frontend/src/environments/environment.ts
+frontend/src/environments/environment.development.ts
