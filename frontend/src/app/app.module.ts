@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';  // ← AJOUT
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,6 +37,9 @@ import { HelpModalComponent } from './components/student/help-modal/help-modal.c
 import { SettingsModalComponent } from './components/student/settings-modal/settings-modal.component';
 import { ProfileModalComponent } from './components/student/profile-modal/profile-modal.component';
 
+// Enregistrer la locale française pour le DatePipe
+registerLocaleData(localeFr);
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,21 +69,21 @@ import { ProfileModalComponent } from './components/student/profile-modal/profil
     HelpModalComponent,
     SettingsModalComponent,
     ProfileModalComponent,
-    
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule  // ← AJOUT
+    HttpClientModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }  // ← AJOUT
+    },
+    { provide: LOCALE_ID, useValue: 'fr-FR' }
   ],
   bootstrap: [AppComponent]
 })
