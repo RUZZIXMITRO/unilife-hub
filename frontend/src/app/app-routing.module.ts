@@ -6,34 +6,30 @@ import { CompleteProfileComponent } from './components/complete-profile/complete
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { StudentLayoutComponent } from './components/student/layout/student-layout/student-layout.component';
 import { StudentDashboardComponent } from './components/student/dashboard/student-dashboard/student-dashboard.component';
-
-
-
-// Guards
 import { AuthGuard } from './guards/auth.guard';
 
-
 const routes: Routes = [
-  // ========== ROUTES PUBLIQUES (Site vitrine) ==========
+  // ========== PUBLIQUES ==========
   { path: '', component: HomeComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
 
-  // ========== COMPLETE PROFILE (Transition) ==========
-  { 
-    path: 'complete-profile', 
+  // ========== COMPLETE PROFILE ==========
+  {
+    path: 'complete-profile',
     component: CompleteProfileComponent,
     canActivate: [AuthGuard]
   },
 
-  // ========== INTERFACE ÉTUDIANTE (Protégée) ==========
+  // ========== INTERFACE ÉTUDIANTE ==========
   {
     path: 'student',
+    component: StudentLayoutComponent,  // ✅ Layout parent avec sidebar/topbar/modals
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: StudentDashboardComponent },
-      // 🔜 Autres routes à ajouter plus tard :
+      // 🔜 À ajouter plus tard :
       // { path: 'agenda', component: AgendaComponent },
       // { path: 'courses', component: CoursesComponent },
       // { path: 'commerce', component: CommerceComponent },
