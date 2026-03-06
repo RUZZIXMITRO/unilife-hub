@@ -1,0 +1,270 @@
+<div class="modal-overlay" (click)="close()">
+  <div class="modal-container" (click)="stopPropagation($event)">
+    <!-- Header -->
+    <div class="modal-header">
+      <h2><i class="fa-solid fa-gear"></i> Paramètres</h2>
+      <button class="close-btn" (click)="close()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'notifications'"
+          (click)="switchTab('notifications')">
+          <i class="fa-solid fa-bell"></i>
+          Notifications
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'appearance'"
+          (click)="switchTab('appearance')">
+          <i class="fa-solid fa-palette"></i>
+          Apparence
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'privacy'"
+          (click)="switchTab('privacy')">
+          <i class="fa-solid fa-shield-halved"></i>
+          Confidentialité
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'account'"
+          (click)="switchTab('account')">
+          <i class="fa-solid fa-user-gear"></i>
+          Compte
+        </button>
+      </div>
+
+      <!-- Alerts -->
+      <div class="alert alert-success" *ngIf="successMessage">
+        <i class="fa-solid fa-circle-check"></i>
+        {{ successMessage }}
+      </div>
+
+      <div class="alert alert-error" *ngIf="errorMessage">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Tab Content : Notifications -->
+      <div class="tab-content" *ngIf="activeTab === 'notifications'">
+        <h4>Préférences de notifications</h4>
+        <p class="tab-description">Choisissez comment vous souhaitez être notifié</p>
+
+        <div class="settings-section">
+          <h5><i class="fa-solid fa-envelope"></i> Notifications par email</h5>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <label>Nouveaux cours disponibles</label>
+              <p>Recevoir un email lorsqu'un nouveau cours est publié</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" [(ngModel)]="notifications.emailNewCourses" (change)="saveNotifications()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label>Tâches à venir</label>
+              <p>Rappel des tâches qui approchent de leur date limite</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" [(ngModel)]="notifications.emailUpcomingTasks" (change)="saveNotifications()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label>Messages</label>
+              <p>Notification pour les nouveaux messages reçus</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" [(ngModel)]="notifications.emailMessages" (change)="saveNotifications()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label>Commandes</label>
+              <p>Mises à jour sur vos commandes marketplace</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" [(ngModel)]="notifications.emailOrders" (change)="saveNotifications()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h5><i class="fa-solid fa-bell"></i> Notifications push</h5>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <label>Activer les notifications push</label>
+              <p>Recevoir des notifications dans le navigateur</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" [(ngModel)]="notifications.pushNotifications" (change)="saveNotifications()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content : Apparence -->
+      <div class="tab-content" *ngIf="activeTab === 'appearance'">
+        <h4>Apparence de l'interface</h4>
+        <p class="tab-description">Personnalisez l'apparence de votre espace</p>
+
+        <div class="settings-section">
+          <h5><i class="fa-solid fa-moon"></i> Thème</h5>
+          
+          <div class="theme-options">
+            <div class="theme-card" [class.active]="!isDarkMode" (click)="setTheme('light')">
+              <div class="theme-preview light-preview">
+                <div class="preview-header"></div>
+                <div class="preview-content">
+                  <div class="preview-item"></div>
+                  <div class="preview-item"></div>
+                </div>
+              </div>
+              <div class="theme-info">
+                <i class="fa-solid fa-sun"></i>
+                <span>Clair</span>
+                <i class="fa-solid fa-check check-icon" *ngIf="!isDarkMode"></i>
+              </div>
+            </div>
+
+            <div class="theme-card" [class.active]="isDarkMode" (click)="setTheme('dark')">
+              <div class="theme-preview dark-preview">
+                <div class="preview-header"></div>
+                <div class="preview-content">
+                  <div class="preview-item"></div>
+                  <div class="preview-item"></div>
+                </div>
+              </div>
+              <div class="theme-info">
+                <i class="fa-solid fa-moon"></i>
+                <span>Sombre</span>
+                <i class="fa-solid fa-check check-icon" *ngIf="isDarkMode"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h5><i class="fa-solid fa-language"></i> Langue</h5>
+          
+          <div class="language-options">
+            <div 
+              class="language-card" 
+              *ngFor="let lang of languages"
+              [class.active]="selectedLanguage === lang.code"
+              (click)="changeLanguage(lang.code)">
+              <span class="language-flag">{{ lang.flag }}</span>
+              <span class="language-name">{{ lang.name }}</span>
+              <i class="fa-solid fa-check check-icon" *ngIf="selectedLanguage === lang.code"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content : Confidentialité -->
+      <div class="tab-content" *ngIf="activeTab === 'privacy'">
+        <h4>Confidentialité et visibilité</h4>
+        <p class="tab-description">Contrôlez qui peut voir vos informations</p>
+
+        <div class="settings-section">
+          <div class="setting-item">
+            <div class="setting-info">
+              <label>Profil public</label>
+              <p>Autoriser les autres étudiants à voir votre profil</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" [(ngModel)]="privacy.showProfile" (change)="savePrivacy()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label>Afficher mes cours</label>
+              <p>Rendre votre liste de cours visible publiquement</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" [(ngModel)]="privacy.showCourses" (change)="savePrivacy()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label>Messages privés</label>
+              <p>Autoriser les autres à vous envoyer des messages</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" [(ngModel)]="privacy.allowMessages" (change)="savePrivacy()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label>Dernière connexion</label>
+              <p>Afficher votre statut de connexion</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" [(ngModel)]="privacy.showLastSeen" (change)="savePrivacy()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content : Compte -->
+      <div class="tab-content" *ngIf="activeTab === 'account'">
+        <h4>Gestion du compte</h4>
+        <p class="tab-description">Gérez vos données et votre compte</p>
+
+        <div class="settings-section">
+          <h5><i class="fa-solid fa-download"></i> Exporter mes données</h5>
+          <p class="section-description">Téléchargez une copie de vos données personnelles</p>
+          
+          <button class="btn btn-secondary" (click)="exportData()" [disabled]="isSaving">
+            <i class="fa-solid fa-spinner fa-spin" *ngIf="isSaving"></i>
+            <i class="fa-solid fa-download" *ngIf="!isSaving"></i>
+            {{ isSaving ? 'Export en cours...' : 'Exporter mes données' }}
+          </button>
+        </div>
+
+    <div class="settings-section danger-zone">
+  <h5><i class="fa-solid fa-triangle-exclamation"></i> Zone de danger</h5>
+  <p class="section-description danger-text">
+    La suppression de votre compte est définitive et irréversible.<br>
+    Toutes vos données (cours, commandes, messages) seront perdues.
+  </p>
+  
+  <button 
+    class="btn btn-danger" 
+    (click)="deleteAccount()" 
+    [disabled]="isDeletingAccount">
+    <i class="fa-solid fa-spinner fa-spin" *ngIf="isDeletingAccount"></i>
+    <i class="fa-solid fa-trash" *ngIf="!isDeletingAccount"></i>
+    {{ isDeletingAccount ? 'Suppression en cours...' : 'Supprimer mon compte' }}
+  </button>
+</div>
+      </div>
+    </div>
+  </div>
+</div>

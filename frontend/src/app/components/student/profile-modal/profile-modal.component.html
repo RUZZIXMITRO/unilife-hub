@@ -1,0 +1,249 @@
+<div class="modal-overlay" (click)="close()">
+  <div class="modal-container" (click)="stopPropagation($event)">
+    <!-- Header -->
+    <div class="modal-header">
+      <h2>Mon Profil</h2>
+      <button class="close-btn" (click)="close()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="modal-loading" *ngIf="isLoading">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      <p>Chargement...</p>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content" *ngIf="!isLoading && user">
+      <!-- User Header -->
+      <div class="user-header">
+        <div class="user-avatar">
+          {{ user.name.charAt(0).toUpperCase() }}
+        </div>
+        <div class="user-info">
+          <h3>{{ user.name }}</h3>
+          <p>{{ user.email }}</p>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'info'"
+          (click)="switchTab('info')">
+          <i class="fa-solid fa-user"></i>
+          Informations
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'security'"
+          (click)="switchTab('security')">
+          <i class="fa-solid fa-lock"></i>
+          Sécurité
+        </button>
+      </div>
+
+      <!-- Tab Content : Informations -->
+      <div class="tab-content" *ngIf="activeTab === 'info'">
+        <!-- Success Message -->
+        <div class="alert alert-success" *ngIf="infoSuccessMessage">
+          <i class="fa-solid fa-circle-check"></i>
+          {{ infoSuccessMessage }}
+        </div>
+
+        <!-- Error Message -->
+        <div class="alert alert-error" *ngIf="infoErrorMessage">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ infoErrorMessage }}
+        </div>
+
+        <!-- Edit Toggle -->
+        <div class="edit-header">
+          <h4>Informations personnelles</h4>
+          <button class="btn-edit" (click)="toggleEditInfo()" *ngIf="!isEditingInfo">
+            <i class="fa-solid fa-pen"></i>
+            Modifier
+          </button>
+        </div>
+
+        <!-- Form -->
+        <form class="profile-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nom complet *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="profileForm.name"
+                name="name"
+                [disabled]="!isEditingInfo"
+                required>
+            </div>
+
+            <div class="form-group">
+              <label>Téléphone *</label>
+              <input 
+                type="tel" 
+                [(ngModel)]="profileForm.phone"
+                name="phone"
+                [disabled]="!isEditingInfo"
+                required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Université *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="profileForm.university"
+                name="university"
+                [disabled]="!isEditingInfo"
+                required>
+            </div>
+
+            <div class="form-group">
+              <label>Numéro étudiant *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="profileForm.studentId"
+                name="studentId"
+                [disabled]="!isEditingInfo"
+                required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Année académique</label>
+              <input 
+                type="text" 
+                [(ngModel)]="profileForm.academicYear"
+                name="academicYear"
+                [disabled]="!isEditingInfo"
+                placeholder="Ex: 2024-2025">
+            </div>
+
+            <div class="form-group">
+              <label>Date de naissance</label>
+              <input 
+                type="date" 
+                [(ngModel)]="profileForm.dateOfBirth"
+                name="dateOfBirth"
+                [disabled]="!isEditingInfo">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Bio</label>
+            <textarea 
+              [(ngModel)]="profileForm.bio"
+              name="bio"
+              [disabled]="!isEditingInfo"
+              rows="3"
+              placeholder="Parlez de vous..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Adresse</label>
+            <input 
+              type="text" 
+              [(ngModel)]="profileForm.address"
+              name="address"
+              [disabled]="!isEditingInfo">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Ville</label>
+              <input 
+                type="text" 
+                [(ngModel)]="profileForm.city"
+                name="city"
+                [disabled]="!isEditingInfo">
+            </div>
+
+            <div class="form-group">
+              <label>Pays</label>
+              <input 
+                type="text" 
+                [(ngModel)]="profileForm.country"
+                name="country"
+                [disabled]="!isEditingInfo">
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="form-actions" *ngIf="isEditingInfo">
+            <button type="button" class="btn btn-secondary" (click)="toggleEditInfo()" [disabled]="isSavingInfo">
+              Annuler
+            </button>
+            <button type="button" class="btn btn-primary" (click)="saveProfile()" [disabled]="isSavingInfo">
+              <i class="fa-solid fa-spinner fa-spin" *ngIf="isSavingInfo"></i>
+              <i class="fa-solid fa-check" *ngIf="!isSavingInfo"></i>
+              {{ isSavingInfo ? 'Enregistrement...' : 'Enregistrer' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab Content : Sécurité -->
+      <div class="tab-content" *ngIf="activeTab === 'security'">
+        <!-- Success Message -->
+        <div class="alert alert-success" *ngIf="passwordSuccessMessage">
+          <i class="fa-solid fa-circle-check"></i>
+          {{ passwordSuccessMessage }}
+        </div>
+
+        <!-- Error Message -->
+        <div class="alert alert-error" *ngIf="passwordErrorMessage">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ passwordErrorMessage }}
+        </div>
+
+        <h4>Changer le mot de passe</h4>
+
+        <form class="password-form">
+          <div class="form-group">
+            <label>Mot de passe actuel *</label>
+            <input 
+              type="password" 
+              [(ngModel)]="passwordForm.currentPassword"
+              name="currentPassword"
+              placeholder="Entrez votre mot de passe actuel"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label>Nouveau mot de passe *</label>
+            <input 
+              type="password" 
+              [(ngModel)]="passwordForm.newPassword"
+              name="newPassword"
+              placeholder="Minimum 6 caractères"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label>Confirmer le nouveau mot de passe *</label>
+            <input 
+              type="password" 
+              [(ngModel)]="passwordForm.confirmNewPassword"
+              name="confirmNewPassword"
+              placeholder="Confirmez le nouveau mot de passe"
+              required>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" (click)="changePassword()" [disabled]="isChangingPassword">
+              <i class="fa-solid fa-spinner fa-spin" *ngIf="isChangingPassword"></i>
+              <i class="fa-solid fa-key" *ngIf="!isChangingPassword"></i>
+              {{ isChangingPassword ? 'Changement...' : 'Changer le mot de passe' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

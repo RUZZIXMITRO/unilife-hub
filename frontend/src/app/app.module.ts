@@ -32,6 +32,9 @@ import { StudentDashboardComponent } from './components/student/dashboard/studen
 import { StudentLayoutComponent } from './components/student/layout/student-layout/student-layout.component';
 import { SidebarComponent } from './components/student/layout/sidebar/sidebar.component';
 import { TopbarComponent } from './components/student/layout/topbar/topbar.component';
+import { HelpModalComponent } from './components/student/help-modal/help-modal.component';
+import { SettingsModalComponent } from './components/student/settings-modal/settings-modal.component';
+import { ProfileModalComponent } from './components/student/profile-modal/profile-modal.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +62,9 @@ import { TopbarComponent } from './components/student/layout/topbar/topbar.compo
     StudentLayoutComponent,
     SidebarComponent,
     TopbarComponent,
+    HelpModalComponent,
+    SettingsModalComponent,
+    ProfileModalComponent,
     
   ],
   imports: [
