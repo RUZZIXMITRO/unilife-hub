@@ -1,1 +1,61 @@
-<p>contact works!</p>
+<section class="contact" id="contact">
+    <div class="container">
+        <h2 class="section-title">Contactez-Nous</h2>
+        <p class="section-subtitle">Nous sommes à votre écoute</p>
+        <div class="contact-content">
+            <div class="contact-form">
+                <form (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-user"></i> Nom complet</label>
+                        <input type="text" id="name" [(ngModel)]="formData.name" name="name" 
+                               placeholder="Votre nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="email" [(ngModel)]="formData.email" name="email" 
+                               placeholder="votre@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message"><i class="fas fa-comment"></i> Message</label>
+                        <textarea id="message" [(ngModel)]="formData.message" name="message" 
+                                  placeholder="Votre message..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Envoyer le message
+                    </button>
+                </form>
+            </div>
+            <div class="contact-info">
+                <h3>Informations de contact</h3>
+                <div class="contact-item">
+                    <div class="contact-item-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="contact-item-text">
+                        <h4>Adresse</h4>
+                        <p>123 Avenue de l'Universitée</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-item-icon"><i class="fas fa-phone"></i></div>
+                    <div class="contact-item-text">
+                        <h4>Téléphone</h4>
+                        <p> 1 23 45 67 89</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-item-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-item-text">
+                        <h4>Email</h4>
+                        <p>contact@unilifehub.com</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-item-icon"><i class="fas fa-clock"></i></div>
+                    <div class="contact-item-text">
+                        <h4>Horaires</h4>
+                        <p>Lundi - Vendredi : 9h - 18h</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

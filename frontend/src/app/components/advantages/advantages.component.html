@@ -1,1 +1,22 @@
-<p>advantages works!</p>
+<section class="advantages" id="advantages">
+    <div class="container">
+        <h2 class="section-title">Avantages pour l'Étudiant</h2>
+        <p class="section-subtitle">Découvrez comment UniLife Hub transforme votre quotidien</p>
+        <div class="advantages-grid">
+            <div class="advantage-card" *ngFor="let advantage of advantages">
+                <div class="advantage-number">{{ advantage.number }}</div>
+                <div class="advantage-icon">
+                    <i [class]="advantage.icon"></i>
+                </div>
+                <h3>{{ advantage.title }}</h3>
+                <p>{{ advantage.description }}</p>
+                <div class="advantage-stats">
+                    <div class="stat-highlight">
+                        <span class="stat-value">{{ advantage.statValue }}</span>
+                        <span class="stat-label">{{ advantage.statLabel }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
