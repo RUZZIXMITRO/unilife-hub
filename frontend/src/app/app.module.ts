@@ -1,13 +1,25 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+// ========== SERVICES ==========
+import { AuthService } from './services/auth.service';
+import { UserService } from './services/user.service';
+import { ThemeService } from './services/theme.service';
+import { AuthInterceptor } from './services/http-interceptor.service';
+
+// ========== GUARDS ==========
+import { AuthGuard } from './guards/auth.guard';
+
+// ========== COMPONENTS - SITE PUBLIC ==========
+import { HomeComponent } from './components/home/home.component';
 import { PreloaderComponent } from './components/preloader/preloader.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HeroComponent } from './components/hero/hero.component';
@@ -23,19 +35,23 @@ import { CtaComponent } from './components/cta/cta.component';
 import { FaqComponent } from './components/faq/faq.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { AuthComponent } from './components/auth/auth.component';
-import { HomeComponent } from './components/home/home.component';
 
-import { AuthInterceptor } from './services/http-interceptor.service';
+// ========== COMPONENTS - AUTH ==========
+import { AuthComponent } from './components/auth/auth.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { CompleteProfileComponent } from './components/complete-profile/complete-profile.component';
-import { StudentDashboardComponent } from './components/student/dashboard/student-dashboard/student-dashboard.component';
+
+// ========== COMPONENTS - INTERFACE ÉTUDIANTE ==========
 import { StudentLayoutComponent } from './components/student/layout/student-layout/student-layout.component';
 import { SidebarComponent } from './components/student/layout/sidebar/sidebar.component';
 import { TopbarComponent } from './components/student/layout/topbar/topbar.component';
-import { HelpModalComponent } from './components/student/help-modal/help-modal.component';
-import { SettingsModalComponent } from './components/student/settings-modal/settings-modal.component';
+import { StudentDashboardComponent } from './components/student/dashboard/student-dashboard/student-dashboard.component';
 import { ProfileModalComponent } from './components/student/profile-modal/profile-modal.component';
+import { SettingsModalComponent } from './components/student/settings-modal/settings-modal.component';
+import { HelpModalComponent } from './components/student/help-modal/help-modal.component';
+
+// ========== COMPONENTS - INTERFACE ADMIN ==========
+import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.component';
 
 // Enregistrer la locale française pour le DatePipe
 registerLocaleData(localeFr);
@@ -43,6 +59,9 @@ registerLocaleData(localeFr);
 @NgModule({
   declarations: [
     AppComponent,
+    
+    // Site Public
+    HomeComponent,
     PreloaderComponent,
     NavbarComponent,
     HeroComponent,
@@ -58,26 +77,38 @@ registerLocaleData(localeFr);
     FaqComponent,
     ContactComponent,
     FooterComponent,
+    
+    // Auth
     AuthComponent,
-    HomeComponent,
     ResetPasswordComponent,
     CompleteProfileComponent,
-    StudentDashboardComponent,
+    
+    // Interface Étudiante
     StudentLayoutComponent,
     SidebarComponent,
     TopbarComponent,
-    HelpModalComponent,
-    SettingsModalComponent,
+    StudentDashboardComponent,
     ProfileModalComponent,
+    SettingsModalComponent,
+    HelpModalComponent,
+    
+    // Interface Admin 
+    AdminDashboardComponent,
+    
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule
   ],
   providers: [
+    AuthService,
+    UserService,
+    ThemeService,
+    AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
