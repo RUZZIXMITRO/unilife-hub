@@ -9,8 +9,8 @@ import { StudentDashboardComponent } from './components/student/dashboard/studen
 
 // ✅ IMPORTS ADMIN
 import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.component';
-
-
+import { SettingsComponent } from './components/admin/settings/settings.component';
+import { HelpComponent } from './components/admin/help/help.component';
 
 
 // Guards
@@ -54,6 +54,8 @@ const routes: Routes = [
   children: [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: AdminDashboardComponent },
+    { path: 'settings', component: SettingsComponent },
+    { path: 'help', component: HelpComponent },
   ]
 },
 

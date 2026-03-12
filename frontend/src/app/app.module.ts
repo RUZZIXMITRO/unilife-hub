@@ -52,6 +52,8 @@ import { HelpModalComponent } from './components/student/help-modal/help-modal.c
 
 // ========== COMPONENTS - INTERFACE ADMIN ==========
 import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { SettingsComponent } from './components/admin/settings/settings.component';
+import { HelpComponent } from './components/admin/help/help.component';
 
 // Enregistrer la locale française pour le DatePipe
 registerLocaleData(localeFr);
@@ -94,6 +96,8 @@ registerLocaleData(localeFr);
     
     // Interface Admin 
     AdminDashboardComponent,
+          SettingsComponent,
+          HelpComponent,
     
   ],
   imports: [
