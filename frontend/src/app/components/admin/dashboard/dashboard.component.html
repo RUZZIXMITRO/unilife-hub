@@ -1,0 +1,328 @@
+<div class="dashboard">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Vue d'ensemble</h1>
+      <p class="subtitle">Tableau de bord administrateur</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-secondary">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>30 derniers jours</span>
+      </button>
+      
+    </div>
+  </div>
+
+ <!-- Statistiques principales -->
+<div class="stats-grid">
+  <div *ngFor="let stat of stats; let i = index" class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon-wrapper" [class]="stat.color">
+        <i class="fa-solid {{ stat.icon }}"></i>
+      </div>
+      <span class="stat-trend"
+        [class.positive]="stat.trend === 'up'"
+        [class.negative]="stat.trend === 'down'">
+        <i class="fa-solid"
+          [class.fa-arrow-up]="stat.trend === 'up'"
+          [class.fa-arrow-down]="stat.trend === 'down'">
+        </i>
+        {{ stat.change }}
+      </span>
+    </div>
+    <div class="stat-body">
+      <p class="stat-label">{{ stat.title }}</p>
+
+      <!-- Loading spinner pour Utilisateurs Actifs seulement -->
+      <h2 class="stat-value" *ngIf="i === 0 && isLoadingStats">
+        <i class="fa-solid fa-spinner fa-spin" style="color: #94a3b8; font-size: 1.5rem;"></i>
+      </h2>
+
+      <!-- Valeur réelle -->
+      <h2 class="stat-value" *ngIf="i !== 0 || !isLoadingStats">
+        {{ stat.value }}
+      </h2>
+    </div>
+  </div>
+</div>
+
+  <!-- Contenu principal -->
+  <div class="dashboard-grid">
+    <!-- Colonne gauche -->
+    <div class="main-col">
+      <!-- Activités récentes -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3>Activités Récentes</h3>
+            <p class="card-subtitle">Dernières actions des utilisateurs</p>
+          </div>
+          <button class="link-btn">Voir tout</button>
+        </div>
+        <div class="card-body">
+          <div class="activities-list">
+            <div *ngFor="let activity of recentActivities" class="activity-item">
+              <div class="activity-avatar" [class]="activity.color">
+                {{ activity.avatar }}
+              </div>
+              <div class="activity-content">
+                <p class="activity-text">
+                  <strong>{{ activity.user }}</strong> {{ activity.action }}
+                </p>
+                <p class="activity-detail">{{ activity.title }}</p>
+              </div>
+              <div class="activity-meta">
+                <span class="activity-time">{{ activity.time }}</span>
+                <div class="activity-icon" [class]="activity.color">
+                  <i class="fa-solid {{ activity.icon }}"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meilleurs cours -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3>Cours les Plus Populaires</h3>
+            <p class="card-subtitle">Classement par nombre d'étudiants</p>
+          </div>
+          <button class="link-btn">Voir tout</button>
+        </div>
+        <div class="card-body">
+          <div class="courses-table">
+            <div *ngFor="let course of topCourses; let i = index" class="course-row">
+              <div class="course-rank">
+                <span class="rank-number">{{ i + 1 }}</span>
+              </div>
+              <div class="course-info">
+                <h4>{{ course.title }}</h4>
+                <p class="course-meta">
+                  <i class="fa-solid fa-user"></i>
+                  {{ course.instructor }}
+                </p>
+              </div>
+              <div class="course-stats">
+                <div class="stat-item">
+                  <i class="fa-solid fa-users"></i>
+                  <span>{{ course.students }}</span>
+                </div>
+                <div class="stat-item">
+                  <i class="fa-solid fa-star"></i>
+                  <span>{{ course.rating }}</span>
+                </div>
+              </div>
+              <div class="course-revenue">
+                {{ course.revenue }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colonne droite -->
+    <div class="side-col">
+      <!-- Stats Marketplace -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3>Marketplace</h3>
+            <p class="card-subtitle">Ventes par catégorie</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="marketplace-list">
+            <div *ngFor="let item of marketplaceStats" class="marketplace-item">
+              <div class="marketplace-icon" [class]="item.color">
+                <i class="fa-solid fa-tag"></i>
+              </div>
+              <div class="marketplace-info">
+                <h4>{{ item.category }}</h4>
+                <p class="sales-count">{{ item.sales }} ventes</p>
+              </div>
+              <div class="marketplace-revenue">
+                <p class="revenue-amount">{{ item.revenue }}</p>
+                <span class="revenue-trend positive">{{ item.trend }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions rapides -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Actions Rapides</h3>
+        </div>
+        <div class="card-body">
+          <div class="quick-actions">
+            <button class="action-card blue" (click)="openAddUserModal()">
+              <i class="fa-solid fa-user-plus"></i>
+              <span>Ajouter un utilisateur</span>
+            </button>
+            <button class="action-card purple">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <span>Créer un cours</span>
+            </button>
+            <button class="action-card green">
+              <i class="fa-solid fa-envelope"></i>
+              <span>Envoyer notification</span>
+            </button>
+            <button class="action-card orange">
+              <i class="fa-solid fa-box-open"></i>
+              <span>Ajouter un produit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alertes -->
+      <div class="card alert-card">
+        <div class="card-header">
+          <h3>Alertes Système</h3>
+        </div>
+        <div class="card-body">
+          <div class="alerts-list">
+            <div class="alert-item warning">
+              <i class="fa-solid fa-exclamation-triangle"></i>
+              <div>
+                <p class="alert-title">Serveur de paiement</p>
+                <p class="alert-message">Latence élevée détectée</p>
+              </div>
+            </div>
+            <div class="alert-item success">
+              <i class="fa-solid fa-check-circle"></i>
+              <div>
+                <p class="alert-title">Sauvegarde complétée</p>
+                <p class="alert-message">Données sécurisées à 14:30</p>
+              </div>
+            </div>
+            <div class="alert-item info">
+              <i class="fa-solid fa-info-circle"></i>
+              <div>
+                <p class="alert-title">Mise à jour disponible</p>
+                <p class="alert-message">Version 2.1.0 prête</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- DRAWER ADD USER -->
+<div class="drawer-overlay" *ngIf="showAddUserModal" (click)="closeAddUserModal()"></div>
+
+<div class="drawer" [class.open]="showAddUserModal">
+
+  <div class="drawer-header">
+    <div class="drawer-title">
+      <div class="drawer-title-icon">
+        <i class="fa-solid fa-user-plus"></i>
+      </div>
+      <div>
+        <h3>Ajouter un utilisateur</h3>
+        <p>Créer un nouveau compte étudiant</p>
+      </div>
+    </div>
+    <button class="drawer-close" (click)="closeAddUserModal()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="drawer-body">
+
+    <!-- Section infos principales -->
+    <div class="drawer-section">
+      <p class="drawer-section-label">Informations principales</p>
+
+      <div class="drawer-field">
+        <label>Nom complet <span class="required">*</span></label>
+        <div class="field-input-wrap">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" [(ngModel)]="newUser.name"
+            placeholder="Ex: Yousra Benchouat" class="drawer-input"/>
+        </div>
+      </div>
+
+      <div class="drawer-field">
+        <label>Email <span class="required">*</span></label>
+        <div class="field-input-wrap">
+          <i class="fa-solid fa-envelope"></i>
+          <input type="email" [(ngModel)]="newUser.email"
+            placeholder="email@exemple.com" class="drawer-input"/>
+        </div>
+      </div>
+
+      <div class="drawer-field">
+        <label>Mot de passe <span class="required">*</span></label>
+        <div class="field-input-wrap">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" [(ngModel)]="newUser.password"
+            placeholder="Minimum 8 caractères" class="drawer-input"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section infos académiques -->
+    <div class="drawer-section">
+      <p class="drawer-section-label">Informations académiques</p>
+
+      <div class="drawer-field">
+        <label>Université</label>
+        <div class="field-input-wrap">
+          <i class="fa-solid fa-building-columns"></i>
+          <input type="text" [(ngModel)]="newUser.university"
+            placeholder="Ex: EHEI Oujda" class="drawer-input"/>
+        </div>
+      </div>
+
+      <div class="drawer-row">
+        <div class="drawer-field">
+          <label>Numéro étudiant</label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-id-card"></i>
+            <input type="text" [(ngModel)]="newUser.studentId"
+              placeholder="STU12345" class="drawer-input"/>
+          </div>
+        </div>
+        <div class="drawer-field">
+          <label>Année</label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <select [(ngModel)]="newUser.academicYear" class="drawer-input">
+              <option value="">-- Année --</option>
+              <option value="1ère année">1ère année</option>
+              <option value="2ème année">2ème année</option>
+              <option value="3ème année">3ème année</option>
+              <option value="4ème année">4ème année</option>
+              <option value="5ème année">5ème année</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="add-user-error" *ngIf="addUserError">
+      <i class="fa-solid fa-circle-exclamation"></i> {{ addUserError }}
+    </div>
+    <div class="add-user-success" *ngIf="addUserSuccess">
+      <i class="fa-solid fa-circle-check"></i> {{ addUserSuccess }}
+    </div>
+
+  </div>
+
+  <div class="drawer-footer">
+    <button class="drawer-btn-cancel" (click)="closeAddUserModal()">Annuler</button>
+    <button class="drawer-btn-confirm" (click)="addUser()" [disabled]="isAddingUser">
+      <i class="fa-solid fa-spinner fa-spin" *ngIf="isAddingUser"></i>
+      <i class="fa-solid fa-user-plus" *ngIf="!isAddingUser"></i>
+      {{ isAddingUser ? 'Création...' : 'Créer le compte' }}
+    </button>
+  </div>
+
+</div>
+</div>
