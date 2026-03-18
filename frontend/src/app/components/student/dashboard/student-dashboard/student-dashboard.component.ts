@@ -2,28 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
 import { UserService } from '../../../../services/user.service';
 
-interface StatCard {
-  icon: string;
-  title: string;
-  value: string | number;
-  change: string;
-  changeType: 'positive' | 'negative' | 'neutral';
+interface Course {
+  name: string;
+  status: 'active' | 'finished' | 'paused';
+  daysLeft: number;
+  progress: number;
+  color: string;
 }
 
-interface Task {
+interface WeekBar {
+  label: string;
+  value: number;
+}
+
+interface CourseEvent {
+  date: string;
+  title: string;
+  time: string;
+}
+
+interface Todo {
   id: number;
   title: string;
   priority: 'high' | 'medium' | 'low';
-  dueDate: string;
-  completed: boolean;
-}
-
-interface Event {
-  id: number;
-  title: string;
-  date: string;
-  time: string;
-  type: 'exam' | 'course' | 'event';
+  due: string;
+  done: boolean;
 }
 
 @Component({
@@ -32,157 +35,119 @@ interface Event {
   styleUrls: ['./student-dashboard.component.css']
 })
 export class StudentDashboardComponent implements OnInit {
+
   userName = 'Étudiant';
   currentDate = new Date();
+  calendarDays: number[] = [];
+  calendarPadding: number[] = [];
+  newTaskTitle = '';
 
-  stats: StatCard[] = [
-    {
-      icon: 'fa-solid fa-book-open',
-      title: 'Cours actifs',
-      value: 6,
-      change: '+2 ce semestre',
-      changeType: 'positive'
-    },
-    {
-      icon: 'fa-solid fa-circle-check',
-      title: 'Tâches complétées',
-      value: '12/20',
-      change: '60% complété',
-      changeType: 'neutral'
-    },
-    {
-      icon: 'fa-solid fa-calendar-days',
-      title: 'Événements à venir',
-      value: 5,
-      change: '3 cette semaine',
-      changeType: 'neutral'
-    },
-    {
-      icon: 'fa-solid fa-box',
-      title: 'Commandes actives',
-      value: 2,
-      change: 'En livraison',
-      changeType: 'positive'
-    }
+  activeCourses: Course[] = [
+    { name: 'Algorithmes & Structures', status: 'active',   daysLeft: 45, progress: 75,  color: '#2563eb' },
+    { name: 'Base de données',          status: 'finished', daysLeft: 1,  progress: 100, color: '#1e293b' },
+    { name: 'Réseaux informatiques',    status: 'active',   daysLeft: 15, progress: 45,  color: '#2563eb' },
+    { name: 'Développement Web',        status: 'paused',   daysLeft: 21, progress: 60,  color: '#f59e0b' }
   ];
 
-  upcomingTasks: Task[] = [
-    {
-      id: 1,
-      title: 'Rapport de stage à rendre',
-      priority: 'high',
-      dueDate: '2025-02-12',
-      completed: false
-    },
-    {
-      id: 2,
-      title: 'Révision examen Mathématiques',
-      priority: 'high',
-      dueDate: '2025-02-15',
-      completed: false
-    },
-    {
-      id: 3,
-      title: 'TP Programmation Python',
-      priority: 'medium',
-      dueDate: '2025-02-18',
-      completed: false
-    }
+  weekBars: WeekBar[] = [
+    { label: 'Lu', value: 80 },
+    { label: 'Ma', value: 95 },
+    { label: 'Me', value: 20 },
+    { label: 'Je', value: 65 },
+    { label: 'Ve', value: 40 },
+    { label: 'Sa', value: 60 },
+    { label: 'Di', value: 55 }
   ];
 
-  upcomingEvents: Event[] = [
-    {
-      id: 1,
-      title: 'Examen Mathématiques',
-      date: '2025-02-15',
-      time: '09:00',
-      type: 'exam'
-    },
-    {
-      id: 2,
-      title: 'Cours Algorithmes',
-      date: '2025-02-10',
-      time: '14:00',
-      type: 'course'
-    },
-    {
-      id: 3,
-      title: 'Séminaire IA',
-      date: '2025-02-20',
-      time: '10:00',
-      type: 'event'
-    }
+  upcomingEvents: CourseEvent[] = [
+    { date: '2026-03-12', title: '10:13 Cours',    time: '10:13' },
+    { date: '2026-03-22', title: '12:13 Révision', time: '12:13' }
   ];
 
-  constructor(
-    private authService: AuthService,
-    private userService: UserService
-  ) {}
+  todos: Todo[] = [
+    { id: 1, title: 'Rapport de stage à rendre',     priority: 'high',   due: '18 mars',  done: false },
+    { id: 2, title: 'Révision examen Mathématiques', priority: 'high',   due: '22 mars',  done: false },
+    { id: 3, title: 'TP Programmation Python',       priority: 'medium', due: '28 mars',  done: false },
+    { id: 4, title: 'Lire chapitre 5 Algorithmes',   priority: 'low',    due: '30 mars',  done: true  },
+    { id: 5, title: 'Préparer présentation PFA',     priority: 'high',   due: '15 avril', done: false }
+  ];
+
+  get pendingCount(): number { return this.todos.filter(t => !t.done).length; }
+  get doneCount(): number    { return this.todos.filter(t => t.done).length; }
+
+  constructor(private authService: AuthService, private userService: UserService) {}
 
   ngOnInit(): void {
     this.loadUserProfile();
+    this.buildCalendar();
+  }
+
+  buildCalendar(): void {
+    const y = this.currentDate.getFullYear();
+    const m = this.currentDate.getMonth();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    let first = new Date(y, m, 1).getDay();
+    this.calendarPadding = first > 0 ? Array(first).fill(0) : [];
+    this.calendarDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  }
+
+  isToday(day: number): boolean {
+    return day === this.currentDate.getDate();
+  }
+
+  hasEvent(day: number): boolean {
+    const y = this.currentDate.getFullYear();
+    const m = String(this.currentDate.getMonth() + 1).padStart(2, '0');
+    const d = String(day).padStart(2, '0');
+    return this.upcomingEvents.some(e => e.date === `${y}-${m}-${d}`);
+  }
+
+  getEventLabel(day: number): string {
+    const y = this.currentDate.getFullYear();
+    const m = String(this.currentDate.getMonth() + 1).padStart(2, '0');
+    const d = String(day).padStart(2, '0');
+    const ev = this.upcomingEvents.find(e => e.date === `${y}-${m}-${d}`);
+    return ev ? ev.title : '';
+  }
+
+  addTask(): void {
+    const title = this.newTaskTitle.trim();
+    if (!title) return;
+    this.todos.unshift({
+      id: Date.now(),
+      title,
+      priority: 'medium',
+      due: 'À définir',
+      done: false
+    });
+    this.newTaskTitle = '';
+  }
+
+  toggleTodo(todo: Todo): void { todo.done = !todo.done; }
+
+  deleteTask(todo: Todo): void {
+    this.todos = this.todos.filter(t => t.id !== todo.id);
+  }
+
+  getPrioColor(priority: string): string {
+    return priority === 'high' ? '#ef4444' : priority === 'medium' ? '#f59e0b' : '#10b981';
   }
 
   loadUserProfile(): void {
     const userId = this.authService.getUserId();
-    
     if (!userId) {
-      console.warn('⚠️ Pas de userId, utilisation du token');
-      const user = this.authService.getCurrentUser();
-      if (user) {
-        this.userName = user.email.split('@')[0];
-      }
+      const u = this.authService.getCurrentUser();
+      if (u) this.userName = u.email.split('@')[0];
       return;
     }
-
-    console.log('🔍 Dashboard - Chargement profil pour userId:', userId);
-
     this.userService.getUserByCredentialId(userId).subscribe({
-      next: (response) => {
-        if (response.success && response.data) {
-          this.userName = response.data.name || 'Étudiant';
-          console.log('✅ Dashboard - Nom chargé:', this.userName);
-        }
-      },
-      error: (error) => {
-        console.error('❌ Dashboard - Erreur chargement profil:', error);
-        
-        // Fallback sur le token
-        const user = this.authService.getCurrentUser();
-        if (user) {
-          this.userName = user.email.split('@')[0];
-          console.log('⚠️ Dashboard - Utilisation fallback:', this.userName);
-        }
-      }
+      next: (r) => { if (r.success && r.data) this.userName = r.data.name || 'Étudiant'; },
+      error: () => { const u = this.authService.getCurrentUser(); if (u) this.userName = u.email.split('@')[0]; }
     });
   }
 
   getGreeting(): string {
-    const hour = this.currentDate.getHours();
-    if (hour < 12) return 'Bonjour';
-    if (hour < 18) return 'Bon après-midi';
-    return 'Bonsoir';
-  }
-
-  toggleTaskComplete(task: Task): void {
-    task.completed = !task.completed;
-  }
-
-  getPriorityColor(priority: string): string {
-    switch(priority) {
-      case 'high': return '#e74c3c';
-      case 'medium': return '#f39c12';
-      case 'low': return '#27ae60';
-      default: return '#95a5a6';
-    }
-  }
-
-  getEventIcon(type: string): string {
-    switch(type) {
-      case 'exam': return 'fa-solid fa-file-pen';
-      case 'course': return 'fa-solid fa-chalkboard-user';
-      case 'event': return 'fa-solid fa-calendar-star';
-      default: return 'fa-solid fa-calendar';
-    }
+    const h = this.currentDate.getHours();
+    return h < 12 ? 'Bonjour' : h < 18 ? 'Bon après-midi' : 'Bonsoir';
   }
 }
