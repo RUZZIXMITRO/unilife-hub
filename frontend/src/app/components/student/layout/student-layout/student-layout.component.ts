@@ -6,7 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./student-layout.component.css']
 })
 export class StudentLayoutComponent {
-  sidebarCollapsed = false;
+  sidebarCollapsed  = false;
+  showProfileModal  = false;
+  showSettingsModal = false;
 
   onSidebarToggle(collapsed: boolean): void {
     this.sidebarCollapsed = collapsed;

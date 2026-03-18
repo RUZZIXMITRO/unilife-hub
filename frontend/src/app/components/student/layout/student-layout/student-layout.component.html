@@ -1,18 +1,34 @@
 <div class="student-layout">
-  <!-- Sidebar -->
-  <app-sidebar 
+
+  <app-sidebar
     [collapsed]="sidebarCollapsed"
-    (sidebarToggled)="onSidebarToggle($event)">
+    (sidebarToggled)="onSidebarToggle($event)"
+    (openProfile)="showProfileModal = true"
+    (openSettings)="showSettingsModal = true">
   </app-sidebar>
 
-  <!-- Main Content Area -->
   <div class="main-content" [class.sidebar-collapsed]="sidebarCollapsed">
-    <!-- Topbar -->
-    <app-topbar></app-topbar>
 
-    <!-- Page Content -->
+    <app-topbar
+      (openProfile)="showProfileModal = true"
+      (openSettings)="showSettingsModal = true">
+    </app-topbar>
+
     <div class="page-content">
       <router-outlet></router-outlet>
     </div>
+
   </div>
+
 </div>
+
+<app-profile-modal
+  *ngIf="showProfileModal"
+  (closeModal)="showProfileModal = false"
+  (profileUpdated)="showProfileModal = false">
+</app-profile-modal>
+
+<app-settings-modal
+  *ngIf="showSettingsModal"
+  (closeModal)="showSettingsModal = false">
+</app-settings-modal>
