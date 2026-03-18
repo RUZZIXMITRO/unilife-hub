@@ -10,13 +10,21 @@ import { ThemeService } from '../../../../services/theme.service';
   styleUrls: ['./topbar.component.css']
 })
 export class TopbarComponent implements OnInit {
-  userName = 'Étudiant';
-  userEmail = '';
-  showProfileMenu = false;
-  showProfileModal = false;
+
+  userName          = '';
+  userEmail         = '';
+  searchQuery       = '';
+  todayLabel        = '';
+  isDarkMode        = false;
+  showProfileMenu   = false;
+  showNotifMenu     = false;
+  showMsgMenu       = false;
+  showProfileModal  = false;
   showSettingsModal = false;
-  showHelpModal = false;  // ✅ NOUVEAU
-  isDarkMode = false;
+  showHelpModal     = false;
+  unreadMessages    = 2;
+  msgSearch         = '';
+  quickMessage      = '';
 
   constructor(
     private authService: AuthService,
@@ -27,95 +35,57 @@ export class TopbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserProfile();
-
+    this.todayLabel = new Date().toLocaleDateString('fr-FR', {
+      weekday: 'short', day: 'numeric', month: 'short'
+    });
     this.themeService.darkMode$.subscribe((isDark: boolean) => {
       this.isDarkMode = isDark;
     });
   }
 
   loadUserProfile(): void {
-    const userId = this.authService.getUserId();
-    
     const authUser = this.authService.getCurrentUser();
-    if (authUser && authUser.email) {
-      this.userEmail = authUser.email;
-    }
-    
+    if (authUser?.email) this.userEmail = authUser.email;
+    const userId = this.authService.getUserId();
     if (!userId) {
-      if (authUser) {
-        this.userName = authUser.email.split('@')[0];
-      }
+      if (authUser) this.userName = authUser.email.split('@')[0];
       return;
     }
-
     this.userService.getUserByCredentialId(userId).subscribe({
-      next: (response) => {
-        if (response.success && response.data) {
-          this.userName = response.data.name || 'Étudiant';
-          
-          if (authUser && authUser.email) {
-            this.userEmail = authUser.email;
-          }
-        }
-      },
-      error: (error) => {
-        console.error('❌ Topbar - Erreur chargement profil:', error);
-        
-        if (authUser) {
-          this.userName = authUser.email.split('@')[0];
-        }
-      }
+      next:  (r) => { if (r.success && r.data) this.userName = r.data.name || authUser?.email?.split('@')[0] || ''; },
+      error: ()  => { if (authUser) this.userName = authUser.email.split('@')[0]; }
     });
   }
 
-  toggleProfileMenu(): void {
-    this.showProfileMenu = !this.showProfileMenu;
+  toggleTheme():   void { this.themeService.toggleTheme(); }
+
+  toggleProfileMenu(): void { this.showProfileMenu = !this.showProfileMenu; this.showNotifMenu = false; this.showMsgMenu = false; }
+  toggleNotifMenu():   void { this.showNotifMenu   = !this.showNotifMenu;   this.showProfileMenu = false; this.showMsgMenu = false; }
+  toggleMsgMenu():     void { this.showMsgMenu     = !this.showMsgMenu;     this.showNotifMenu = false; this.showProfileMenu = false; }
+
+  openProfileModal():   void { this.showProfileModal  = true;  this.showProfileMenu = false; }
+  closeProfileModal():  void { this.showProfileModal  = false; this.loadUserProfile(); }
+  openSettingsModal():  void { this.showSettingsModal = true;  this.showProfileMenu = false; }
+  closeSettingsModal(): void { this.showSettingsModal = false; }
+  openHelpModal():      void { this.showHelpModal     = true;  this.showProfileMenu = false; }
+  closeHelpModal():     void { this.showHelpModal     = false; }
+
+  openConversation(id: string): void {
+    this.showMsgMenu = false;
+    this.router.navigate(['/student/messages', id]);
   }
 
-  toggleTheme(): void {
-    this.themeService.toggleTheme();
+  sendQuickMessage(): void {
+    if (this.quickMessage.trim()) this.quickMessage = '';
   }
 
-  openProfileModal(): void {
-    this.showProfileModal = true;
-    this.showProfileMenu = false;
-  }
-
-  closeProfileModal(): void {
-    this.showProfileModal = false;
-    this.loadUserProfile();
-  }
-
-  openSettingsModal(): void {
-    this.showSettingsModal = true;
-    this.showProfileMenu = false;
-  }
-
-  closeSettingsModal(): void {
-    this.showSettingsModal = false;
-  }
-
-  // ✅ NOUVELLES MÉTHODES POUR LE MODAL AIDE
-  openHelpModal(): void {
-    this.showHelpModal = true;
-    this.showProfileMenu = false;
-  }
-
-  closeHelpModal(): void {
-    this.showHelpModal = false;
-  }
-
-  logout(): void {
-    this.authService.logout();
-  }
+  logout(): void { this.authService.logout(); }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    const profileDropdown = document.querySelector('.profile-dropdown');
-    
-    if (profileDropdown && !profileDropdown.contains(target)) {
-      this.showProfileMenu = false;
-    }
+    if (!document.querySelector('.profile-dropdown')?.contains(target)) this.showProfileMenu = false;
+    if (!document.querySelector('.notif-btn')?.contains(target))        this.showNotifMenu   = false;
+    if (!document.querySelector('.msg-btn')?.contains(target))          this.showMsgMenu     = false;
   }
 }
