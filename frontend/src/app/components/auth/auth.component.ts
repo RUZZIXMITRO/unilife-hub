@@ -95,58 +95,38 @@ export class AuthComponent implements OnInit {
     });
   }
 
-  // ✅ NOUVELLE MÉTHODE : Vérifie le rôle depuis UserService
-  private checkRoleAndRedirect(credentialId: string): void {
-    console.log('🔍 Vérification rôle pour credentialId:', credentialId);
+ private checkRoleAndRedirect(credentialId: string): void {
+  console.log('🔍 Vérification rôle pour credentialId:', credentialId);
 
-    this.userService.getUserByCredentialId(credentialId).subscribe({
-      next: (response) => {
-        console.log('✅ Profil trouvé:', response);
+  this.userService.getUserByCredentialId(credentialId).subscribe({
+    next: (response) => {
+      console.log('✅ Profil trouvé:', response);
 
-        if (response.success && response.data) {
-          const userRole = response.data.role?.toString().toUpperCase();
-          console.log('🎭 Rôle depuis UserService:', userRole);
+      if (response.success && response.data) {
+        const userRole = response.data.role?.toString().toUpperCase();
+        console.log('🎭 Rôle depuis UserService:', userRole);
 
-          this.authService.markProfileAsCompleted();
+        this.authService.markProfileAsCompleted();
 
-          // ✅ RÔLE ADMIN → Dashboard Admin
-          if (userRole === 'ADMIN') {
-            console.log('🔑 ADMIN détecté → /admin/dashboard');
-            setTimeout(() => {
-              this.router.navigate(['/admin/dashboard']);
-            }, 1000);
-          } else {
-            // ✅ RÔLE STUDENT → Dashboard Student
-            console.log('👨‍🎓 STUDENT détecté → /student/dashboard');
-            setTimeout(() => {
-              this.router.navigate(['/student/dashboard']);
-            }, 1000);
-          }
-        }
-      },
-      error: (error) => {
-        console.log('❌ Erreur vérification profil:', error.status);
-
-        if (error.status === 404) {
-          // ✅ PAS DE PROFIL → Compléter le profil (nouveau utilisateur)
-          console.log('❌ Profil non trouvé → /complete-profile');
-          setTimeout(() => {
-            this.router.navigate(['/complete-profile']);
-          }, 1000);
+        if (userRole === 'ADMIN') {
+          console.log('🔑 ADMIN détecté → /admin/dashboard');
+          setTimeout(() => this.router.navigate(['/admin/dashboard']), 1000);
         } else {
-          // ✅ FALLBACK → Utiliser le rôle du token JWT
-          const tokenUser = this.authService.getCurrentUser();
-          console.log('⚠️ Fallback token role:', tokenUser?.role);
-
-          if (tokenUser?.role === 'ADMIN') {
-            setTimeout(() => this.router.navigate(['/admin/dashboard']), 1000);
-          } else {
-            setTimeout(() => this.router.navigate(['/student/dashboard']), 1000);
-          }
+          console.log('👨‍🎓 STUDENT détecté → /student/dashboard');
+          setTimeout(() => this.router.navigate(['/student/dashboard']), 1000);
         }
       }
-    });
-  }
+    },
+    error: (error) => {
+      if (error.status === 404) {
+        console.log('❌ Profil non trouvé → /complete-profile');
+        setTimeout(() => this.router.navigate(['/complete-profile']), 1000);
+      } else {
+        setTimeout(() => this.router.navigate(['/student/dashboard']), 1000);
+      }
+    }
+  });
+}
 
   onRegister() {
     this.errorMessage = '';
