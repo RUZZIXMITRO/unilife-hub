@@ -11,6 +11,7 @@ import { StudentDashboardComponent } from './components/student/dashboard/studen
 import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { SettingsComponent } from './components/admin/settings/settings.component';
 import { HelpComponent } from './components/admin/help/help.component';
+import { PromoteAdminComponent } from './components/setup/promote-admin/promote-admin.component';
 
 
 // Guards
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'setup/promote', component: PromoteAdminComponent },
 
   // ========== COMPLETE PROFILE (Transition) ==========
   { 
