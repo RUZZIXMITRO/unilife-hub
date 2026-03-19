@@ -20,12 +20,12 @@ export class AdminService {
     });
   }
 
-  getAllUsers(): Observable<any> {
-    return this.http.get(
-      `${this.userApiUrl}`,
-      { headers: this.getHeaders() }
-    );
-  }
+getAllUsers(): Observable<any> {
+  return this.http.get(
+    `${this.userApiUrl}`,
+    { headers: this.getHeaders() }
+  );
+}
 
  blockUser(userId: string, reason: string, blockedUntil?: Date): Observable<any> {
   return this.http.put(
@@ -38,6 +38,7 @@ export class AdminService {
   );
 }
 
+  // ✅ Débloquer depuis AdminController UserService
   unblockUser(userId: string): Observable<any> {
     return this.http.put(
       `${this.adminApiUrl}/unblock/${userId}`,
@@ -49,29 +50,21 @@ export class AdminService {
   
 promoteToAdmin(userId: string, credentialId: string): Observable<any> {
   return new Observable(observer => {
-    // Étape 1 : Mettre à jour Role dans UserService
+    // Étape 1 : UserService
     this.http.put(
       `${this.adminApiUrl}/promote/${userId}`,
       {},
       { headers: this.getHeaders() }
     ).subscribe({
       next: () => {
-        // Étape 2 : Mettre à jour Role dans AuthService
+        // Étape 2 : AuthService
         this.http.post(
           `${this.authApiUrl}/promote-to-admin/${credentialId}`,
           {},
           { headers: this.getHeaders() }
         ).subscribe({
-          next: (res) => {
-            observer.next(res);
-            observer.complete();
-          },
-          error: (err) => {
-            console.warn('⚠️ Auth promote failed:', err);
-            // UserService mis à jour = suffisant
-            observer.next({ success: true });
-            observer.complete();
-          }
+          next: (res) => { observer.next(res); observer.complete(); },
+          error: () => { observer.next({ success: true }); observer.complete(); }
         });
       },
       error: (err) => observer.error(err)
@@ -81,25 +74,21 @@ promoteToAdmin(userId: string, credentialId: string): Observable<any> {
 
 demoteFromAdmin(userId: string, credentialId: string): Observable<any> {
   return new Observable(observer => {
+    // Étape 1 : UserService
     this.http.put(
       `${this.adminApiUrl}/demote/${userId}`,
       {},
       { headers: this.getHeaders() }
     ).subscribe({
       next: () => {
+        // Étape 2 : AuthService
         this.http.post(
           `${this.authApiUrl}/demote-from-admin/${credentialId}`,
           {},
           { headers: this.getHeaders() }
         ).subscribe({
-          next: (res) => {
-            observer.next(res);
-            observer.complete();
-          },
-          error: (err) => {
-            observer.next({ success: true });
-            observer.complete();
-          }
+          next: (res) => { observer.next(res); observer.complete(); },
+          error: () => { observer.next({ success: true }); observer.complete(); }
         });
       },
       error: (err) => observer.error(err)
@@ -107,6 +96,7 @@ demoteFromAdmin(userId: string, credentialId: string): Observable<any> {
   });
 }
 
+// ✅ Supprimer complet
 deleteUserComplete(userId: string, credentialId: string): Observable<any> {
   return new Observable(observer => {
     this.http.delete(
