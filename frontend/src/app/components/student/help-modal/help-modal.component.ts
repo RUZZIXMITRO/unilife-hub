@@ -171,4 +171,5 @@ export class HelpModalComponent {
   stopPropagation(event: Event): void {
     event.stopPropagation();
   }
+  
 }
