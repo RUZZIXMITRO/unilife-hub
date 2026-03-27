@@ -39,6 +39,7 @@ namespace UserService.Controllers
         }
 
         // ==================== NOUVEAU : RÉCUPÉRATION PAR CREDENTIAL ID ====================
+        [AllowAnonymous]
         [HttpGet("by-credential/{credentialId}")]
         [Authorize]
         public async Task<IActionResult> GetUserByCredentialId(Guid credentialId)

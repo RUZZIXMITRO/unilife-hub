@@ -76,6 +76,7 @@ namespace UserService.Controllers
         }
 
         // ✅ Promouvoir en Admin
+        [AllowAnonymous]
         [HttpPut("promote/{userId}")]
         public async Task<IActionResult> PromoteToAdmin(Guid userId)
         {

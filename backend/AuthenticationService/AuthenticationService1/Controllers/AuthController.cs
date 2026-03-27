@@ -220,8 +220,8 @@ namespace AuthenticationService1.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("promote-to-admin/{userId}")]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> PromoteToAdmin(Guid userId)
         {
             try
@@ -437,7 +437,7 @@ namespace AuthenticationService1.Controllers
                         role = credential.Role.ToString(),
                         isActive = credential.IsActive,
                         createdAt = credential.CreatedAt,
-                        updatedAt = credential.UpdatedAt, 
+                        updatedAt = credential.UpdatedAt,
                         profile = userProfile
                     });
                 }
@@ -484,6 +484,32 @@ namespace AuthenticationService1.Controllers
                 await _context.SaveChangesAsync();
 
                 return Ok(new { success = true, message = "Credential supprimé" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+
+    [AllowAnonymous]
+        [HttpGet("find-by-email/{email}")]
+        public async Task<IActionResult> FindByEmail(string email)
+        {
+            try
+            {
+                var credential = await _context.Credentials
+                    .FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
+
+                if (credential == null)
+                    return NotFound(new { success = false, message = "Email introuvable" });
+
+                return Ok(new {
+                    success = true,
+                    credentialId = credential.Id,
+                    email = credential.Email,
+                    role = credential.Role.ToString()
+                });
             }
             catch (Exception ex)
             {
