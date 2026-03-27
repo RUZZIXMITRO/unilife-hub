@@ -15,6 +15,7 @@ export class PromoteAdminComponent {
 
   private authUrl = 'https://localhost:7076/api/Auth';
   private adminUrl = 'https://localhost:7212/api/Admin';
+  private userUrl = 'https://localhost:7212/api/Users';
   private SECRET = 'UNILIFE2026';
 
   constructor(private http: HttpClient) {}
@@ -42,81 +43,68 @@ export class PromoteAdminComponent {
     this.error = '';
     this.success = '';
 
-    // Étape 1 : Trouver l'utilisateur par email dans AuthService
+    // Étape 1 : Trouver par email SANS token (AllowAnonymous)
     this.http.get<any>(
-      `${this.authUrl}/all-users-with-profiles`,
-      { headers: this.getHeaders() }
+      `${this.authUrl}/find-by-email/${this.email}`
     ).subscribe({
       next: (res) => {
-        const user = res.data.find((u: any) =>
-          u.email.toLowerCase() === this.email.toLowerCase()
-        );
-
-        if (!user) {
+        if (!res.success) {
           this.loading = false;
           this.error = 'Aucun compte trouvé avec cet email.';
           return;
         }
 
-        if (user.role === 'ADMIN') {
+        if (res.role === 'ADMIN') {
           this.loading = false;
           this.error = 'Cet utilisateur est déjà administrateur.';
           return;
         }
 
-        const credentialId = user.credentialId;
+        const credentialId = res.credentialId;
 
-        // Étape 2 : Promouvoir dans AuthService
+        // Étape 2 : Promouvoir dans AuthService (AllowAnonymous)
         this.http.post<any>(
           `${this.authUrl}/promote-to-admin/${credentialId}`,
-          {},
-          { headers: this.getHeaders() }
+          {}
         ).subscribe({
           next: () => {
+
             // Étape 3 : Récupérer userId depuis UserService
             this.http.get<any>(
-              `https://localhost:7212/api/Users/by-credential/${credentialId}`,
-              { headers: this.getHeaders() }
+              `${this.userUrl}/by-credential/${credentialId}`
             ).subscribe({
               next: (userRes) => {
-                console.log('👤 UserRes complet:', userRes);
-                console.log('👤 userId récupéré:', userRes.data?.id);
                 const userId = userRes.data?.id;
 
                 if (userId) {
-                  console.log('📤 PUT vers:', `${this.adminUrl}/promote/${userId}`);
-                  // Étape 4 : Promouvoir dans UserService
+                  // Étape 4 : Promouvoir dans UserService (AllowAnonymous)
                   this.http.put<any>(
                     `${this.adminUrl}/promote/${userId}`,
-                    {},
-                    { headers: this.getHeaders() }
+                    {}
                   ).subscribe({
-                    next: (promoteRes) => {
-                      console.log('✅ UserService promu:', promoteRes);
+                    next: () => {
                       this.loading = false;
-                      this.success = `✅ ${this.email} est maintenant ADMIN ! Il doit se reconnecter.`;
+                      this.success = `${this.email} est maintenant ADMIN ! Il doit se reconnecter.`;
                       this.email = '';
                       this.secretCode = '';
                     },
-                    error: (err) => {
-                      console.error('❌ Erreur UserService promote:', err);
+                    error: () => {
                       this.loading = false;
-                      this.success = `✅ ${this.email} est maintenant ADMIN ! Il doit se reconnecter.`;
+                      this.success = `${this.email} est maintenant ADMIN ! Il doit se reconnecter.`;
                       this.email = '';
                       this.secretCode = '';
                     }
                   });
                 } else {
                   this.loading = false;
-                  this.success = `✅ ${this.email} est maintenant ADMIN ! Il doit se reconnecter.`;
+                  this.success = `${this.email} est maintenant ADMIN ! Il doit se reconnecter.`;
                   this.email = '';
                   this.secretCode = '';
                 }
               },
-              error: (err) => {
-                console.error('❌ Erreur récupération user:', err);
+              error: () => {
                 this.loading = false;
-                this.success = `✅ ${this.email} est maintenant ADMIN ! Il doit se reconnecter.`;
+                this.success = `${this.email} est maintenant ADMIN ! Il doit se reconnecter.`;
                 this.email = '';
                 this.secretCode = '';
               }
@@ -128,13 +116,9 @@ export class PromoteAdminComponent {
           }
         });
       },
-      error: (err) => {
+      error: () => {
         this.loading = false;
-        if (err.status === 401) {
-          this.error = 'Tu dois être connecté. Connecte-toi d\'abord puis reviens ici.';
-        } else {
-          this.error = 'Impossible de contacter le serveur.';
-        }
+        this.error = 'Aucun compte trouvé avec cet email.';
       }
     });
   }
