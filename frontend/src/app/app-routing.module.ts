@@ -12,7 +12,7 @@ import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.
 import { SettingsComponent } from './components/admin/settings/settings.component';
 import { HelpComponent } from './components/admin/help/help.component';
 import { PromoteAdminComponent } from './components/setup/promote-admin/promote-admin.component';
-
+import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
 
 // Guards
 import { AuthGuard } from './guards/auth.guard';
@@ -52,6 +52,7 @@ const routes: Routes = [
   // ========== INTERFACE ADMIN (Protégée) ✅ NOUVEAU
  {
   path: 'admin',
+  component: AdminLayoutComponent,
   canActivate: [AuthGuard, AdminGuard],
   children: [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
