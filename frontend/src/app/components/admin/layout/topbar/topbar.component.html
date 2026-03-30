@@ -1,0 +1,127 @@
+<header class="topbar">
+
+  <button class="hamburger-btn" (click)="menuToggle.emit()">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- Date et heure -->
+  <div class="topbar-left">
+    <div class="datetime">
+      <p class="date">{{ currentDate }}</p>
+      <p class="time">
+        <i class="fa-solid fa-clock"></i>
+        {{ currentTime }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Recherche -->
+  <div class="topbar-center">
+    <div class="search-box">
+      <!-- Faux champs pour tromper l'autocomplete -->
+      <input type="text" style="display:none" autocomplete="username">
+      <input type="password" style="display:none" autocomplete="current-password">
+
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input
+        type="search"
+        autocomplete="off"
+        placeholder="Rechercher utilisateurs, cours, produits..."
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+        class="search-input">
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="topbar-right">
+
+    <!-- Switch Thème -->
+    <button class="icon-btn" (click)="toggleTheme()" title="Changer le thème">
+      <i class="fa-solid" [class.fa-moon]="!isDarkMode" [class.fa-sun]="isDarkMode"></i>
+    </button>
+
+    <!-- Centre d'aide -->
+    <button class="icon-btn" title="Centre d'aide" (click)="router.navigate(['/admin/help'])">
+      <i class="fa-solid fa-circle-question"></i>
+    </button>
+
+    <!-- Notifications -->
+    <div class="notification-wrapper">
+      <button class="icon-btn" (click)="toggleNotifications(); showProfile = false" title="Notifications">
+        <i class="fa-solid fa-bell"></i>
+        <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+      </button>
+
+      <div class="dropdown" *ngIf="showNotifications">
+        <div class="dropdown-header">
+          <h3>Notifications</h3>
+          <button class="link-btn" (click)="markAllAsRead()">Tout marquer comme lu</button>
+        </div>
+        <div class="notifications-list">
+          <div *ngFor="let notif of notifications"
+               class="notification-item"
+               [class.unread]="notif.unread"
+               (click)="markAsRead(notif)">
+            <div class="notif-icon" [class]="notif.type">
+              <i class="fa-solid {{ notif.icon }}"></i>
+            </div>
+            <div class="notif-content">
+              <p class="notif-title">{{ notif.title }}</p>
+              <p class="notif-message">{{ notif.message }}</p>
+            </div>
+            <div class="notif-meta">
+              <span class="notif-time">{{ notif.time }}</span>
+              <span class="notif-dot" *ngIf="notif.unread"></span>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown-footer">
+          <button class="footer-btn" (click)="viewAllNotifications()">Voir toutes les notifications</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profil -->
+    <div class="profile-wrapper">
+      <button class="profile-btn" (click)="toggleProfile(); showNotifications = false">
+        <div class="profile-avatar">{{ adminEmail.charAt(0).toUpperCase() }}</div>
+        <span class="profile-name">{{ adminEmail.split('@')[0] }}</span>
+        <i class="fa-solid fa-chevron-down profile-chevron" [class.rotated]="showProfile"></i>
+      </button>
+
+      <div class="dropdown profile-dropdown" *ngIf="showProfile">
+        <div class="profile-dropdown-header">
+          <div class="profile-avatar-lg">{{ adminEmail.charAt(0).toUpperCase() }}</div>
+          <div>
+            <p class="profile-dropdown-name">{{ adminEmail.split('@')[0] }}</p>
+            <p class="profile-dropdown-email">{{ adminEmail }}</p>
+          </div>
+        </div>
+
+        <div class="profile-dropdown-menu">
+          <button class="profile-menu-item" (click)="router.navigate(['/admin/profile']); showProfile = false">
+            <i class="fa-solid fa-user"></i>
+            <span>Voir le profil</span>
+          </button>
+          <button class="profile-menu-item" (click)="router.navigate(['/admin/settings']); showProfile = false">
+            <i class="fa-solid fa-gear"></i>
+            <span>Paramètres</span>
+          </button>
+          <button class="profile-menu-item" (click)="router.navigate(['/admin/help']); showProfile = false">
+            <i class="fa-solid fa-circle-question"></i>
+            <span>Aide</span>
+          </button>
+        </div>
+
+        <div class="profile-dropdown-footer">
+          <button class="profile-menu-item danger" (click)="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Déconnexion</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>

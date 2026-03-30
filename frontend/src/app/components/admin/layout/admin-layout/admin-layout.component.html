@@ -1,0 +1,19 @@
+<div class="admin-layout" [class.dark]="isDark">
+
+  <!-- Overlay mobile -->
+  <div class="sidebar-overlay"
+       *ngIf="mobileOpen"
+       (click)="mobileOpen = false"></div>
+
+  <app-admin-sidebar [class.mobile-open]="mobileOpen"></app-admin-sidebar>
+
+  <div class="admin-main"
+       [class.collapsed]="sidebarState.isCollapsed"
+       [class.mobile]="isMobile">
+    <app-admin-topbar (menuToggle)="mobileOpen = !mobileOpen"></app-admin-topbar>
+    <div class="admin-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</div>
