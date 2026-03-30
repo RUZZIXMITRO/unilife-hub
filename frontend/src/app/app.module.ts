@@ -55,7 +55,9 @@ import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.
 import { SettingsComponent } from './components/admin/settings/settings.component';
 import { HelpComponent } from './components/admin/help/help.component';
 import { PromoteAdminComponent } from './components/setup/promote-admin/promote-admin.component';
-
+import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
+import { AdminSidebarComponent } from './components/admin/layout/sidebar/sidebar.component';
+import { AdminTopbarComponent } from './components/admin/layout/topbar/topbar.component';
 // Enregistrer la locale française pour le DatePipe
 registerLocaleData(localeFr);
 
@@ -96,11 +98,13 @@ registerLocaleData(localeFr);
     HelpModalComponent,
     
     // Interface Admin 
-    AdminDashboardComponent,
+          AdminDashboardComponent,
           SettingsComponent,
           HelpComponent,
           PromoteAdminComponent,
-    
+          AdminLayoutComponent,
+          AdminSidebarComponent,
+          AdminTopbarComponent,
   ],
   imports: [
     BrowserModule,

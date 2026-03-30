@@ -1,0 +1,61 @@
+<aside class="sidebar" [class.collapsed]="sidebarState.isCollapsed">
+
+  <!-- Header -->
+  <div class="sidebar-header">
+    <div class="logo" *ngIf="!sidebarState.isCollapsed">
+      <div class="logo-icon">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <span class="logo-text">UniLife <strong>Hub</strong></span>
+    </div>
+    <button class="toggle-btn" (click)="toggle()" [title]="sidebarState.isCollapsed ? 'Ouvrir' : 'Fermer'">
+      <i class="fa-solid" [class.fa-chevron-left]="!sidebarState.isCollapsed" [class.fa-chevron-right]="sidebarState.isCollapsed"></i>
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="sidebar-search" *ngIf="!sidebarState.isCollapsed">
+    <div class="search-input-wrap">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Rechercher...">
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    <a *ngFor="let item of mainMenuItems"
+      [routerLink]="item.route"
+      [class.active]="isActive(item.route)"
+      class="nav-link"
+      [title]="sidebarState.isCollapsed ? item.label : ''">
+      <span class="nav-icon"><i class="fa-solid {{ item.icon }}"></i></span>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">{{ item.label }}</span>
+    </a>
+
+    <div class="nav-divider"></div>
+
+    <a *ngFor="let item of bottomMenuItems"
+      [routerLink]="item.route"
+      [class.active]="isActive(item.route)"
+      class="nav-link"
+      [title]="sidebarState.isCollapsed ? item.label : ''">
+      <span class="nav-icon"><i class="fa-solid {{ item.icon }}"></i></span>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <!-- Footer -->
+  <div class="sidebar-footer">
+    <div class="admin-card">
+      <div class="admin-avatar">{{ adminEmail.charAt(0).toUpperCase() }}</div>
+      <div class="admin-info" *ngIf="!sidebarState.isCollapsed">
+        <p class="admin-name">{{ adminEmail.split('@')[0] }}</p>
+        <p class="admin-role">Administrateur</p>
+      </div>
+      <button class="logout-btn" (click)="logout()" *ngIf="!sidebarState.isCollapsed" title="Déconnexion">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </div>
+
+</aside>
