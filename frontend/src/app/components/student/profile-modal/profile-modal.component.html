@@ -1,204 +1,182 @@
 <div class="modal-overlay" (click)="close()">
   <div class="modal-container" (click)="stopPropagation($event)">
-    <!-- Header -->
+
+    <!-- ===== HERO HEADER ===== -->
     <div class="modal-header">
-      <h2>Mon Profil</h2>
-      <button class="close-btn" (click)="close()">
-        <i class="fa-solid fa-xmark"></i>
+      <div class="modal-header-bg">
+
+        <div class="mh-top">
+          <span class="mh-title">Mon Profil</span>
+          <button class="close-btn" (click)="close()">
+            <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px">
+              <line x1="2" y1="2" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="12" y1="2" x2="2"  y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="mh-profile" *ngIf="!isLoading && user">
+          <div class="user-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
+          <div class="user-info">
+            <h3>{{ user.name }}</h3>
+            <p>{{ user.email }}</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== TABS ===== -->
+    <div class="tabs" *ngIf="!isLoading && user">
+      <button class="tab-btn" [class.active]="activeTab === 'info'" (click)="switchTab('info')">
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px">
+          <circle cx="8" cy="5.5" r="3" fill="currentColor" opacity="0.85"/>
+          <path d="M2 14 C2 10.5 14 10.5 14 14" fill="currentColor" opacity="0.5"/>
+        </svg>
+        Informations
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'security'" (click)="switchTab('security')">
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px">
+          <rect x="3" y="7" width="10" height="8" rx="2.5" fill="currentColor" opacity="0.7"/>
+          <path d="M5 7 L5 5 C5 3.3 11 3.3 11 5 L11 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="8" cy="11" r="1.2" fill="white" opacity="0.9"/>
+        </svg>
+        Sécurité
       </button>
     </div>
 
-    <!-- Loading State -->
+    <!-- ===== LOADING ===== -->
     <div class="modal-loading" *ngIf="isLoading">
-      <i class="fa-solid fa-spinner fa-spin"></i>
-      <p>Chargement...</p>
+      <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" style="width:36px;height:36px;animation:spin 0.9s linear infinite;display:block;margin:0 auto 0.75rem">
+        <circle cx="20" cy="20" r="15" fill="none" stroke="#e2e8f0" stroke-width="3.5"/>
+        <path d="M20 5 A15 15 0 0 1 35 20" fill="none" stroke="#2563eb" stroke-width="3.5" stroke-linecap="round"/>
+      </svg>
+      <p style="margin:0;font-size:0.82rem;font-weight:600">Chargement...</p>
     </div>
 
-    <!-- Content -->
+    <!-- ===== CONTENT ===== -->
     <div class="modal-content" *ngIf="!isLoading && user">
-      <!-- User Header -->
-      <div class="user-header">
-        <div class="user-avatar">
-          {{ user.name.charAt(0).toUpperCase() }}
-        </div>
-        <div class="user-info">
-          <h3>{{ user.name }}</h3>
-          <p>{{ user.email }}</p>
-        </div>
-      </div>
 
-      <!-- Tabs -->
-      <div class="tabs">
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'info'"
-          (click)="switchTab('info')">
-          <i class="fa-solid fa-user"></i>
-          Informations
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="activeTab === 'security'"
-          (click)="switchTab('security')">
-          <i class="fa-solid fa-lock"></i>
-          Sécurité
-        </button>
-      </div>
-
-      <!-- Tab Content : Informations -->
+      <!-- ===== TAB : INFORMATIONS ===== -->
       <div class="tab-content" *ngIf="activeTab === 'info'">
-        <!-- Success Message -->
+
         <div class="alert alert-success" *ngIf="infoSuccessMessage">
-          <i class="fa-solid fa-circle-check"></i>
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;flex-shrink:0">
+            <circle cx="8" cy="8" r="7" fill="#16a34a" opacity="0.15"/>
+            <path d="M4.5 8 L7 10.5 L11.5 5.5" stroke="#16a34a" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
           {{ infoSuccessMessage }}
         </div>
 
-        <!-- Error Message -->
         <div class="alert alert-error" *ngIf="infoErrorMessage">
-          <i class="fa-solid fa-circle-exclamation"></i>
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;flex-shrink:0">
+            <circle cx="8" cy="8" r="7" fill="#dc2626" opacity="0.15"/>
+            <line x1="8" y1="4.5" x2="8" y2="8.5" stroke="#dc2626" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="8" cy="11" r="1" fill="#dc2626"/>
+          </svg>
           {{ infoErrorMessage }}
         </div>
 
-        <!-- Edit Toggle -->
         <div class="edit-header">
           <h4>Informations personnelles</h4>
           <button class="btn-edit" (click)="toggleEditInfo()" *ngIf="!isEditingInfo">
-            <i class="fa-solid fa-pen"></i>
+            <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" style="width:11px;height:11px">
+              <path d="M9 2 L12 5 L5 12 L2 12 L2 9 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="7.5" y1="3.5" x2="10.5" y2="6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
             Modifier
           </button>
         </div>
 
-        <!-- Form -->
         <form class="profile-form">
           <div class="form-row">
             <div class="form-group">
               <label>Nom complet *</label>
-              <input 
-                type="text" 
-                [(ngModel)]="profileForm.name"
-                name="name"
-                [disabled]="!isEditingInfo"
-                required>
+              <input type="text" [(ngModel)]="profileForm.name" name="name" [disabled]="!isEditingInfo" required/>
             </div>
-
             <div class="form-group">
               <label>Téléphone *</label>
-              <input 
-                type="tel" 
-                [(ngModel)]="profileForm.phone"
-                name="phone"
-                [disabled]="!isEditingInfo"
-                required>
+              <input type="tel" [(ngModel)]="profileForm.phone" name="phone" [disabled]="!isEditingInfo" required/>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label>Université *</label>
-              <input 
-                type="text" 
-                [(ngModel)]="profileForm.university"
-                name="university"
-                [disabled]="!isEditingInfo"
-                required>
+              <input type="text" [(ngModel)]="profileForm.university" name="university" [disabled]="!isEditingInfo" required/>
             </div>
-
             <div class="form-group">
               <label>Numéro étudiant *</label>
-              <input 
-                type="text" 
-                [(ngModel)]="profileForm.studentId"
-                name="studentId"
-                [disabled]="!isEditingInfo"
-                required>
+              <input type="text" [(ngModel)]="profileForm.studentId" name="studentId" [disabled]="!isEditingInfo" required/>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label>Année académique</label>
-              <input 
-                type="text" 
-                [(ngModel)]="profileForm.academicYear"
-                name="academicYear"
-                [disabled]="!isEditingInfo"
-                placeholder="Ex: 2024-2025">
+              <input type="text" [(ngModel)]="profileForm.academicYear" name="academicYear" [disabled]="!isEditingInfo" placeholder="Ex: 2025-2026"/>
             </div>
-
             <div class="form-group">
               <label>Date de naissance</label>
-              <input 
-                type="date" 
-                [(ngModel)]="profileForm.dateOfBirth"
-                name="dateOfBirth"
-                [disabled]="!isEditingInfo">
+              <input type="date" [(ngModel)]="profileForm.dateOfBirth" name="dateOfBirth" [disabled]="!isEditingInfo"/>
             </div>
           </div>
 
           <div class="form-group">
             <label>Bio</label>
-            <textarea 
-              [(ngModel)]="profileForm.bio"
-              name="bio"
-              [disabled]="!isEditingInfo"
-              rows="3"
-              placeholder="Parlez de vous..."></textarea>
+            <textarea [(ngModel)]="profileForm.bio" name="bio" [disabled]="!isEditingInfo" rows="3" placeholder="Parlez de vous..."></textarea>
           </div>
 
           <div class="form-group">
             <label>Adresse</label>
-            <input 
-              type="text" 
-              [(ngModel)]="profileForm.address"
-              name="address"
-              [disabled]="!isEditingInfo">
+            <input type="text" [(ngModel)]="profileForm.address" name="address" [disabled]="!isEditingInfo"/>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label>Ville</label>
-              <input 
-                type="text" 
-                [(ngModel)]="profileForm.city"
-                name="city"
-                [disabled]="!isEditingInfo">
+              <input type="text" [(ngModel)]="profileForm.city" name="city" [disabled]="!isEditingInfo"/>
             </div>
-
             <div class="form-group">
               <label>Pays</label>
-              <input 
-                type="text" 
-                [(ngModel)]="profileForm.country"
-                name="country"
-                [disabled]="!isEditingInfo">
+              <input type="text" [(ngModel)]="profileForm.country" name="country" [disabled]="!isEditingInfo"/>
             </div>
           </div>
 
-          <!-- Action Buttons -->
           <div class="form-actions" *ngIf="isEditingInfo">
             <button type="button" class="btn btn-secondary" (click)="toggleEditInfo()" [disabled]="isSavingInfo">
               Annuler
             </button>
             <button type="button" class="btn btn-primary" (click)="saveProfile()" [disabled]="isSavingInfo">
-              <i class="fa-solid fa-spinner fa-spin" *ngIf="isSavingInfo"></i>
-              <i class="fa-solid fa-check" *ngIf="!isSavingInfo"></i>
+              <svg *ngIf="isSavingInfo" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="width:13px;height:13px;animation:spin 0.9s linear infinite">
+                <path d="M8 2 A6 6 0 0 1 14 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+              <svg *ngIf="!isSavingInfo" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" style="width:13px;height:13px">
+                <path d="M2.5 7 L5.5 10 L11.5 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
               {{ isSavingInfo ? 'Enregistrement...' : 'Enregistrer' }}
             </button>
           </div>
         </form>
       </div>
 
-      <!-- Tab Content : Sécurité -->
+      <!-- ===== TAB : SÉCURITÉ ===== -->
       <div class="tab-content" *ngIf="activeTab === 'security'">
-        <!-- Success Message -->
+
         <div class="alert alert-success" *ngIf="passwordSuccessMessage">
-          <i class="fa-solid fa-circle-check"></i>
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;flex-shrink:0">
+            <circle cx="8" cy="8" r="7" fill="#16a34a" opacity="0.15"/>
+            <path d="M4.5 8 L7 10.5 L11.5 5.5" stroke="#16a34a" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
           {{ passwordSuccessMessage }}
         </div>
 
-        <!-- Error Message -->
         <div class="alert alert-error" *ngIf="passwordErrorMessage">
-          <i class="fa-solid fa-circle-exclamation"></i>
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;flex-shrink:0">
+            <circle cx="8" cy="8" r="7" fill="#dc2626" opacity="0.15"/>
+            <line x1="8" y1="4.5" x2="8" y2="8.5" stroke="#dc2626" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="8" cy="11" r="1" fill="#dc2626"/>
+          </svg>
           {{ passwordErrorMessage }}
         </div>
 
@@ -207,43 +185,37 @@
         <form class="password-form">
           <div class="form-group">
             <label>Mot de passe actuel *</label>
-            <input 
-              type="password" 
-              [(ngModel)]="passwordForm.currentPassword"
-              name="currentPassword"
-              placeholder="Entrez votre mot de passe actuel"
-              required>
+            <input type="password" [(ngModel)]="passwordForm.currentPassword" name="currentPassword" placeholder="Entrez votre mot de passe actuel"/>
           </div>
-
           <div class="form-group">
             <label>Nouveau mot de passe *</label>
-            <input 
-              type="password" 
-              [(ngModel)]="passwordForm.newPassword"
-              name="newPassword"
-              placeholder="Minimum 6 caractères"
-              required>
+            <input type="password" [(ngModel)]="passwordForm.newPassword" name="newPassword" placeholder="Minimum 6 caractères"/>
           </div>
-
           <div class="form-group">
             <label>Confirmer le nouveau mot de passe *</label>
-            <input 
-              type="password" 
-              [(ngModel)]="passwordForm.confirmNewPassword"
-              name="confirmNewPassword"
-              placeholder="Confirmez le nouveau mot de passe"
-              required>
+            <input type="password" [(ngModel)]="passwordForm.confirmNewPassword" name="confirmNewPassword" placeholder="Confirmez le nouveau mot de passe"/>
           </div>
 
           <div class="form-actions">
             <button type="button" class="btn btn-primary" (click)="changePassword()" [disabled]="isChangingPassword">
-              <i class="fa-solid fa-spinner fa-spin" *ngIf="isChangingPassword"></i>
-              <i class="fa-solid fa-key" *ngIf="!isChangingPassword"></i>
+              <svg *ngIf="isChangingPassword" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="width:13px;height:13px;animation:spin 0.9s linear infinite">
+                <path d="M8 2 A6 6 0 0 1 14 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+              <svg *ngIf="!isChangingPassword" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" style="width:13px;height:13px">
+                <rect x="2" y="6" width="10" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M4 6 L4 4 C4 2.3 10 2.3 10 4 L10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="7" cy="9.5" r="1" fill="currentColor"/>
+              </svg>
               {{ isChangingPassword ? 'Changement...' : 'Changer le mot de passe' }}
             </button>
           </div>
         </form>
       </div>
+
     </div>
   </div>
 </div>
+
+<style>
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
