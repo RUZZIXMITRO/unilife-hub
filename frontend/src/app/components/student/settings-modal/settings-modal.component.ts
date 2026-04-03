@@ -50,11 +50,6 @@ export class SettingsModalComponent implements OnInit {
     showLastSeen: true
   };
 
-  languages = [
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'ar', name: 'العربية', flag: '🇲🇦' }
-  ];
 
   constructor(
     private themeService: ThemeService,
@@ -82,10 +77,6 @@ export class SettingsModalComponent implements OnInit {
       this.privacy = JSON.parse(savedPrivacy);
     }
 
-    const savedLanguage = localStorage.getItem('language');
-    if (savedLanguage) {
-      this.selectedLanguage = savedLanguage;
-    }
   }
 
   switchTab(tab: 'notifications' | 'appearance' | 'privacy' | 'account'): void {
@@ -106,11 +97,7 @@ export class SettingsModalComponent implements OnInit {
     }
   }
 
-  changeLanguage(languageCode: string): void {
-    this.selectedLanguage = languageCode;
-    localStorage.setItem('language', languageCode);
-    this.showSuccessMessage('Langue mise à jour avec succès !');
-  }
+
 
   saveNotifications(): void {
     localStorage.setItem('notifications', JSON.stringify(this.notifications));
