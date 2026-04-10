@@ -11,13 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("265e897f-7672-42d7-96da-d5468862d281")]
-[assembly: System.Reflection.AssemblyCompanyAttribute("ApiGateway")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("UserService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fb10d46af1b26a722d7082916fde729e9ba45bf7")]
-[assembly: System.Reflection.AssemblyProductAttribute("ApiGateway")]
-[assembly: System.Reflection.AssemblyTitleAttribute("ApiGateway")]
+[assembly: System.Reflection.AssemblyProductAttribute("UserService")]
+[assembly: System.Reflection.AssemblyTitleAttribute("UserService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Généré par la classe MSBuild WriteCodeFragment.

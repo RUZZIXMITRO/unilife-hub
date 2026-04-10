@@ -1,0 +1,425 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\repositories\\implementations\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\repositories\\implementations\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\models\\enums\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\models\\enums\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\migrations\\20260204170122_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\migrations\\20260204170122_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\migrations\\userdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\migrations\\userdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\services\\implementations\\adminserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\services\\implementations\\adminserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\services\\interfaces\\iadminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\services\\interfaces\\iadminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\repositories\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\repositories\\interfaces\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\repositories\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\repositories\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\dtos\\requests\\blockuserrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\dtos\\requests\\blockuserrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\services\\implementations\\userserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\services\\implementations\\userserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\dtos\\responses\\userresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\dtos\\responses\\userresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\services\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\services\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\dtos\\responses\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\dtos\\responses\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\data\\userdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\data\\userdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\repositories\\implementations\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\repositories\\implementations\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\models\\userpreferences.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\models\\userpreferences.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\dtos\\requests\\updateuserrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\dtos\\requests\\updateuserrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\models\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\models\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\dtos\\requests\\registeruserrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\dtos\\requests\\registeruserrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|c:\\users\\yousra\\desktop\\unilife-hub\\backend\\userservice\\userservice\\userservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{FB836D15-05B0-4001-A311-76A319FFC7F5}|UserService\\UserService.csproj|solutionrelative:userservice\\userservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "UserService\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "UserService\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAkwFwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:54:54.346Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "20260204170122_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Migrations\\20260204170122_InitialCreate.cs",
+              "RelativeDocumentMoniker": "UserService\\Migrations\\20260204170122_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Migrations\\20260204170122_InitialCreate.cs",
+              "RelativeToolTip": "UserService\\Migrations\\20260204170122_InitialCreate.cs",
+              "ViewState": "AgIAAF0AAAAAAAAAAADwv3UAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T17:01:23.149Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserRole.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Models\\Enums\\UserRole.cs",
+              "RelativeDocumentMoniker": "UserService\\Models\\Enums\\UserRole.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Models\\Enums\\UserRole.cs",
+              "RelativeToolTip": "UserService\\Models\\Enums\\UserRole.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAAAUAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:45:45.03Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GenericRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Repositories\\Implementations\\GenericRepository.cs",
+              "RelativeDocumentMoniker": "UserService\\Repositories\\Implementations\\GenericRepository.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Repositories\\Implementations\\GenericRepository.cs",
+              "RelativeToolTip": "UserService\\Repositories\\Implementations\\GenericRepository.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAAwC4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:51:58.999Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AdminServiceImpl.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Services\\Implementations\\AdminServiceImpl.cs",
+              "RelativeDocumentMoniker": "UserService\\Services\\Implementations\\AdminServiceImpl.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Services\\Implementations\\AdminServiceImpl.cs",
+              "RelativeToolTip": "UserService\\Services\\Implementations\\AdminServiceImpl.cs",
+              "ViewState": "AgIAALcAAAAAAAAAAAAowNMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:53:47.364Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "UserService\\Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "UserService\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAAHYAAAAAAAAAAAAAAHYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:54:33.623Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UserDbContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Migrations\\UserDbContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "UserService\\Migrations\\UserDbContextModelSnapshot.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Migrations\\UserDbContextModelSnapshot.cs",
+              "RelativeToolTip": "UserService\\Migrations\\UserDbContextModelSnapshot.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-24T22:20:40.805Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IAdminService.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Services\\Interfaces\\IAdminService.cs",
+              "RelativeDocumentMoniker": "UserService\\Services\\Interfaces\\IAdminService.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Services\\Interfaces\\IAdminService.cs",
+              "RelativeToolTip": "UserService\\Services\\Interfaces\\IAdminService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:52:59.239Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Services\\Interfaces\\IUserService.cs",
+              "RelativeDocumentMoniker": "UserService\\Services\\Interfaces\\IUserService.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Services\\Interfaces\\IUserService.cs",
+              "RelativeToolTip": "UserService\\Services\\Interfaces\\IUserService.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAA9wBMAAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:52:43.27Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "BlockUserRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\DTOs\\Requests\\BlockUserRequest.cs",
+              "RelativeDocumentMoniker": "UserService\\DTOs\\Requests\\BlockUserRequest.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\DTOs\\Requests\\BlockUserRequest.cs",
+              "RelativeToolTip": "UserService\\DTOs\\Requests\\BlockUserRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:50:09.598Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IUserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Repositories\\Interfaces\\IUserRepository.cs",
+              "RelativeDocumentMoniker": "UserService\\Repositories\\Interfaces\\IUserRepository.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Repositories\\Interfaces\\IUserRepository.cs",
+              "RelativeToolTip": "UserService\\Repositories\\Interfaces\\IUserRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:51:43.035Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IGenericRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Repositories\\Interfaces\\IGenericRepository.cs",
+              "RelativeDocumentMoniker": "UserService\\Repositories\\Interfaces\\IGenericRepository.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Repositories\\Interfaces\\IGenericRepository.cs",
+              "RelativeToolTip": "UserService\\Repositories\\Interfaces\\IGenericRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:51:24.549Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ApiResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\DTOs\\Responses\\ApiResponse.cs",
+              "RelativeDocumentMoniker": "UserService\\DTOs\\Responses\\ApiResponse.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\DTOs\\Responses\\ApiResponse.cs",
+              "RelativeToolTip": "UserService\\DTOs\\Responses\\ApiResponse.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAADwvx0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:50:45.394Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserServiceImpl.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Services\\Implementations\\UserServiceImpl.cs",
+              "RelativeDocumentMoniker": "UserService\\Services\\Implementations\\UserServiceImpl.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Services\\Implementations\\UserServiceImpl.cs",
+              "RelativeToolTip": "UserService\\Services\\Implementations\\UserServiceImpl.cs",
+              "ViewState": "AgIAAOAAAAAAAAAAAAAUwOkAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:53:18.671Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "UserResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\DTOs\\Responses\\UserResponse.cs",
+              "RelativeDocumentMoniker": "UserService\\DTOs\\Responses\\UserResponse.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\DTOs\\Responses\\UserResponse.cs",
+              "RelativeToolTip": "UserService\\DTOs\\Responses\\UserResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:50:27.953Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\appsettings.json",
+              "RelativeDocumentMoniker": "UserService\\appsettings.json",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\appsettings.json",
+              "RelativeToolTip": "UserService\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-04T16:45:07.523Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "UserDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Data\\UserDbContext.cs",
+              "RelativeDocumentMoniker": "UserService\\Data\\UserDbContext.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Data\\UserDbContext.cs",
+              "RelativeToolTip": "UserService\\Data\\UserDbContext.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAADwvxoAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:51:02.291Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Repositories\\Implementations\\UserRepository.cs",
+              "RelativeDocumentMoniker": "UserService\\Repositories\\Implementations\\UserRepository.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Repositories\\Implementations\\UserRepository.cs",
+              "RelativeToolTip": "UserService\\Repositories\\Implementations\\UserRepository.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAswDgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:52:19.137Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Models\\User.cs",
+              "RelativeDocumentMoniker": "UserService\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Models\\User.cs",
+              "RelativeToolTip": "UserService\\Models\\User.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAADwv2MAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:46:55.559Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "UpdateUserRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\DTOs\\Requests\\UpdateUserRequest.cs",
+              "RelativeDocumentMoniker": "UserService\\DTOs\\Requests\\UpdateUserRequest.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\DTOs\\Requests\\UpdateUserRequest.cs",
+              "RelativeToolTip": "UserService\\DTOs\\Requests\\UpdateUserRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAQwAkAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:49:13.861Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "UserPreferences.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Models\\UserPreferences.cs",
+              "RelativeDocumentMoniker": "UserService\\Models\\UserPreferences.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Models\\UserPreferences.cs",
+              "RelativeToolTip": "UserService\\Models\\UserPreferences.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:48:15.27Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Program.cs",
+              "RelativeDocumentMoniker": "UserService\\Program.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Program.cs",
+              "RelativeToolTip": "UserService\\Program.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAAFsAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:55:07.226Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "UserProfile.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Models\\UserProfile.cs",
+              "RelativeDocumentMoniker": "UserService\\Models\\UserProfile.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\Models\\UserProfile.cs",
+              "RelativeToolTip": "UserService\\Models\\UserProfile.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAowCMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:47:56.441Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "RegisterUserRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\DTOs\\Requests\\RegisterUserRequest.cs",
+              "RelativeDocumentMoniker": "UserService\\DTOs\\Requests\\RegisterUserRequest.cs",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\DTOs\\Requests\\RegisterUserRequest.cs",
+              "RelativeToolTip": "UserService\\DTOs\\Requests\\RegisterUserRequest.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAA5wBkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T16:48:54.969Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "UserService.csproj",
+              "DocumentMoniker": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\UserService.csproj",
+              "RelativeDocumentMoniker": "UserService\\UserService.csproj",
+              "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\UserService.csproj",
+              "RelativeToolTip": "UserService\\UserService.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-02-04T16:31:24.321Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
