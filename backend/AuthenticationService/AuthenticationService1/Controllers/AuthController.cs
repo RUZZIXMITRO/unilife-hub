@@ -97,7 +97,7 @@ namespace AuthenticationService1.Controllers
         }
 
         [HttpPost("logout")]
-        [Authorize]
+        
         [ProducesResponseType(typeof(ApiResponse<string>), 200)]
         public async Task<IActionResult> Logout()
         {
@@ -144,11 +144,10 @@ namespace AuthenticationService1.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize]
         [ProducesResponseType(200)]
         public IActionResult GetCurrentUser()
         {
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var userId = Request.Headers["X-User-Id"].ToString();
             var email = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
 
             return Ok(new
@@ -160,14 +159,13 @@ namespace AuthenticationService1.Controllers
         }
 
         [HttpPost("change-password")]
-        [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             // Récupérer l'ID de l'utilisateur depuis le token JWT
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = Request.Headers["X-User-Id"].ToString();
 
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized(new ApiResponse<bool>
@@ -183,7 +181,6 @@ namespace AuthenticationService1.Controllers
         }
 
         [HttpDelete("delete-account")]
-        [Authorize]
         [ProducesResponseType(typeof(ApiResponse<string>), 200)]
         [ProducesResponseType(typeof(ApiResponse<string>), 400)]
         public async Task<IActionResult> DeleteAccount()
@@ -191,7 +188,7 @@ namespace AuthenticationService1.Controllers
             try
             {
                 // Récupérer l'ID de l'utilisateur depuis le token JWT
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userId = Request.Headers["X-User-Id"].ToString();
 
                 if (string.IsNullOrEmpty(userId))
                 {
@@ -220,7 +217,6 @@ namespace AuthenticationService1.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpPost("promote-to-admin/{userId}")]
         public async Task<IActionResult> PromoteToAdmin(Guid userId)
         {
@@ -270,7 +266,6 @@ namespace AuthenticationService1.Controllers
         }
 
         [HttpPost("demote-from-admin/{userId}")]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DemoteFromAdmin(Guid userId)
         {
             try
@@ -318,7 +313,6 @@ namespace AuthenticationService1.Controllers
             }
         }
         [HttpPut("block-user/{credentialId}")]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> BlockUser(Guid credentialId, [FromBody] BlockUserRequest request)
         {
             try
@@ -362,7 +356,6 @@ namespace AuthenticationService1.Controllers
         }
 
         [HttpPut("unblock-user/{credentialId}")]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UnblockUser(Guid credentialId)
         {
             try
@@ -400,7 +393,6 @@ namespace AuthenticationService1.Controllers
             }
         }
         [HttpGet("all-users-with-profiles")]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetAllUsersWithProfiles()
         {
             try
@@ -437,7 +429,7 @@ namespace AuthenticationService1.Controllers
                         role = credential.Role.ToString(),
                         isActive = credential.IsActive,
                         createdAt = credential.CreatedAt,
-                        updatedAt = credential.UpdatedAt,
+                        updatedAt = credential.UpdatedAt, 
                         profile = userProfile
                     });
                 }
@@ -460,7 +452,6 @@ namespace AuthenticationService1.Controllers
             }
         }
         [HttpDelete("delete-credential/{credentialId}")]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeleteCredential(Guid credentialId)
         {
             try
@@ -490,9 +481,7 @@ namespace AuthenticationService1.Controllers
                 return StatusCode(500, new { success = false, message = ex.Message });
             }
         }
-
-
-    [AllowAnonymous]
+        [AllowAnonymous]
         [HttpGet("find-by-email/{email}")]
         public async Task<IActionResult> FindByEmail(string email)
         {
@@ -504,7 +493,8 @@ namespace AuthenticationService1.Controllers
                 if (credential == null)
                     return NotFound(new { success = false, message = "Email introuvable" });
 
-                return Ok(new {
+                return Ok(new
+                {
                     success = true,
                     credentialId = credential.Id,
                     email = credential.Email,
@@ -517,4 +507,5 @@ namespace AuthenticationService1.Controllers
             }
         }
     }
+
 }

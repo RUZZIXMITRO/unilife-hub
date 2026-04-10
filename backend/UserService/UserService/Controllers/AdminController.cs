@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UserService.DTOs.Requests;
 using UserService.Services.Interfaces;
 
@@ -7,7 +6,6 @@ namespace UserService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "ADMIN")]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
@@ -17,7 +15,6 @@ namespace UserService.Controllers
             _adminService = adminService;
         }
 
-        // ✅ DÉJÀ EXISTANT
         [HttpPut("activate/{userId}")]
         public async Task<IActionResult> ActivateAccount(Guid userId)
         {
@@ -25,7 +22,6 @@ namespace UserService.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        // ✅ DÉJÀ EXISTANT
         [HttpPut("deactivate/{userId}")]
         public async Task<IActionResult> DeactivateAccount(Guid userId)
         {
@@ -33,7 +29,6 @@ namespace UserService.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        // ✅ DÉJÀ EXISTANT
         [HttpPut("block/{userId}")]
         public async Task<IActionResult> BlockUser(Guid userId, [FromBody] BlockUserRequest request)
         {
@@ -43,7 +38,6 @@ namespace UserService.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        // ✅ DÉJÀ EXISTANT
         [HttpPut("unblock/{userId}")]
         public async Task<IActionResult> UnblockUser(Guid userId)
         {
@@ -51,7 +45,6 @@ namespace UserService.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        // ✅ NOUVEAU : Supprimer un utilisateur par son User ID
         [HttpDelete("delete/{userId}")]
         public async Task<IActionResult> DeleteUser(Guid userId)
         {
@@ -59,7 +52,6 @@ namespace UserService.Controllers
             return result.Success ? Ok(result) : NotFound(result);
         }
 
-        // ✅ NOUVEAU : Supprimer par Credential ID
         [HttpDelete("delete-by-credential/{credentialId}")]
         public async Task<IActionResult> DeleteUserByCredential(Guid credentialId)
         {
@@ -67,7 +59,6 @@ namespace UserService.Controllers
             return result.Success ? Ok(result) : NotFound(result);
         }
 
-        // ✅ NOUVEAU : Lister tous les utilisateurs
         [HttpGet("users")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -75,8 +66,6 @@ namespace UserService.Controllers
             return Ok(result);
         }
 
-        // ✅ Promouvoir en Admin
-        [AllowAnonymous]
         [HttpPut("promote/{userId}")]
         public async Task<IActionResult> PromoteToAdmin(Guid userId)
         {
@@ -84,13 +73,11 @@ namespace UserService.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        // ✅ Rétrograder en Student
         [HttpPut("demote/{userId}")]
         public async Task<IActionResult> DemoteFromAdmin(Guid userId)
         {
             var result = await _adminService.DemoteFromAdminAsync(userId);
             return result.Success ? Ok(result) : BadRequest(result);
         }
-
     }
 }
