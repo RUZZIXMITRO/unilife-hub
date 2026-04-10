@@ -13,9 +13,9 @@ export class PromoteAdminComponent {
   success = '';
   error = '';
 
-  private authUrl = 'https://localhost:7076/api/Auth';
-  private adminUrl = 'https://localhost:7212/api/Admin';
-  private userUrl = 'https://localhost:7212/api/Users';
+ private authUrl = 'https://localhost:5000/api/Auth';
+private adminUrl = 'https://localhost:5000/api/Admin';
+private userUrl = 'https://localhost:5000/api/Users';
   private SECRET = 'UNILIFE2026';
 
   constructor(private http: HttpClient) {}
