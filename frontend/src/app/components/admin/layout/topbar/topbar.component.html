@@ -1,66 +1,75 @@
 <header class="topbar">
 
+  <!-- Hamburger mobile -->
   <button class="hamburger-btn" (click)="menuToggle.emit()">
     <i class="fa-solid fa-bars"></i>
   </button>
 
-  <!-- Date et heure -->
+  <!-- LEFT : date/heure -->
   <div class="topbar-left">
     <div class="datetime">
       <p class="date">{{ currentDate }}</p>
-      <p class="time">
-        <i class="fa-solid fa-clock"></i>
-        {{ currentTime }}
-      </p>
+      <p class="time"><i class="fa-regular fa-clock"></i> {{ currentTime }}</p>
     </div>
   </div>
 
-  <!-- Recherche -->
+  <!-- CENTER : search -->
   <div class="topbar-center">
     <div class="search-box">
-      <!-- Faux champs pour tromper l'autocomplete -->
-      <input type="text" style="display:none" autocomplete="username">
-      <input type="password" style="display:none" autocomplete="current-password">
-
       <i class="fa-solid fa-magnifying-glass search-icon"></i>
-      <input
-        type="search"
-        autocomplete="off"
-        placeholder="Rechercher utilisateurs, cours, produits..."
-        [(ngModel)]="searchQuery"
-        (keyup.enter)="onSearch()"
-        class="search-input">
+     <input
+  type="text"
+  autocomplete="nope"
+  readonly
+  onfocus="this.removeAttribute('readonly')"
+  placeholder="Rechercher utilisateurs, cours, produits..."
+  [(ngModel)]="searchQuery"
+  (keyup.enter)="onSearch()"
+  class="search-input">
+      <div class="search-shortcut">
+        <i class="fa-solid fa-slash" style="font-size:9px; opacity:0.5"></i>
+      </div>
     </div>
   </div>
 
-  <!-- Actions -->
+  <!-- RIGHT -->
   <div class="topbar-right">
 
-    <!-- Switch Thème -->
-    <button class="icon-btn" (click)="toggleTheme()" title="Changer le thème">
-      <i class="fa-solid" [class.fa-moon]="!isDarkMode" [class.fa-sun]="isDarkMode"></i>
+    <!-- Theme toggle -->
+    <button class="theme-toggle" (click)="toggleTheme()" [title]="isDarkMode ? 'Mode clair' : 'Mode sombre'">
+      <div class="theme-track">
+        <div class="theme-thumb" [class.dark]="isDarkMode">
+          <i class="fa-solid" [class.fa-sun]="!isDarkMode" [class.fa-moon]="isDarkMode"></i>
+        </div>
+      </div>
     </button>
 
-    <!-- Centre d'aide -->
-    <button class="icon-btn" title="Centre d'aide" (click)="router.navigate(['/admin/help'])">
+    <!-- Aide -->
+    <button class="icon-btn" (click)="router.navigate(['/admin/help'])" title="Aide">
       <i class="fa-solid fa-circle-question"></i>
     </button>
 
     <!-- Notifications -->
-    <div class="notification-wrapper">
+    <div class="notif-wrapper">
       <button class="icon-btn" (click)="toggleNotifications(); showProfile = false" title="Notifications">
         <i class="fa-solid fa-bell"></i>
-        <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+        <span class="notif-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
       </button>
 
       <div class="dropdown" *ngIf="showNotifications">
-        <div class="dropdown-header">
-          <h3>Notifications</h3>
-          <button class="link-btn" (click)="markAllAsRead()">Tout marquer comme lu</button>
+        <!-- SVG déco -->
+        <div class="dropdown-decor">
+          <svg viewBox="0 0 340 60" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="300" cy="20" rx="80" ry="50" fill="rgba(30,111,255,0.06)"/>
+          </svg>
         </div>
-        <div class="notifications-list">
+        <div class="dropdown-header">
+          <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+          <button class="mark-read-btn" (click)="markAllAsRead()">Tout lire</button>
+        </div>
+        <div class="notif-list">
           <div *ngFor="let notif of notifications"
-               class="notification-item"
+               class="notif-item"
                [class.unread]="notif.unread"
                (click)="markAsRead(notif)">
             <div class="notif-icon" [class]="notif.type">
@@ -68,7 +77,7 @@
             </div>
             <div class="notif-content">
               <p class="notif-title">{{ notif.title }}</p>
-              <p class="notif-message">{{ notif.message }}</p>
+              <p class="notif-msg">{{ notif.message }}</p>
             </div>
             <div class="notif-meta">
               <span class="notif-time">{{ notif.time }}</span>
@@ -77,7 +86,9 @@
           </div>
         </div>
         <div class="dropdown-footer">
-          <button class="footer-btn" (click)="viewAllNotifications()">Voir toutes les notifications</button>
+          <button class="see-all-btn" (click)="viewAllNotifications()">
+            Voir tout <i class="fa-solid fa-arrow-right"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -85,39 +96,39 @@
     <!-- Profil -->
     <div class="profile-wrapper">
       <button class="profile-btn" (click)="toggleProfile(); showNotifications = false">
-        <div class="profile-avatar">{{ adminEmail.charAt(0).toUpperCase() }}</div>
-        <span class="profile-name">{{ adminEmail.split('@')[0] }}</span>
+        <div class="profile-avatar">
+          <span>{{ adminEmail.charAt(0).toUpperCase() }}</span>
+          <span class="online-dot"></span>
+        </div>
+        <div class="profile-info">
+          <span class="profile-name">{{ adminEmail.split('@')[0] }}</span>
+          <span class="profile-role">Admin</span>
+        </div>
         <i class="fa-solid fa-chevron-down profile-chevron" [class.rotated]="showProfile"></i>
       </button>
 
-      <div class="dropdown profile-dropdown" *ngIf="showProfile">
-        <div class="profile-dropdown-header">
-          <div class="profile-avatar-lg">{{ adminEmail.charAt(0).toUpperCase() }}</div>
-          <div>
-            <p class="profile-dropdown-name">{{ adminEmail.split('@')[0] }}</p>
-            <p class="profile-dropdown-email">{{ adminEmail }}</p>
+      <div class="profile-dropdown" *ngIf="showProfile">
+        <div class="pd-header">
+          <div class="pd-avatar">{{ adminEmail.charAt(0).toUpperCase() }}</div>
+          <div class="pd-info">
+            <p class="pd-name">{{ adminEmail.split('@')[0] }}</p>
+            <p class="pd-email">{{ adminEmail }}</p>
           </div>
         </div>
-
-        <div class="profile-dropdown-menu">
-          <button class="profile-menu-item" (click)="router.navigate(['/admin/profile']); showProfile = false">
-            <i class="fa-solid fa-user"></i>
-            <span>Voir le profil</span>
+        <div class="pd-menu">
+          <button class="pd-item" (click)="router.navigate(['/admin/profile']); showProfile = false">
+            <i class="fa-solid fa-user"></i><span>Mon profil</span>
           </button>
-          <button class="profile-menu-item" (click)="router.navigate(['/admin/settings']); showProfile = false">
-            <i class="fa-solid fa-gear"></i>
-            <span>Paramètres</span>
+          <button class="pd-item" (click)="router.navigate(['/admin/settings']); showProfile = false">
+            <i class="fa-solid fa-gear"></i><span>Paramètres</span>
           </button>
-          <button class="profile-menu-item" (click)="router.navigate(['/admin/help']); showProfile = false">
-            <i class="fa-solid fa-circle-question"></i>
-            <span>Aide</span>
+          <button class="pd-item" (click)="router.navigate(['/admin/help']); showProfile = false">
+            <i class="fa-solid fa-circle-question"></i><span>Aide</span>
           </button>
         </div>
-
-        <div class="profile-dropdown-footer">
-          <button class="profile-menu-item danger" (click)="logout()">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <span>Déconnexion</span>
+        <div class="pd-footer">
+          <button class="pd-item danger" (click)="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
           </button>
         </div>
       </div>

@@ -7,8 +7,8 @@ import { Observable, forkJoin } from 'rxjs';
 })
 export class AdminService {
   private authApiUrl = 'https://localhost:7076/api/Auth';
-  private userApiUrl = 'https://localhost:7212/api/Users';
-  private adminApiUrl = 'https://localhost:7212/api/Admin';
+  private userApiUrl = 'https://localhost:5000/api/Users';
+  private adminApiUrl = 'https://localhost:5000/api/Admin';
 
   constructor(private http: HttpClient) {}
 

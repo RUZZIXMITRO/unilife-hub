@@ -1,61 +1,169 @@
 <aside class="sidebar" [class.collapsed]="sidebarState.isCollapsed">
 
-  <!-- Header -->
+  <!-- SVG décoratif fond -->
+  <div class="sidebar-bg-decor">
+    <svg viewBox="0 0 260 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="200" cy="120" rx="120" ry="120" fill="rgba(46,79,138,0.15)"/>
+      <ellipse cx="-20" cy="400" rx="100" ry="100" fill="rgba(122,168,255,0.08)"/>
+      <ellipse cx="180" cy="700" rx="90" ry="90" fill="rgba(46,79,138,0.1)"/>
+    </svg>
+  </div>
+
+  <!-- Header admin -->
   <div class="sidebar-header">
-    <div class="logo" *ngIf="!sidebarState.isCollapsed">
-      <div class="logo-icon">
-        <i class="fa-solid fa-graduation-cap"></i>
+    <div class="admin-profile" *ngIf="!sidebarState.isCollapsed">
+      <div class="avatar-wrap">
+        <div class="admin-avatar">{{ adminEmail.charAt(0).toUpperCase() }}</div>
+        <span class="avatar-status"></span>
       </div>
-      <span class="logo-text">UniLife <strong>Hub</strong></span>
+      <div class="admin-info">
+        <p class="admin-name">{{ adminEmail.split('@')[0] }}</p>
+        <p class="admin-role">Administrateur</p>
+      </div>
+      <button class="toggle-btn" (click)="toggle()" title="Réduire">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
     </div>
-    <button class="toggle-btn" (click)="toggle()" [title]="sidebarState.isCollapsed ? 'Ouvrir' : 'Fermer'">
-      <i class="fa-solid" [class.fa-chevron-left]="!sidebarState.isCollapsed" [class.fa-chevron-right]="sidebarState.isCollapsed"></i>
-    </button>
+    <div class="collapsed-header" *ngIf="sidebarState.isCollapsed">
+      <div class="avatar-wrap" (click)="toggle()">
+        <div class="admin-avatar sm">{{ adminEmail.charAt(0).toUpperCase() }}</div>
+        <span class="avatar-status"></span>
+      </div>
+    </div>
   </div>
 
   <!-- Search -->
   <div class="sidebar-search" *ngIf="!sidebarState.isCollapsed">
-    <div class="search-input-wrap">
+    <div class="search-wrap">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" placeholder="Rechercher...">
+      <input type="text" placeholder="Rechercher..."/>
     </div>
+  </div>
+  <div class="search-icon-only" *ngIf="sidebarState.isCollapsed">
+    <button class="icon-only-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
   </div>
 
   <!-- Navigation -->
   <nav class="sidebar-nav">
-    <a *ngFor="let item of mainMenuItems"
-      [routerLink]="item.route"
-      [class.active]="isActive(item.route)"
-      class="nav-link"
-      [title]="sidebarState.isCollapsed ? item.label : ''">
-      <span class="nav-icon"><i class="fa-solid {{ item.icon }}"></i></span>
-      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">{{ item.label }}</span>
+
+    <a [routerLink]="'/admin/dashboard'"
+       [class.active]="isActive('/admin/dashboard')"
+       class="nav-item"
+       [title]="sidebarState.isCollapsed ? 'Vue d\'ensemble' : ''">
+      <div class="nav-icon-wrap">
+        <i class="fa-solid fa-chart-line"></i>
+      </div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Vue d'ensemble</span>
     </a>
 
-    <div class="nav-divider"></div>
-
-    <a *ngFor="let item of bottomMenuItems"
-      [routerLink]="item.route"
-      [class.active]="isActive(item.route)"
-      class="nav-link"
-      [title]="sidebarState.isCollapsed ? item.label : ''">
-      <span class="nav-icon"><i class="fa-solid {{ item.icon }}"></i></span>
-      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">{{ item.label }}</span>
+    <a [routerLink]="'/admin/users'"
+       [class.active]="isActive('/admin/users')"
+       class="nav-item"
+       [title]="sidebarState.isCollapsed ? 'Utilisateurs' : ''">
+      <div class="nav-icon-wrap">
+        <i class="fa-solid fa-users"></i>
+      </div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Utilisateurs</span>
+      <span class="nav-badge blue" *ngIf="!sidebarState.isCollapsed">14</span>
     </a>
+
+    <a [routerLink]="'/admin/marketplace'"
+       [class.active]="isActive('/admin/marketplace')"
+       class="nav-item"
+       [title]="sidebarState.isCollapsed ? 'Marketplace' : ''">
+      <div class="nav-icon-wrap">
+        <i class="fa-solid fa-store"></i>
+      </div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Marketplace</span>
+    </a>
+
+    <a [routerLink]="'/admin/courses'"
+       [class.active]="isActive('/admin/courses')"
+       class="nav-item"
+       [title]="sidebarState.isCollapsed ? 'Cours' : ''">
+      <div class="nav-icon-wrap">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Cours & Formation</span>
+    </a>
+
+    <a [routerLink]="'/admin/reports'"
+       [class.active]="isActive('/admin/reports')"
+       class="nav-item"
+       [title]="sidebarState.isCollapsed ? 'Signalements' : ''">
+      <div class="nav-icon-wrap">
+        <i class="fa-solid fa-flag"></i>
+      </div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Signalements</span>
+      <span class="nav-badge red" *ngIf="!sidebarState.isCollapsed">12</span>
+    </a>
+
+    <a [routerLink]="'/admin/chat'"
+       [class.active]="isActive('/admin/chat')"
+       class="nav-item"
+       [title]="sidebarState.isCollapsed ? 'Messages' : ''">
+      <div class="nav-icon-wrap">
+        <i class="fa-solid fa-comments"></i>
+      </div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Messages</span>
+      <span class="nav-badge-icon" *ngIf="!sidebarState.isCollapsed">
+        <i class="fa-solid fa-plus"></i>
+      </span>
+    </a>
+
+    <a [routerLink]="'/admin/analytics'"
+       [class.active]="isActive('/admin/analytics')"
+       class="nav-item"
+       [title]="sidebarState.isCollapsed ? 'Statistiques' : ''">
+      <div class="nav-icon-wrap">
+        <i class="fa-solid fa-chart-pie"></i>
+      </div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Statistiques</span>
+    </a>
+
+    <a [routerLink]="'/admin/payments'"
+       [class.active]="isActive('/admin/payments')"
+       class="nav-item"
+       [title]="sidebarState.isCollapsed ? 'Paiements' : ''">
+      <div class="nav-icon-wrap">
+        <i class="fa-solid fa-credit-card"></i>
+      </div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Paiements</span>
+    </a>
+
+    <div class="nav-divider" *ngIf="!sidebarState.isCollapsed">
+      <span>Système</span>
+    </div>
+    <div class="nav-divider-line" *ngIf="sidebarState.isCollapsed"></div>
+
+    <a [routerLink]="'/admin/settings'"
+       [class.active]="isActive('/admin/settings')"
+       class="nav-item"
+       [title]="sidebarState.isCollapsed ? 'Paramètres' : ''">
+      <div class="nav-icon-wrap">
+        <i class="fa-solid fa-gear"></i>
+      </div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Paramètres</span>
+    </a>
+
+    <a [routerLink]="'/admin/help'"
+       [class.active]="isActive('/admin/help')"
+       class="nav-item"
+       [title]="sidebarState.isCollapsed ? 'Aide' : ''">
+      <div class="nav-icon-wrap">
+        <i class="fa-solid fa-circle-question"></i>
+      </div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Aide</span>
+    </a>
+
   </nav>
 
-  <!-- Footer -->
+  <!-- Footer : logout -->
   <div class="sidebar-footer">
-    <div class="admin-card">
-      <div class="admin-avatar">{{ adminEmail.charAt(0).toUpperCase() }}</div>
-      <div class="admin-info" *ngIf="!sidebarState.isCollapsed">
-        <p class="admin-name">{{ adminEmail.split('@')[0] }}</p>
-        <p class="admin-role">Administrateur</p>
-      </div>
-      <button class="logout-btn" (click)="logout()" *ngIf="!sidebarState.isCollapsed" title="Déconnexion">
-        <i class="fa-solid fa-right-from-bracket"></i>
-      </button>
-    </div>
+    <button class="logout-btn" (click)="logout()" [title]="sidebarState.isCollapsed ? 'Déconnexion' : ''">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span *ngIf="!sidebarState.isCollapsed">Déconnexion</span>
+    </button>
   </div>
 
 </aside>
