@@ -22,6 +22,24 @@ services:
       retries: 10
       start_period: 30s
 
+      # ========== API GATEWAY ==========
+  apigateway:
+    build:
+      context: ./backend/ApiGateway
+      dockerfile: Dockerfile
+    container_name: unilifehub-gateway
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      - authservice
+      - userservice
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+
   # ========== AUTHENTICATION SERVICE ==========
   authservice:
     build:
