@@ -1,0 +1,486 @@
+<div class="users-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Gestion des Utilisateurs</h1>
+      <p class="subtitle">Gérer tous les utilisateurs de la plateforme</p>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card" (click)="filterStatus='all'; applyFilters()">
+      <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
+      <div class="stat-content">
+        <p class="stat-label">Total</p>
+        <h3 class="stat-value">{{ stats.total }}</h3>
+      </div>
+    </div>
+    <div class="stat-card" (click)="filterStatus='active'; applyFilters()">
+      <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="stat-content">
+        <p class="stat-label">Actifs</p>
+        <h3 class="stat-value">{{ stats.active }}</h3>
+      </div>
+    </div>
+    <div class="stat-card" (click)="filterStatus='blocked'; applyFilters()">
+      <div class="stat-icon red"><i class="fa-solid fa-ban"></i></div>
+      <div class="stat-content">
+        <p class="stat-label">Bloqués</p>
+        <h3 class="stat-value">{{ stats.blocked }}</h3>
+      </div>
+    </div>
+    <div class="stat-card" (click)="filterRole='STUDENT'; applyFilters()">
+      <div class="stat-icon purple"><i class="fa-solid fa-graduation-cap"></i></div>
+      <div class="stat-content">
+        <p class="stat-label">Étudiants</p>
+        <h3 class="stat-value">{{ stats.students }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtres -->
+  <div class="filters-section">
+    <div class="search-box-large">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        type="text"
+        placeholder="Rechercher par nom, email, université..."
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()">
+    </div>
+    <div class="filters-group">
+      <select [(ngModel)]="filterStatus" (change)="onFilterChange()" class="filter-select">
+        <option value="all">Tous les statuts</option>
+        <option value="active">Actifs</option>
+        <option value="blocked">Bloqués</option>
+      </select>
+      <select [(ngModel)]="filterRole" (change)="onFilterChange()" class="filter-select">
+        <option value="all">Tous les rôles</option>
+        <option value="STUDENT">Étudiants</option>
+        <option value="ADMIN">Administrateurs</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tableau -->
+  <div class="table-card">
+    <div class="table-header">
+      <h3>Liste des Utilisateurs ({{ filteredUsers.length }})</h3>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-state">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      <p>Chargement...</p>
+    </div>
+
+    <div *ngIf="!isLoading" class="table-wrapper">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Utilisateur</th>
+            <th>Email</th>
+            <th>Université</th>
+            <th>Rôle</th>
+            <th>Statut</th>
+            <th>Inscription</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of paginatedUsers">
+            <!-- Avatar + Nom -->
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar" [style.background]="getAvatarColor(user)">
+                  <img *ngIf="user.avatarUrl" [src]="user.avatarUrl" [alt]="user.name">
+                  <span *ngIf="!user.avatarUrl">{{ getInitials(user) }}</span>
+                </div>
+                <div class="user-info">
+                  <p class="user-name">{{ user.name || 'N/A' }}</p>
+                  <p class="user-id">{{ user.studentId || '—' }}</p>
+                </div>
+              </div>
+            </td>
+
+            <!-- Email -->
+            <td><span class="user-email">{{ user.email }}</span></td>
+
+            <!-- Université -->
+            <td><span class="university-text">{{ user.university || '—' }}</span></td>
+
+            <!-- Rôle -->
+            <td>
+              <span class="badge-role" [class.admin]="getRole(user) === 'ADMIN'" [class.student]="getRole(user) === 'STUDENT'">
+                <i class="fa-solid" [class.fa-shield-halved]="getRole(user) === 'ADMIN'" [class.fa-graduation-cap]="getRole(user) === 'STUDENT'"></i>
+                {{ getRole(user) === 'ADMIN' ? 'Admin' : 'Étudiant' }}
+              </span>
+            </td>
+
+            <!-- Statut -->
+            <td>
+              <div class="status-cell">
+                <span class="badge-status" [class.active]="!user.isBlocked && user.isActive" [class.blocked]="user.isBlocked">
+                  <i class="fa-solid" [class.fa-circle-check]="!user.isBlocked" [class.fa-ban]="user.isBlocked"></i>
+                  {{ user.isBlocked ? 'Bloqué' : 'Actif' }}
+                </span>
+                <span *ngIf="user.isBlocked && user.blockedUntil" class="block-until">
+                  jusqu'au {{ formatDate(user.blockedUntil) }}
+                </span>
+              </div>
+            </td>
+
+            <!-- Date -->
+            <td><span class="date-text">{{ formatDate(user.createdAt) }}</span></td>
+
+            <!-- Actions -->
+            <td class="text-center">
+              <div class="actions-cell">
+                <!-- Voir profil (toujours visible) -->
+                <button class="btn-icon info" (click)="openProfileModal(user)" title="Voir profil">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+
+                <!-- Promouvoir Admin (seulement STUDENT) -->
+                <button
+                  *ngIf="getRole(user) === 'STUDENT'"
+                  class="btn-icon purple"
+                  (click)="openPromoteModal(user)"
+                  title="Donner rôle Admin">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </button>
+
+                <!-- Rétrograder en Student (seulement ADMIN) -->
+<button
+  *ngIf="getRole(user) === 'ADMIN'"
+  class="btn-icon orange"
+  (click)="openDemoteModal(user)"
+  title="Rétrograder en étudiant">
+  <i class="fa-solid fa-user-graduate"></i>
+</button>
+                <!-- Bloquer (seulement STUDENT non bloqué) -->
+                <button
+                  *ngIf="getRole(user) === 'STUDENT' && !user.isBlocked"
+                  class="btn-icon warning"
+                  (click)="openBlockModal(user)"
+                  title="Bloquer">
+                  <i class="fa-solid fa-ban"></i>
+                </button>
+
+                <!-- Débloquer (seulement STUDENT bloqué) -->
+                <button
+                  *ngIf="getRole(user) === 'STUDENT' && user.isBlocked"
+                  class="btn-icon success"
+                  (click)="openUnblockModal(user)"
+                  title="Débloquer">
+                  <i class="fa-solid fa-circle-check"></i>
+                </button>
+
+                <!-- Supprimer (seulement STUDENT) -->
+                <button
+                  *ngIf="getRole(user) === 'STUDENT'"
+                  class="btn-icon danger"
+                  (click)="openDeleteModal(user)"
+                  title="Supprimer">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="paginatedUsers.length === 0">
+            <td colspan="7" class="empty-state">
+              <i class="fa-solid fa-users-slash"></i>
+              <p>Aucun utilisateur trouvé</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button class="page-btn" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          class="page-number"
+          [class.active]="currentPage === i + 1"
+          (click)="changePage(i + 1)">
+          {{ i + 1 }}
+        </button>
+      </div>
+      <button class="page-btn" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+      <span class="page-info">Page {{ currentPage }} / {{ totalPages }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL : VOIR PROFIL ===== -->
+<div class="modal-overlay" *ngIf="showProfileModal" (click)="closeModals()">
+  <div class="modal-content profile-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-user"></i> Profil Utilisateur</h3>
+      <button class="close-btn" (click)="closeModals()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="profile-top">
+        <div class="profile-avatar-xl" [style.background]="getAvatarColor(selectedUser)">
+          <img *ngIf="selectedUser?.avatarUrl" [src]="selectedUser.avatarUrl" [alt]="selectedUser.name">
+          <span *ngIf="!selectedUser?.avatarUrl">{{ getInitials(selectedUser) }}</span>
+        </div>
+        <div class="profile-identity">
+          <h2>{{ selectedUser?.name }}</h2>
+          <p class="profile-email"><i class="fa-solid fa-envelope"></i> {{ selectedUser?.email }}</p>
+          <div class="profile-badges">
+            <span class="badge-role" [class.admin]="getRole(selectedUser) === 'ADMIN'" [class.student]="getRole(selectedUser) === 'STUDENT'">
+              <i class="fa-solid" [class.fa-shield-halved]="getRole(selectedUser) === 'ADMIN'" [class.fa-graduation-cap]="getRole(selectedUser) === 'STUDENT'"></i>
+              {{ getRole(selectedUser) === 'ADMIN' ? 'Administrateur' : 'Étudiant' }}
+            </span>
+            <span class="badge-status" [class.active]="!selectedUser?.isBlocked" [class.blocked]="selectedUser?.isBlocked">
+              <i class="fa-solid" [class.fa-circle-check]="!selectedUser?.isBlocked" [class.fa-ban]="selectedUser?.isBlocked"></i>
+              {{ selectedUser?.isBlocked ? 'Bloqué' : 'Actif' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-grid">
+        <div class="info-section">
+          <h4><i class="fa-solid fa-circle-info"></i> Informations personnelles</h4>
+          <div class="info-list">
+            <div class="info-row">
+              <span class="info-label"><i class="fa-solid fa-phone"></i> Téléphone</span>
+              <span class="info-value">{{ selectedUser?.phone || '—' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label"><i class="fa-solid fa-university"></i> Université</span>
+              <span class="info-value">{{ selectedUser?.university || '—' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label"><i class="fa-solid fa-id-card"></i> N° Étudiant</span>
+              <span class="info-value">{{ selectedUser?.studentId || '—' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label"><i class="fa-solid fa-calendar"></i> Année académique</span>
+              <span class="info-value">{{ selectedUser?.academicYear || '—' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h4><i class="fa-solid fa-clock"></i> Activité</h4>
+          <div class="info-list">
+            <div class="info-row">
+              <span class="info-label"><i class="fa-solid fa-calendar-plus"></i> Inscription</span>
+              <span class="info-value">{{ formatDate(selectedUser?.createdAt) }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label"><i class="fa-solid fa-right-to-bracket"></i> Dernière connexion</span>
+              <span class="info-value">{{ selectedUser?.lastLogin ? formatDate(selectedUser.lastLogin) : 'Jamais' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label"><i class="fa-solid fa-circle-check"></i> Vérifié</span>
+              <span class="info-value">{{ selectedUser?.isVerified ? 'Oui' : 'Non' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section" *ngIf="selectedUser?.bio">
+        <h4><i class="fa-solid fa-pen"></i> Biographie</h4>
+        <p class="bio-text">{{ selectedUser?.bio }}</p>
+      </div>
+
+      <div class="block-info-box" *ngIf="selectedUser?.isBlocked">
+        <i class="fa-solid fa-ban"></i>
+        <div>
+          <p><strong>Compte bloqué</strong></p>
+          <p>Raison : {{ selectedUser?.blockedReason || 'Non spécifiée' }}</p>
+          <p *ngIf="selectedUser?.blockedUntil">Jusqu'au : {{ formatDate(selectedUser.blockedUntil) }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModals()">Fermer</button>
+      <!-- Bloquer/Débloquer uniquement pour les STUDENT -->
+      <button
+        *ngIf="getRole(selectedUser) === 'STUDENT' && !selectedUser?.isBlocked"
+        class="btn-warning"
+        (click)="closeModals(); openBlockModal(selectedUser)">
+        <i class="fa-solid fa-ban"></i> Bloquer
+      </button>
+      <button
+        *ngIf="getRole(selectedUser) === 'STUDENT' && selectedUser?.isBlocked"
+        class="btn-success"
+        (click)="closeModals(); openUnblockModal(selectedUser)">
+        <i class="fa-solid fa-circle-check"></i> Débloquer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL : BLOQUER ===== -->
+<div class="modal-overlay" *ngIf="showBlockModal" (click)="closeModals()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-ban"></i> Bloquer l'utilisateur</h3>
+      <button class="close-btn" (click)="closeModals()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-text">
+        Bloquer <strong>{{ selectedUser?.name }}</strong> l'empêchera de se connecter.
+      </p>
+      <div class="form-group">
+        <label>Raison du blocage *</label>
+        <textarea
+          [(ngModel)]="blockReason"
+          placeholder="Ex: Comportement inapproprié, spam, violation des conditions..."
+          rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Durée du blocage</label>
+        <select [(ngModel)]="blockDuration" class="filter-select" style="width: 100%">
+          <option [value]="1">1 jour</option>
+          <option [value]="7">7 jours</option>
+          <option [value]="30">30 jours (par défaut)</option>
+          <option [value]="90">3 mois</option>
+          <option [value]="365">1 an</option>
+          <option [value]="3650">Permanent (10 ans)</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModals()">Annuler</button>
+      <button class="btn-danger" (click)="confirmBlock()" [disabled]="!blockReason.trim()">
+        <i class="fa-solid fa-ban"></i> Bloquer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL : DÉBLOQUER ===== -->
+<div class="modal-overlay" *ngIf="showUnblockModal" (click)="closeModals()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-circle-check"></i> Débloquer l'utilisateur</h3>
+      <button class="close-btn" (click)="closeModals()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-text">
+        Débloquer <strong>{{ selectedUser?.name }}</strong> lui permettra de se reconnecter.
+      </p>
+      <div class="block-info-box" *ngIf="selectedUser?.blockedReason">
+        <i class="fa-solid fa-circle-info"></i>
+        <div>
+          <p><strong>Raison du blocage :</strong> {{ selectedUser?.blockedReason }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModals()">Annuler</button>
+      <button class="btn-success" (click)="confirmUnblock()">
+        <i class="fa-solid fa-circle-check"></i> Débloquer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL : SUPPRIMER ===== -->
+<div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeModals()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header danger">
+      <h3><i class="fa-solid fa-trash"></i> Supprimer l'utilisateur</h3>
+      <button class="close-btn" (click)="closeModals()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="warning-box">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <p><strong>Action irréversible !</strong> Toutes les données seront supprimées.</p>
+      </div>
+      <p class="modal-text">
+        Supprimer définitivement <strong>{{ selectedUser?.name }}</strong> ({{ selectedUser?.email }}) ?
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModals()">Annuler</button>
+      <button class="btn-danger" (click)="confirmDelete()">
+        <i class="fa-solid fa-trash"></i> Supprimer définitivement
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL : PROMOUVOIR ADMIN ===== -->
+<div class="modal-overlay" *ngIf="showPromoteModal" (click)="closeModals()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-shield-halved"></i> Donner le rôle Admin</h3>
+      <button class="close-btn" (click)="closeModals()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="promote-info">
+        <div class="promote-avatar" [style.background]="getAvatarColor(selectedUser)">
+          {{ getInitials(selectedUser) }}
+        </div>
+        <div>
+          <h4>{{ selectedUser?.name }}</h4>
+          <p>{{ selectedUser?.email }}</p>
+        </div>
+      </div>
+      <div class="warning-box info">
+        <i class="fa-solid fa-circle-info"></i>
+        <p>Cet utilisateur aura accès au <strong>panneau d'administration</strong> complet.</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModals()">Annuler</button>
+      <button class="btn-purple" (click)="confirmPromote()">
+        <i class="fa-solid fa-shield-halved"></i> Confirmer la promotion
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL : RÉTROGRADER ===== -->
+<div class="modal-overlay" *ngIf="showDemoteModal" (click)="closeModals()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-user-graduate"></i> Rétrograder en étudiant</h3>
+      <button class="close-btn" (click)="closeModals()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="promote-info">
+        <div class="promote-avatar" [style.background]="getAvatarColor(selectedUser)">
+          {{ getInitials(selectedUser) }}
+        </div>
+        <div>
+          <h4>{{ selectedUser?.name }}</h4>
+          <p>{{ selectedUser?.email }}</p>
+        </div>
+      </div>
+      <div class="warning-box">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <p>Cet utilisateur <strong>perdra l'accès</strong> au panneau d'administration.</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModals()">Annuler</button>
+      <button class="btn-warning" (click)="confirmDemote()">
+        <i class="fa-solid fa-user-graduate"></i> Confirmer
+      </button>
+    </div>
+  </div>
+</div>
