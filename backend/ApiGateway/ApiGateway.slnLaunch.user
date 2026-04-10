@@ -1,0 +1,22 @@
+[
+  {
+    "Name": "Nouveau profil",
+    "Projects": [
+      {
+        "Path": "ApiGateway.csproj",
+        "Action": "Start",
+        "DebugTarget": "ApiGateway"
+      },
+      {
+        "Path": "..\\AuthenticationService1\\AuthenticationService1\\AuthenticationService1.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "..\\UserService\\UserService\\UserService.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      }
+    ]
+  }
+]
