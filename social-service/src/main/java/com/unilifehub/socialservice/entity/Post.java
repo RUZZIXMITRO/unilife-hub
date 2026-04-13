@@ -29,10 +29,13 @@ public class Post {
     private Long groupId;
 
     @Column(nullable = false)
+    @Builder.Default
     private int likesCount = 0;
 
     @Column(nullable = false)
+    @Builder.Default
     private int commentsCount = 0;
+
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

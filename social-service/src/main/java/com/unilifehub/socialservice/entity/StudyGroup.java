@@ -33,6 +33,7 @@ public class StudyGroup {
     private GroupType type;
 
     @Column(nullable = false)
+    @Builder.Default
     private int membersCount = 0;
 
     @Column(nullable = false, updatable = false)

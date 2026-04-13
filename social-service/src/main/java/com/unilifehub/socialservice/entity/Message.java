@@ -26,7 +26,9 @@ public class Message {
     private String content;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean isRead = false;
+
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
