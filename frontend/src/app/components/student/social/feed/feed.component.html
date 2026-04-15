@@ -1,0 +1,136 @@
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="section-header">
+    <h3><i class="fa-solid fa-rss"></i> Fil d'actualité</h3>
+    <div class="sh-right">
+      <button class="filter-btn active">Public</button>
+      <button class="filter-btn">Amis</button>
+    </div>
+  </div>
+
+  <!-- ===== CRÉER UN POST ===== -->
+  <div class="perf-card create-post-card">
+    <div class="create-post-header">
+      <div class="post-avatar-create">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <textarea
+        [(ngModel)]="newPostContent"
+        placeholder="Quoi de neuf ? Partagez avec la communauté..."
+        class="post-input"
+        rows="3">
+      </textarea>
+    </div>
+    <div class="create-post-footer">
+      <div class="footer-left">
+        <button class="filter-btn">
+          <i class="fa-solid fa-image"></i> Photo
+        </button>
+        <select [(ngModel)]="newPostVisibility" class="filter-btn visibility-select">
+          <option value="PUBLIC">🌍 Public</option>
+          <option value="FRIENDS">👥 Amis</option>
+        </select>
+      </div>
+      <button (click)="createPost()" class="btn-create"
+              [disabled]="!newPostContent.trim()">
+        <i class="fa-solid fa-paper-plane"></i> Publier
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== LOADING ===== -->
+  <div *ngIf="isLoading" class="perf-card loading-card">
+    <i class="fa-solid fa-spinner fa-spin"></i> Chargement...
+  </div>
+
+  <!-- ===== POSTS ===== -->
+  <div *ngIf="!isLoading">
+
+    <div *ngIf="posts.length === 0" class="perf-card empty-card">
+      <i class="fa-solid fa-newspaper" style="font-size:2rem;color:#94a3b8;margin-bottom:0.75rem;display:block"></i>
+      <p>Aucun post pour le moment. Soyez le premier à publier !</p>
+    </div>
+
+    <div *ngFor="let post of posts" class="perf-card post-card">
+
+      <!-- En-tête -->
+      <div class="post-header">
+        <div class="post-avatar">
+          <span>{{ getInitial(post.userName) }}</span>
+        </div>
+        <div class="post-meta">
+          <h4>{{ post.userName || 'Étudiant' }}</h4>
+          <span class="post-time">
+            <i class="fa-regular fa-clock"></i>
+            {{ getTimeAgo(post.createdAt) }} ·
+            <i class="fa-solid fa-earth-africa" *ngIf="post.visibility === 'PUBLIC'"></i>
+            <i class="fa-solid fa-user-group" *ngIf="post.visibility === 'FRIENDS'"></i>
+          </span>
+        </div>
+        <button *ngIf="post.userId === 0"
+                (click)="deletePost(post.id)"
+                class="btn-delete"
+                title="Supprimer">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+
+      <!-- Contenu -->
+      <div class="post-content">
+        <p>{{ post.content }}</p>
+      </div>
+
+      <!-- Compteurs -->
+      <div class="post-counters">
+        <span *ngIf="post.likesCount > 0">
+          <i class="fa-solid fa-heart" style="color:#ef4444"></i>
+          {{ post.likesCount }}
+        </span>
+        <span *ngIf="post.commentsCount > 0">
+          {{ post.commentsCount }} commentaire(s)
+        </span>
+      </div>
+
+      <!-- Actions -->
+      <div class="post-actions">
+        <button (click)="toggleLike(post)"
+                [class.liked]="post.likedByMe"
+                class="action-btn">
+          <i class="fa-solid fa-heart" *ngIf="post.likedByMe"></i>
+          <i class="fa-regular fa-heart" *ngIf="!post.likedByMe"></i>
+          J'aime
+        </button>
+        <button (click)="toggleComments(post.id)" class="action-btn">
+          <i class="fa-regular fa-comment"></i>
+          Commenter
+        </button>
+        <button class="action-btn">
+          <i class="fa-solid fa-share-nodes"></i>
+          Partager
+        </button>
+      </div>
+
+      <!-- Commentaires -->
+      <div *ngIf="showComments[post.id]" class="comments-section">
+        <div class="comment-input-row">
+          <div class="post-avatar small">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <input
+            [(ngModel)]="newComment[post.id]"
+            (keyup.enter)="addComment(post.id)"
+            placeholder="Écrire un commentaire..."
+            class="comment-input">
+          <button (click)="addComment(post.id)"
+                  [disabled]="!newComment[post.id] || !newComment[post.id].trim()"
+                  class="btn-send-comment">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,110 @@
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="section-header">
+    <h3><i class="fa-solid fa-people-group"></i> Groupes d'études</h3>
+    <div class="sh-right">
+      <button class="filter-btn" (click)="showCreateForm = !showCreateForm">
+        <i class="fa-solid fa-plus"></i> Nouveau groupe
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== CRÉER UN GROUPE ===== -->
+  <div *ngIf="showCreateForm" class="perf-card create-form">
+    <div class="pc-head">
+      <h4><i class="fa-solid fa-plus-circle"></i> Créer un groupe</h4>
+      <button class="filter-btn" (click)="showCreateForm = false">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="form-grid">
+      <input [(ngModel)]="newGroup.name"
+             placeholder="Nom du groupe *"
+             class="form-input">
+      <input [(ngModel)]="newGroup.subject"
+             placeholder="Matière (ex: Mathématiques)"
+             class="form-input">
+    </div>
+    <textarea [(ngModel)]="newGroup.description"
+              placeholder="Description du groupe..."
+              class="form-input"
+              rows="3">
+    </textarea>
+    <div class="form-footer">
+      <select [(ngModel)]="newGroup.type" class="filter-btn type-select">
+        <option value="PUBLIC">🌍 Public</option>
+        <option value="PRIVATE">🔒 Privé</option>
+      </select>
+      <button (click)="createGroup()" class="btn-create"
+              [disabled]="!newGroup.name.trim()">
+        <i class="fa-solid fa-check"></i> Créer
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== RECHERCHE ===== -->
+  <div class="search-bar">
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <input [(ngModel)]="searchKeyword"
+           (input)="searchGroups()"
+           placeholder="Rechercher un groupe par nom ou matière..."
+           class="search-input">
+  </div>
+
+  <!-- ===== LOADING ===== -->
+  <div *ngIf="isLoading" class="perf-card empty-card">
+    <i class="fa-solid fa-spinner fa-spin"></i> Chargement...
+  </div>
+
+  <!-- ===== LISTE GROUPES ===== -->
+  <div *ngIf="!isLoading">
+
+    <div *ngIf="groups.length === 0" class="perf-card empty-card">
+      <i class="fa-solid fa-people-group" style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+      <p>Aucun groupe disponible. Créez le premier !</p>
+    </div>
+
+    <div *ngFor="let group of groups" class="perf-card group-card">
+      <div class="group-icon"
+           [style.background]="group.type === 'PUBLIC'
+             ? 'linear-gradient(135deg,#8b5cf6,#6d28d9)'
+             : 'linear-gradient(135deg,#1e293b,#334155)'">
+        <i class="fa-solid fa-people-group"></i>
+      </div>
+      <div class="group-info">
+        <div class="group-title-row">
+          <h4>{{ group.name }}</h4>
+          <span class="group-type-badge"
+                [class.public]="group.type === 'PUBLIC'"
+                [class.private]="group.type === 'PRIVATE'">
+            <i class="fa-solid fa-earth-africa" *ngIf="group.type === 'PUBLIC'"></i>
+            <i class="fa-solid fa-lock" *ngIf="group.type === 'PRIVATE'"></i>
+            {{ group.type === 'PUBLIC' ? 'Public' : 'Privé' }}
+          </span>
+        </div>
+        <p *ngIf="group.description">{{ group.description }}</p>
+        <div class="group-meta">
+          <span><i class="fa-solid fa-users"></i> {{ group.membersCount }} membres</span>
+          <span *ngIf="group.subject">
+            <i class="fa-solid fa-book"></i> {{ group.subject }}
+          </span>
+        </div>
+      </div>
+      <div class="group-action">
+        <button *ngIf="!group.isMember"
+                (click)="joinGroup(group.id)"
+                class="btn-join">
+          <i class="fa-solid fa-right-to-bracket"></i> Rejoindre
+        </button>
+        <button *ngIf="group.isMember"
+                (click)="leaveGroup(group.id)"
+                class="btn-leave">
+          <i class="fa-solid fa-right-from-bracket"></i> Quitter
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

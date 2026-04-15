@@ -39,8 +39,13 @@ const routes: Routes = [
     component: StudentLayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: StudentDashboardComponent },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'dashboard', component: StudentDashboardComponent },
+  {
+    path: 'social',
+    loadChildren: () => import('./components/student/social/social.module')
+      .then(m => m.SocialModule)
+  },
       // 🔜 Autres routes à ajouter plus tard :
       // { path: 'agenda', component: AgendaComponent },
       // { path: 'courses', component: CoursesComponent },

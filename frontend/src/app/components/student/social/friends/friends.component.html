@@ -1,0 +1,85 @@
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="section-header">
+    <h3><i class="fa-solid fa-user-group"></i> Mes Relations</h3>
+    <div class="sh-right">
+      <button class="filter-btn"
+              [class.active]="activeTab === 'friends'"
+              (click)="setTab('friends')">
+        <i class="fa-solid fa-users"></i>
+        Amis ({{ friends.length }})
+      </button>
+      <button class="filter-btn"
+              [class.active]="activeTab === 'requests'"
+              (click)="setTab('requests')">
+        <i class="fa-solid fa-bell"></i>
+        Demandes
+        <span *ngIf="pendingRequests.length > 0" class="badge-count">
+          {{ pendingRequests.length }}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== LISTE AMIS ===== -->
+  <div *ngIf="activeTab === 'friends'">
+
+    <div *ngIf="friends.length === 0" class="perf-card empty-card">
+      <i class="fa-solid fa-user-plus" style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+      <p>Vous n'avez pas encore d'amis.<br>Recherchez des étudiants pour vous connecter !</p>
+    </div>
+
+    <div *ngFor="let friend of friends" class="perf-card friend-card">
+      <div class="friend-avatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="friend-info">
+        <h4>Étudiant #{{ friend.requesterId }}</h4>
+        <span class="status online">
+          <i class="fa-solid fa-circle"></i> En ligne
+        </span>
+      </div>
+      <div class="friend-actions">
+        <button class="filter-btn">
+          <i class="fa-solid fa-comment"></i> Message
+        </button>
+        <button class="filter-btn" style="color:#ef4444">
+          <i class="fa-solid fa-user-minus"></i>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== DEMANDES REÇUES ===== -->
+  <div *ngIf="activeTab === 'requests'">
+
+    <div *ngIf="pendingRequests.length === 0" class="perf-card empty-card">
+      <i class="fa-regular fa-bell" style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+      <p>Aucune demande d'ami en attente</p>
+    </div>
+
+    <div *ngFor="let request of pendingRequests" class="perf-card friend-card">
+      <div class="friend-avatar pending">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="friend-info">
+        <h4>Étudiant #{{ request.requesterId }}</h4>
+        <span class="status pending-status">
+          <i class="fa-regular fa-clock"></i> Demande en attente
+        </span>
+      </div>
+      <div class="friend-actions">
+        <button (click)="acceptRequest(request.id)" class="btn-accept">
+          <i class="fa-solid fa-check"></i> Accepter
+        </button>
+        <button (click)="rejectRequest(request.id)" class="btn-reject">
+          <i class="fa-solid fa-xmark"></i> Refuser
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
