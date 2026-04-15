@@ -123,4 +123,10 @@ public class PostService {
                 .updatedAt(post.getUpdatedAt())
                 .build();
     }
+    // Récupérer un post par ID
+    public PostResponse getPostById(Long postId, Long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post non trouvé"));
+        return mapToResponse(post, userId);
+    }
 }

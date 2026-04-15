@@ -87,4 +87,14 @@ public class PostController {
         return ResponseEntity.ok(
                 ApiResponse.success("Like mis à jour", post));
     }
+    // GET /api/social/posts/{id} → récupérer un post par ID
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<PostResponse>> getPostById(
+            @PathVariable Long id,
+            Authentication auth) {
+        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        PostResponse post = postService.getPostById(id, userId);
+        return ResponseEntity.ok(
+                ApiResponse.success("Post récupéré", post));
+    }
 }
