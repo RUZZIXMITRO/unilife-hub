@@ -33,6 +33,11 @@ public class Message {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "conversation_id")
+    private Long conversationId;
+    public Long getConversationId() { return conversationId; }
+    public void setConversationId(Long conversationId) { this.conversationId = conversationId; }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
