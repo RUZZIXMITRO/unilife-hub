@@ -15,9 +15,27 @@ export class FeedComponent implements OnInit {
   showComments: { [key: number]: boolean } = {};
   newComment: { [key: number]: string } = {};
 
+  // Signalement
+  showReportModal = false;
+  reportPostId: number | null = null;
+  reportReason = '';
+
+  // Utilisateur connecté
+  currentUserId: number = 0;
+
   constructor(private socialService: SocialService) {}
 
   ngOnInit(): void {
+    // Récupérer l'userId depuis le token JWT stocké
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        this.currentUserId = payload.userId || payload.sub || 0;
+      } catch (e) {
+        this.currentUserId = 0;
+      }
+    }
     this.loadFeed();
   }
 
@@ -63,6 +81,7 @@ export class FeedComponent implements OnInit {
   }
 
   deletePost(postId: number): void {
+    if (!confirm('Supprimer ce post ?')) return;
     this.socialService.deletePost(postId).subscribe({
       next: (res) => {
         if (res.success) {
@@ -82,6 +101,47 @@ export class FeedComponent implements OnInit {
           const post = this.posts.find(p => p.id === postId);
           if (post) post.commentsCount++;
         }
+      }
+    });
+  }
+
+  // ===== PARTAGER =====
+  sharePost(postId: number): void {
+    this.socialService.sharePost(postId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          alert('Post partagé avec succès !');
+        }
+      },
+      error: () => {
+        alert('Vous avez déjà partagé ce post.');
+      }
+    });
+  }
+
+  // ===== SIGNALER =====
+  openReportModal(postId: number): void {
+    this.reportPostId = postId;
+    this.reportReason = '';
+    this.showReportModal = true;
+  }
+
+  closeReportModal(): void {
+    this.showReportModal = false;
+    this.reportPostId = null;
+    this.reportReason = '';
+  }
+
+  submitReport(): void {
+    if (!this.reportReason.trim() || this.reportPostId === null) return;
+    this.socialService.reportPost(this.reportPostId, this.reportReason).subscribe({
+      next: () => {
+        alert('Signalement envoyé. Merci !');
+        this.closeReportModal();
+      },
+      error: () => {
+        alert('Erreur lors du signalement.');
+        this.closeReportModal();
       }
     });
   }

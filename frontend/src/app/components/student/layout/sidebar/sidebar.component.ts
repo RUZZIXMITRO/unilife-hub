@@ -27,6 +27,8 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserName();
+    // Auto-ouvrir le sous-menu si on est sur /student/social
+this.socialExpanded = this.router.url.includes('/student/social');
   }
 
   loadUserName(): void {
@@ -53,4 +55,8 @@ export class SidebarComponent implements OnInit {
   isActive(route: string): boolean {
     return this.router.url === route || this.router.url.startsWith(route + '/');
   }
+  socialExpanded = false;
+  toggleSocial(): void {
+  this.socialExpanded = !this.socialExpanded;
+}
 }

@@ -48,7 +48,8 @@
   <div *ngIf="!isLoading">
 
     <div *ngIf="posts.length === 0" class="perf-card empty-card">
-      <i class="fa-solid fa-newspaper" style="font-size:2rem;color:#94a3b8;margin-bottom:0.75rem;display:block"></i>
+      <i class="fa-solid fa-newspaper"
+         style="font-size:2rem;color:#94a3b8;margin-bottom:0.75rem;display:block"></i>
       <p>Aucun post pour le moment. Soyez le premier à publier !</p>
     </div>
 
@@ -64,11 +65,14 @@
           <span class="post-time">
             <i class="fa-regular fa-clock"></i>
             {{ getTimeAgo(post.createdAt) }} ·
-            <i class="fa-solid fa-earth-africa" *ngIf="post.visibility === 'PUBLIC'"></i>
-            <i class="fa-solid fa-user-group" *ngIf="post.visibility === 'FRIENDS'"></i>
+            <i class="fa-solid fa-earth-africa"
+               *ngIf="post.visibility === 'PUBLIC'"></i>
+            <i class="fa-solid fa-user-group"
+               *ngIf="post.visibility === 'FRIENDS'"></i>
           </span>
         </div>
-        <button *ngIf="post.userId === 0"
+        <!-- Bouton supprimer uniquement pour ses propres posts -->
+        <button *ngIf="post.userId === currentUserId"
                 (click)="deletePost(post.id)"
                 class="btn-delete"
                 title="Supprimer">
@@ -92,8 +96,10 @@
         </span>
       </div>
 
-      <!-- Actions -->
+      <!-- ===== ACTIONS ===== -->
       <div class="post-actions">
+
+        <!-- J'aime -->
         <button (click)="toggleLike(post)"
                 [class.liked]="post.likedByMe"
                 class="action-btn">
@@ -101,14 +107,27 @@
           <i class="fa-regular fa-heart" *ngIf="!post.likedByMe"></i>
           J'aime
         </button>
+
+        <!-- Commenter -->
         <button (click)="toggleComments(post.id)" class="action-btn">
           <i class="fa-regular fa-comment"></i>
           Commenter
         </button>
-        <button class="action-btn">
+
+        <!-- Partager ✅ BRANCHÉ -->
+        <button (click)="sharePost(post.id)" class="action-btn">
           <i class="fa-solid fa-share-nodes"></i>
           Partager
         </button>
+
+        <!-- Signaler ✅ NOUVEAU -->
+        <button (click)="openReportModal(post.id)"
+                class="action-btn report-btn"
+                title="Signaler ce post">
+          <i class="fa-solid fa-flag"></i>
+          Signaler
+        </button>
+
       </div>
 
       <!-- Commentaires -->
@@ -130,6 +149,49 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ===== MODAL SIGNALEMENT ✅ NOUVEAU ===== -->
+  <div *ngIf="showReportModal" class="modal-overlay" (click)="closeReportModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h4><i class="fa-solid fa-flag"></i> Signaler ce post</h4>
+        <button (click)="closeReportModal()" class="btn-close-modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Pourquoi signalez-vous ce contenu ?</p>
+        <div class="report-options">
+          <button *ngFor="let reason of ['Contenu inapproprié',
+                                         'Spam ou publicité',
+                                         'Harcèlement ou intimidation',
+                                         'Fausses informations',
+                                         'Autre']"
+                  (click)="reportReason = reason"
+                  [class.selected]="reportReason === reason"
+                  class="report-option-btn">
+            {{ reason }}
+          </button>
+        </div>
+        <textarea
+          [(ngModel)]="reportReason"
+          placeholder="Ou décrivez le problème..."
+          class="report-textarea"
+          rows="3">
+        </textarea>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeReportModal()" class="filter-btn">
+          Annuler
+        </button>
+        <button (click)="submitReport()"
+                [disabled]="!reportReason.trim()"
+                class="btn-create">
+          <i class="fa-solid fa-paper-plane"></i> Envoyer
+        </button>
+      </div>
     </div>
   </div>
 

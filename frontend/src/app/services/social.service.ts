@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+// ===== INTERFACES EXISTANTES =====
 export interface Post {
   id: number;
   userId: number;
@@ -49,6 +50,7 @@ export interface Message {
   id: number;
   senderId: number;
   receiverId: number;
+  conversationId: number;
   content: string;
   isRead: boolean;
   createdAt: string;
@@ -71,12 +73,38 @@ export interface ApiResponse<T> {
   data: T;
 }
 
+// ===== NOUVELLES INTERFACES =====
+export interface Share {
+  id: number;
+  postId: number;
+  userId: number;
+  createdAt: string;
+  shareCount: number;
+}
+
+export interface BlockList {
+  id: number;
+  blockerId: number;
+  blockedId: number;
+  blockedAt: string;
+}
+
+export interface Conversation {
+  id: number;
+  user1Id: number;
+  user2Id: number;
+  lastMessage: string | null;
+  lastMessageAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class SocialService {
 
-  private apiUrl = 'https://localhost:8084/api/social';
+  private apiUrl = 'http://localhost:8084/api/social';
 
   constructor(private http: HttpClient) {}
 
@@ -122,6 +150,46 @@ export class SocialService {
     return this.http.post<ApiResponse<Post>>(
       `${this.apiUrl}/posts/${postId}/like`,
       {},
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // ===== SHARE (NOUVEAU) =====
+  sharePost(postId: number): Observable<ApiResponse<Share>> {
+    return this.http.post<ApiResponse<Share>>(
+      `${this.apiUrl}/posts/${postId}/share`,
+      {},
+      { headers: this.getHeaders() }
+    );
+  }
+
+  unsharePost(postId: number): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(
+      `${this.apiUrl}/posts/${postId}/share`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  getShareCount(postId: number): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(
+      `${this.apiUrl}/posts/${postId}/shares/count`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // ===== SIGNALEMENT (NOUVEAU) =====
+  reportPost(postId: number, reason: string): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(
+      `${this.apiUrl}/posts/${postId}/report`,
+      { reason },
+      { headers: this.getHeaders() }
+    );
+  }
+
+  reportComment(commentId: number, reason: string): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(
+      `${this.apiUrl}/comments/${commentId}/report`,
+      { reason },
       { headers: this.getHeaders() }
     );
   }
@@ -180,6 +248,36 @@ export class SocialService {
     );
   }
 
+  searchUsers(keyword: string): Observable<ApiResponse<any[]>> {
+    return this.http.get<ApiResponse<any[]>>(
+      `${this.apiUrl}/friends/search?keyword=${keyword}`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // ===== BLOCAGE (NOUVEAU) =====
+  blockUser(userId: number): Observable<ApiResponse<BlockList>> {
+    return this.http.post<ApiResponse<BlockList>>(
+      `${this.apiUrl}/users/${userId}/block`,
+      {},
+      { headers: this.getHeaders() }
+    );
+  }
+
+  unblockUser(userId: number): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(
+      `${this.apiUrl}/users/${userId}/unblock`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  getBlockedUsers(): Observable<ApiResponse<BlockList[]>> {
+    return this.http.get<ApiResponse<BlockList[]>>(
+      `${this.apiUrl}/users/blocked`,
+      { headers: this.getHeaders() }
+    );
+  }
+
   // ===== GROUPS =====
   getPublicGroups(): Observable<ApiResponse<Group[]>> {
     return this.http.get<ApiResponse<Group[]>>(
@@ -231,6 +329,22 @@ export class SocialService {
     return this.http.post<ApiResponse<Message>>(
       `${this.apiUrl}/messages`,
       { receiverId, content },
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // ===== CONVERSATIONS (NOUVEAU) =====
+  getConversations(): Observable<ApiResponse<Conversation[]>> {
+    return this.http.get<ApiResponse<Conversation[]>>(
+      `${this.apiUrl}/conversations`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  startConversation(userId: number): Observable<ApiResponse<Conversation>> {
+    return this.http.post<ApiResponse<Conversation>>(
+      `${this.apiUrl}/conversations/${userId}/start`,
+      {},
       { headers: this.getHeaders() }
     );
   }
