@@ -1,6 +1,7 @@
 package com.unilifehub.socialservice.service;
 
 import com.unilifehub.socialservice.dto.request.CreateGroupRequest;
+import com.unilifehub.socialservice.dto.response.GroupMemberResponse;
 import com.unilifehub.socialservice.dto.response.GroupResponse;
 import com.unilifehub.socialservice.entity.GroupMember;
 import com.unilifehub.socialservice.entity.StudyGroup;
@@ -54,16 +55,25 @@ public class GroupService {
             throw new RuntimeException("Vous êtes déjà membre");
         }
 
+        // ✅ PENDING si groupe PRIVATE, ACCEPTED si PUBLIC
+        GroupMember.MemberStatus status = group.getType() == StudyGroup.GroupType.PRIVATE
+                ? GroupMember.MemberStatus.PENDING
+                : GroupMember.MemberStatus.ACCEPTED;
+
         GroupMember member = GroupMember.builder()
                 .userId(userId)
                 .group(group)
                 .role(GroupMember.MemberRole.MEMBER)
-                .status(GroupMember.MemberStatus.ACCEPTED)
+                .status(status)
                 .build();
 
         memberRepository.save(member);
-        group.setMembersCount(group.getMembersCount() + 1);
-        groupRepository.save(group);
+
+        // Incrémenter seulement si ACCEPTED
+        if (status == GroupMember.MemberStatus.ACCEPTED) {
+            group.setMembersCount(group.getMembersCount() + 1);
+            groupRepository.save(group);
+        }
 
         return mapToResponse(group, userId);
     }
@@ -111,6 +121,91 @@ public class GroupService {
                 .membersCount(group.getMembersCount())
                 .isMember(isMember)
                 .createdAt(group.getCreatedAt())
+                .build();
+    }
+    // Récupérer les membres d'un groupe
+    public List<GroupMemberResponse> getGroupMembers(Long groupId) {
+        return memberRepository.findByGroupId(groupId)
+                .stream()
+                .map(this::mapMemberToResponse)
+                .collect(Collectors.toList());
+    }
+
+    // Membres en attente (PENDING)
+    public List<GroupMemberResponse> getPendingMembers(Long groupId) {
+        return memberRepository.findByGroupIdAndStatus(groupId, GroupMember.MemberStatus.PENDING)
+                .stream()
+                .map(this::mapMemberToResponse)
+                .collect(Collectors.toList());
+    }
+
+    // Approuver un membre
+    public GroupMemberResponse approveMember(Long groupId, Long userId, Long adminId) {
+        // Vérifier que celui qui approuve est admin
+        GroupMember admin = memberRepository.findByGroupIdAndUserId(groupId, adminId)
+                .orElseThrow(() -> new RuntimeException("Vous n'êtes pas membre de ce groupe"));
+
+        if (admin.getRole() != GroupMember.MemberRole.ADMIN) {
+            throw new RuntimeException("Vous n'avez pas les droits d'admin");
+        }
+
+        GroupMember member = memberRepository.findByGroupIdAndUserId(groupId, userId)
+                .orElseThrow(() -> new RuntimeException("Membre introuvable"));
+
+        member.setStatus(GroupMember.MemberStatus.ACCEPTED);
+        memberRepository.save(member);
+
+        // Mettre à jour le compteur
+        StudyGroup group = groupRepository.findById(groupId).get();
+        group.setMembersCount(group.getMembersCount() + 1);
+        groupRepository.save(group);
+
+        return mapMemberToResponse(member);
+    }
+
+    // Rejeter un membre
+    public void rejectMember(Long groupId, Long userId, Long adminId) {
+        // Vérifier que celui qui rejette est admin
+        GroupMember admin = memberRepository.findByGroupIdAndUserId(groupId, adminId)
+                .orElseThrow(() -> new RuntimeException("Vous n'êtes pas membre de ce groupe"));
+
+        if (admin.getRole() != GroupMember.MemberRole.ADMIN) {
+            throw new RuntimeException("Vous n'avez pas les droits d'admin");
+        }
+
+        GroupMember member = memberRepository.findByGroupIdAndUserId(groupId, userId)
+                .orElseThrow(() -> new RuntimeException("Membre introuvable"));
+
+        memberRepository.delete(member);
+    }
+
+    // Retirer un membre (kick)
+    public void removeMember(Long groupId, Long userId, Long adminId) {
+        GroupMember admin = memberRepository.findByGroupIdAndUserId(groupId, adminId)
+                .orElseThrow(() -> new RuntimeException("Vous n'êtes pas membre de ce groupe"));
+
+        if (admin.getRole() != GroupMember.MemberRole.ADMIN) {
+            throw new RuntimeException("Vous n'avez pas les droits d'admin");
+        }
+
+        GroupMember member = memberRepository.findByGroupIdAndUserId(groupId, userId)
+                .orElseThrow(() -> new RuntimeException("Membre introuvable"));
+
+        memberRepository.delete(member);
+
+        StudyGroup group = groupRepository.findById(groupId).get();
+        group.setMembersCount(Math.max(0, group.getMembersCount() - 1));
+        groupRepository.save(group);
+    }
+
+    private GroupMemberResponse mapMemberToResponse(GroupMember m) {
+        return GroupMemberResponse.builder()
+                .id(m.getId())
+                .userId(m.getUserId())
+                .groupId(m.getGroup().getId())
+                .role(m.getRole())
+                .status(m.getStatus())
+                .joinedAt(m.getJoinedAt())
                 .build();
     }
 }
