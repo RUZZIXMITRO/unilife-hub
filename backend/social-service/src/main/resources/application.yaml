@@ -20,6 +20,8 @@ spring:
       hibernate:
         format_sql: true
 
-# JWT - doit être le même secret que AuthService !
+# JWT - identique à AuthService ASP.NET
 jwt:
-  secret: votreCleSecreteTresLongueEtComplexe
+  secret: SuperSecretKeyForJWTAuthentication2024VeryLongAndComplexKey!@#$%^&*()
+  issuer: UniLifeHub
+  audience: UniLifeHubUsers

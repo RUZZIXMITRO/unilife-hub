@@ -42,7 +42,8 @@ public class JwtUtils {
     }
 
     private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        // AuthService ASP.NET utilise plain text — pas Base64
+        byte[] keyBytes = jwtSecret.getBytes(java.nio.charset.StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
