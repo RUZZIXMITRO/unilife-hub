@@ -14,7 +14,7 @@ export interface ChangePasswordRequest {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:7076/api/Auth';
+  private apiUrl = 'http://localhost:7076/api/Auth';
   
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();

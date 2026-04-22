@@ -62,7 +62,7 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'https://localhost:7212/api/Users';
+  private apiUrl = 'http://localhost:7212/api/Users';
 
   constructor(
     private http: HttpClient,
