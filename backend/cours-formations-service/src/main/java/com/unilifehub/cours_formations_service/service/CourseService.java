@@ -117,6 +117,14 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
+    public List<CourseResponse> getPendingCourses() {
+        return courseRepository.findAll()
+                .stream()
+                .filter(c -> !c.getIsApproved())
+                .map(c -> toResponse(c, null))
+                .collect(Collectors.toList());
+    }
+
     public CourseResponse toResponse(Course course, Integer userId) {
         boolean isFavorite = userId != null &&
                 favoriteRepository.existsByUserIdAndResourceId(

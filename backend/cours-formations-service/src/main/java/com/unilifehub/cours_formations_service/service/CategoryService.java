@@ -66,6 +66,15 @@ public class CategoryService {
     }
 
     public void deleteCategory(Integer id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Catégorie non trouvée"));
+
+        if (category.getCoursesCount() > 0 || category.getFormationsCount() > 0) {
+            throw new RuntimeException(
+                    "Impossible de supprimer : la catégorie contient "
+                            + category.getCoursesCount() + " cours et "
+                            + category.getFormationsCount() + " formations");
+        }
         categoryRepository.deleteById(id);
     }
 
