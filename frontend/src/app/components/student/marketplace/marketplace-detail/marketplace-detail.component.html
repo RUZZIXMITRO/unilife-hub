@@ -1,0 +1,148 @@
+<div class="md-wrapper">
+
+  <!-- HEADER -->
+  <div class="md-header">
+    <button class="btn-back" (click)="goBack()">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <div class="md-breadcrumb">
+      <span class="bc-link" (click)="goBack()">Marketplace</span>
+      <i class="fas fa-chevron-right"></i>
+      <span class="bc-current" *ngIf="listing">{{ listing.title }}</span>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="md-loading" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Chargement...</p>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="md-body" *ngIf="!loading && listing">
+
+    <!-- LEFT: Image -->
+    <div class="md-left">
+      <div class="md-img-card">
+        <img *ngIf="listing.imageUrls && listing.imageUrls.length > 0"
+             [src]="listing.imageUrls[0]" alt="{{ listing.title }}" />
+        <div *ngIf="!listing.imageUrls || listing.imageUrls.length === 0" class="md-no-img">
+          <i class="fas fa-image"></i>
+          <p>Aucune photo</p>
+        </div>
+        <!-- Fav button sur l'image -->
+        <button class="img-fav-btn" [class.is-fav]="isFavorite" (click)="toggleFavorite()">
+          <i class="fas fa-heart"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Infos -->
+    <div class="md-right">
+
+      <!-- Bloc 1 : Titre + Prix + Badges -->
+      <div class="md-main-block">
+
+        <div class="md-top-row">
+          <span class="md-cat-badge">
+            <i class="fas {{ getCatIconFromCategory(listing.category) }}"></i>
+            {{ listing.category }}
+          </span>
+          <span class="md-cond-badge" [class]="getConditionClass(listing.condition)">
+            {{ listing.condition }}
+          </span>
+        </div>
+
+        <h1 class="md-title">{{ listing.title }}</h1>
+
+        <div class="md-price-row">
+          <span class="md-price">{{ listing.price }}</span>
+          <span class="md-currency">DH</span>
+        </div>
+
+        <div class="md-meta-row">
+          <span class="md-meta-item">
+            <i class="fas fa-clock"></i>
+            {{ listing.createdAt | slice:0:10 }}
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Bloc 2 : Description -->
+      <div class="md-desc-block" *ngIf="listing.description">
+        <div class="md-block-title">
+          <i class="fas fa-align-left"></i>
+          Description
+        </div>
+        <p class="md-desc-text">{{ listing.description }}</p>
+      </div>
+
+      <!-- Bloc 3 : Actions -->
+      <div class="md-actions-block">
+        <button class="btn-contact" (click)="contactSeller()">
+          <i class="fas fa-comment-dots"></i>
+          Contacter le vendeur
+        </button>
+        <div class="md-actions-secondary">
+          <button class="btn-fav-text" [class.is-fav]="isFavorite" (click)="toggleFavorite()">
+            <i class="fas fa-heart"></i>
+            {{ isFavorite ? 'Retiré des favoris' : 'Ajouter aux favoris' }}
+          </button>
+          <button class="btn-report-text" (click)="showReportModal = true">
+            <i class="fas fa-flag"></i>
+            Signaler
+          </button>
+        </div>
+      </div>
+
+      <!-- Bloc 4 : Coordonnées révélées -->
+      <div class="md-contact-block" *ngIf="showContact && contactInfo">
+        <div class="md-block-title">
+          <i class="fas fa-address-card"></i>
+          Coordonnées du vendeur
+        </div>
+        <div class="contact-row" *ngIf="contactInfo.phone">
+          <div class="contact-ico-wrap phone">
+            <i class="fas fa-phone"></i>
+          </div>
+          <div class="contact-details">
+            <span class="contact-label">Téléphone</span>
+            <span class="contact-value">{{ contactInfo.phone }}</span>
+          </div>
+        </div>
+        <div class="contact-row" *ngIf="contactInfo.email">
+          <div class="contact-ico-wrap mail">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="contact-details">
+            <span class="contact-label">Email</span>
+            <span class="contact-value">{{ contactInfo.email }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- REPORT MODAL -->
+  <div class="modal-overlay" *ngIf="showReportModal" (click)="showReportModal = false">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-ico">
+        <i class="fas fa-flag"></i>
+      </div>
+      <h3>Signaler cette annonce</h3>
+      <p>Décris le problème rencontré avec cette annonce.</p>
+      <textarea [(ngModel)]="reportReason" rows="4"
+                placeholder="Raison du signalement..."></textarea>
+      <div class="modal-btns">
+        <button class="modal-cancel" (click)="showReportModal = false">Annuler</button>
+        <button class="modal-send" (click)="submitReport()">
+          <i class="fas fa-paper-plane"></i>
+          Envoyer
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
