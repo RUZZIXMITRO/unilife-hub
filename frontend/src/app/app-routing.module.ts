@@ -15,6 +15,17 @@ import { PromoteAdminComponent } from './components/setup/promote-admin/promote-
 import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
 import { UsersManagementComponent } from './components/admin/users-management/users-management.component';
 import { ProfileComponent } from './components/admin/pages/profile/profile.component';
+
+// ✅ IMPORTS ADMIN MARKETPLACE
+import { AdminMarketplaceComponent } from './components/admin/marketplace/admin-marketplace/admin-marketplace.component';
+import { AdminReportsComponent } from './components/admin/marketplace/admin-reports/admin-reports.component';
+
+// ✅ IMPORTS MARKETPLACE ÉTUDIANT
+import { MarketplaceListComponent } from './components/student/marketplace/marketplace-list/marketplace-list.component';
+import { MarketplaceDetailComponent } from './components/student/marketplace/marketplace-detail/marketplace-detail.component';
+import { MarketplacePublishComponent } from './components/student/marketplace/marketplace-publish/marketplace-publish.component';
+import { MyListingsComponent } from './components/student/marketplace/my-listings/my-listings.component';
+import { MyFavoritesComponent } from './components/student/marketplace/my-favorites/my-favorites.component';
 // Guards
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
@@ -41,12 +52,11 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: StudentDashboardComponent },
-      // 🔜 Autres routes à ajouter plus tard :
-      // { path: 'agenda', component: AgendaComponent },
-      // { path: 'courses', component: CoursesComponent },
-      // { path: 'commerce', component: CommerceComponent },
-      // { path: 'chatbot', component: ChatbotComponent },
-      // { path: 'social', component: SocialComponent },
+      { path: 'marketplace', component: MarketplaceListComponent },
+      { path: 'marketplace/publish', component: MarketplacePublishComponent },
+      { path: 'marketplace/my-listings', component: MyListingsComponent },
+      { path: 'marketplace/my-favorites', component: MyFavoritesComponent },
+      { path: 'marketplace/:id', component: MarketplaceDetailComponent },
     ]
   },
 
@@ -60,6 +70,8 @@ const routes: Routes = [
     { path: 'dashboard', component: AdminDashboardComponent },
     { path: 'settings', component: SettingsComponent },
     { path: 'help', component: HelpComponent },
+    { path: 'marketplace', component: AdminMarketplaceComponent },
+    { path: 'reports', component: AdminReportsComponent },
     { path: 'users', component: UsersManagementComponent } ,
     { path: 'profile', component: ProfileComponent }
   ]
