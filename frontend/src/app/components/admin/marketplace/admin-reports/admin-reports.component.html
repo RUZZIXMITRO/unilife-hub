@@ -1,0 +1,136 @@
+<div class="page">
+
+  <div class="page-topbar">
+    <div class="topbar-left">
+      <div class="page-eyebrow">Administration</div>
+      <h1 class="page-heading">
+        <i class="fas fa-flag"></i>
+        Signalements
+      </h1>
+    </div>
+    <div class="topbar-right">
+      <div class="reports-counter" *ngIf="reports.length > 0">
+        <span class="counter-dot"></span>
+        {{ reports.length }} signalement{{ reports.length > 1 ? 's' : '' }}
+      </div>
+      <button class="btn-refresh" (click)="loadReports()">
+        <i class="fas fa-arrows-rotate"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="page-loading" *ngIf="loading">
+    <div class="loading-track"><div class="loading-bar"></div></div>
+  </div>
+
+  <!-- EMPTY -->
+  <div class="page-empty" *ngIf="!loading && reports.length === 0">
+    <div class="empty-ico"><i class="fas fa-shield-halved"></i></div>
+    <h3>Aucun signalement</h3>
+    <p>La communauté est en règle.</p>
+  </div>
+
+  <!-- TABLE -->
+  <div class="report-table" *ngIf="!loading && reports.length > 0">
+    <div class="table-head">
+      <div></div>
+      <div>Annonce signalée</div>
+      <div>Motif</div>
+      <div>Infos</div>
+      <div></div>
+    </div>
+
+    <div class="table-row" *ngFor="let report of reports">
+
+      <div>
+        <div class="row-img">
+          <img *ngIf="getImage(report.listing?.imageUrls)"
+               [src]="getImage(report.listing?.imageUrls)" alt="" />
+          <div *ngIf="!getImage(report.listing?.imageUrls)" class="row-no-img">
+            <i class="fas fa-image"></i>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="row-title">
+          {{ report.listing?.title || 'Annonce #' + report.listingId }}
+        </div>
+        <div class="row-sub">
+          <span>Vendeur #{{ report.listing?.sellerId }}</span>
+          <span class="status-tag" *ngIf="report.listing?.status">
+            {{ report.listing.status }}
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <div class="reason-text">{{ report.reason }}</div>
+      </div>
+
+      <div class="col-meta">
+        <div class="meta-line">
+          <i class="fas fa-user-slash"></i>
+          #{{ report.reporterId }}
+        </div>
+        <div class="meta-line">
+          <i class="fas fa-clock"></i>
+          {{ report.createdAt | slice:0:10 }}
+        </div>
+      </div>
+
+      <div class="col-actions">
+        <button class="act-btn primary" (click)="confirmDeleteListingId = report.listingId">
+          <i class="fas fa-trash-alt"></i>
+          Supprimer
+        </button>
+        <button class="act-btn ghost" (click)="confirmDeleteId = report.id">
+          <i class="fas fa-eye-slash"></i>
+          Ignorer
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL IGNORE -->
+  <div class="modal-veil" *ngIf="confirmDeleteId !== null" (click)="confirmDeleteId = null">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Ignorer ce signalement ?</h2>
+        <button class="modal-close" (click)="confirmDeleteId = null">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <p class="modal-desc">Le signalement sera retiré. L'annonce restera visible.</p>
+      <div class="modal-footer">
+        <button class="modal-btn cancel" (click)="confirmDeleteId = null">Annuler</button>
+        <button class="modal-btn confirm" (click)="deleteReport(confirmDeleteId!)">
+          Ignorer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DELETE -->
+  <div class="modal-veil" *ngIf="confirmDeleteListingId !== null" (click)="confirmDeleteListingId = null">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Supprimer l'annonce ?</h2>
+        <button class="modal-close" (click)="confirmDeleteListingId = null">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <p class="modal-desc">L'annonce sera définitivement supprimée de la plateforme.</p>
+      <div class="modal-footer">
+        <button class="modal-btn cancel" (click)="confirmDeleteListingId = null">Annuler</button>
+        <button class="modal-btn confirm"
+          (click)="deleteListingFromReport({listingId: confirmDeleteListingId})">
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
