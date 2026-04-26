@@ -14,7 +14,7 @@ export class AdminSidebarComponent {
   mainMenuItems = [
     { icon: 'fa-chart-line',     label: 'Vue d\'ensemble', route: '/admin/dashboard' },
     { icon: 'fa-users',          label: 'Utilisateurs',    route: '/admin/users' },
-    { icon: 'fa-graduation-cap', label: 'Cours',           route: '/admin/courses' },
+    { icon: 'fa-graduation-cap', label: 'Cours & Formation', route: '/admin/cours-formations' },
     { icon: 'fa-store',          label: 'Marketplace',     route: '/admin/marketplace' },
     { icon: 'fa-comments',       label: 'Gestion Chat',    route: '/admin/chat' },
     { icon: 'fa-flag',           label: 'Signalements',    route: '/admin/reports' },

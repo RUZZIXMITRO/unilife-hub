@@ -1,7 +1,7 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
@@ -49,6 +49,7 @@ import { StudentDashboardComponent } from './components/student/dashboard/studen
 import { ProfileModalComponent } from './components/student/profile-modal/profile-modal.component';
 import { SettingsModalComponent } from './components/student/settings-modal/settings-modal.component';
 import { HelpModalComponent } from './components/student/help-modal/help-modal.component';
+import { StudentCoursComponent } from './components/student/cours/student-cours.component';
 
 // ========== COMPONENTS - INTERFACE ADMIN ==========
 import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.component';
@@ -58,13 +59,14 @@ import { PromoteAdminComponent } from './components/setup/promote-admin/promote-
 import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
 import { AdminSidebarComponent } from './components/admin/layout/sidebar/sidebar.component';
 import { AdminTopbarComponent } from './components/admin/layout/topbar/topbar.component';
-// Enregistrer la locale française pour le DatePipe
+import { AdminCoursFormationsComponent } from './components/admin/cours-formations/cours-formations.component';
+
 registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [
     AppComponent,
-    
+
     // Site Public
     HomeComponent,
     PreloaderComponent,
@@ -82,12 +84,12 @@ registerLocaleData(localeFr);
     FaqComponent,
     ContactComponent,
     FooterComponent,
-    
+
     // Auth
     AuthComponent,
     ResetPasswordComponent,
     CompleteProfileComponent,
-    
+
     // Interface Étudiante
     StudentLayoutComponent,
     SidebarComponent,
@@ -96,15 +98,17 @@ registerLocaleData(localeFr);
     ProfileModalComponent,
     SettingsModalComponent,
     HelpModalComponent,
-    
-    // Interface Admin 
-          AdminDashboardComponent,
-          SettingsComponent,
-          HelpComponent,
-          PromoteAdminComponent,
-          AdminLayoutComponent,
-          AdminSidebarComponent,
-          AdminTopbarComponent,
+    StudentCoursComponent,
+
+    // Interface Admin
+    AdminDashboardComponent,
+    SettingsComponent,
+    HelpComponent,
+    PromoteAdminComponent,
+    AdminLayoutComponent,
+    AdminSidebarComponent,
+    AdminTopbarComponent,
+    AdminCoursFormationsComponent,
   ],
   imports: [
     BrowserModule,
