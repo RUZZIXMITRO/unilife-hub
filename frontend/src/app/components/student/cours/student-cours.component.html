@@ -1,0 +1,209 @@
+<div class="cours-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Cours & Formations</h1>
+      <p class="subtitle">Accédez aux ressources pédagogiques</p>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-bar">
+    <button class="tab-btn" [class.active]="activeTab === 'cours'" (click)="activeTab = 'cours'; loadCours()">
+      <i class="fa-solid fa-book"></i> Cours ({{ cours.length }})
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'formations'" (click)="activeTab = 'formations'; loadFormations()">
+      <i class="fa-solid fa-graduation-cap"></i> Formations ({{ formations.length }})
+    </button>
+  </div>
+
+  <!-- Bouton Upload pour les étudiants -->
+<div class="upload-bar">
+  <button class="btn-upload" (click)="showUploadModal = true">
+    <i class="fa-solid fa-upload"></i>
+    <span>Partager un cours</span>
+  </button>
+</div>
+
+<!-- MODAL UPLOAD -->
+<div class="drawer-overlay" *ngIf="showUploadModal" (click)="showUploadModal = false"></div>
+<div class="drawer" [class.open]="showUploadModal">
+  <div class="drawer-header">
+    <div class="drawer-title">
+      <div class="drawer-title-icon"><i class="fa-solid fa-upload"></i></div>
+      <div>
+        <h3>Partager un cours</h3>
+        <p>Uploader un fichier pédagogique</p>
+      </div>
+    </div>
+    <button class="drawer-close" (click)="showUploadModal = false">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-section">
+      <p class="drawer-section-label">Informations du cours</p>
+      <div class="drawer-field">
+        <label>Titre <span class="required">*</span></label>
+        <div class="field-input-wrap">
+          <i class="fa-solid fa-heading"></i>
+          <input type="text" [(ngModel)]="uploadData.title"
+            placeholder="Titre du cours" class="drawer-input"/>
+        </div>
+      </div>
+      <div class="drawer-field">
+        <label>Description</label>
+        <div class="field-input-wrap">
+          <i class="fa-solid fa-align-left"></i>
+          <input type="text" [(ngModel)]="uploadData.description"
+            placeholder="Description du cours" class="drawer-input"/>
+        </div>
+      </div>
+      <div class="drawer-field">
+        <label>Catégorie <span class="required">*</span></label>
+        <div class="field-input-wrap">
+          <i class="fa-solid fa-folder"></i>
+          <select [(ngModel)]="uploadData.categoryId" class="drawer-input">
+            <option [value]="null">-- Sélectionner --</option>
+            <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-section">
+      <p class="drawer-section-label">Fichier</p>
+      <div class="file-drop-zone" (click)="fileInput.click()"
+           [class.has-file]="selectedFile">
+        <input #fileInput type="file"
+               accept=".pdf,.doc,.docx,.ppt,.pptx"
+               (change)="onFileSelected($event)" style="display:none"/>
+        <i class="fa-solid" [class.fa-file-arrow-up]="!selectedFile"
+           [class.fa-file-check]="selectedFile"></i>
+        <p *ngIf="!selectedFile">Cliquez pour sélectionner un fichier</p>
+        <p *ngIf="selectedFile">{{ selectedFile.name }}</p>
+        <span>PDF, DOC, PPT — max 50MB</span>
+      </div>
+    </div>
+    <div class="upload-message success" *ngIf="uploadSuccess">
+      <i class="fa-solid fa-circle-check"></i> Cours envoyé — en attente d'approbation
+    </div>
+    <div class="upload-message error" *ngIf="uploadError">
+      <i class="fa-solid fa-circle-exclamation"></i> {{ uploadError }}
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn-cancel" (click)="showUploadModal = false">Annuler</button>
+    <button class="drawer-btn-confirm" (click)="uploadCours()"
+            [disabled]="isUploading">
+      <i class="fa-solid fa-spinner fa-spin" *ngIf="isUploading"></i>
+      <i class="fa-solid fa-upload" *ngIf="!isUploading"></i>
+      {{ isUploading ? 'Envoi...' : 'Partager' }}
+    </button>
+  </div>
+</div>
+
+  <!-- Barre de recherche -->
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <i class="fa-solid fa-search"></i>
+      <input type="text" [(ngModel)]="searchKeyword" placeholder="Rechercher..." class="search-input" (keyup.enter)="rechercher()"/>
+    </div>
+    <select [(ngModel)]="selectedCategory" class="filter-select">
+      <option [value]="null">Toutes les catégories</option>
+      <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+    </select>
+    <ng-container *ngIf="activeTab === 'formations'">
+      <select [(ngModel)]="selectedLevel" class="filter-select">
+        <option value="">Tous les niveaux</option>
+        <option value="Débutant">Débutant</option>
+        <option value="Intermédiaire">Intermédiaire</option>
+        <option value="Avancé">Avancé</option>
+      </select>
+      <select [(ngModel)]="selectedLanguage" class="filter-select">
+        <option value="">Toutes les langues</option>
+        <option value="Français">Français</option>
+        <option value="Anglais">Anglais</option>
+        <option value="Arabe">Arabe</option>
+      </select>
+    </ng-container>
+    <button class="btn-search" (click)="rechercher()">
+      <i class="fa-solid fa-search"></i> Rechercher
+    </button>
+  </div>
+
+  <!-- COURS -->
+  <div *ngIf="activeTab === 'cours'">
+    <div *ngIf="isLoading" class="loading-state">
+      <i class="fa-solid fa-spinner fa-spin"></i> Chargement...
+    </div>
+    <div *ngIf="!isLoading && cours.length === 0" class="empty-state">
+      <i class="fa-solid fa-book-open"></i>
+      <p>Aucun cours disponible</p>
+    </div>
+    <div class="cours-grid" *ngIf="!isLoading">
+      <div *ngFor="let c of cours" class="cours-card">
+        <div class="card-top">
+          <div class="file-icon" [class]="c.fileType?.includes('pdf') ? 'pdf' : 'doc'">
+            <i class="fa-solid {{ getFileIcon(c.fileType) }}"></i>
+          </div>
+          <button class="btn-fav" (click)="toggleFavori(c, 'course')" [class.active]="c.isFavorite">
+            <i class="fa-solid fa-heart"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <span class="category-badge">{{ c.categoryName }}</span>
+          <h3>{{ c.title }}</h3>
+          <p class="card-desc">{{ c.description }}</p>
+        </div>
+        <div class="card-footer">
+          <div class="card-stats">
+            <span><i class="fa-solid fa-download"></i> {{ c.downloadsCount }}</span>
+            <span><i class="fa-solid fa-eye"></i> {{ c.viewsCount }}</span>
+            <span class="file-size">{{ formatSize(c.fileSize) }}</span>
+          </div>
+          <button class="btn-download" (click)="telecharger(c.id)">
+            <i class="fa-solid fa-download"></i> Télécharger
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMATIONS -->
+  <div *ngIf="activeTab === 'formations'">
+    <div *ngIf="formations.length === 0" class="empty-state">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <p>Aucune formation disponible</p>
+    </div>
+    <div class="cours-grid">
+      <div *ngFor="let f of formations" class="cours-card formation">
+        <div class="card-top">
+          <span class="provider-badge">{{ f.provider }}</span>
+          <button class="btn-fav" (click)="toggleFavori(f, 'formation')" [class.active]="f.isFavorite">
+            <i class="fa-solid fa-heart"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <span class="category-badge">{{ f.categoryName }}</span>
+          <h3>{{ f.title }}</h3>
+          <p class="card-desc">{{ f.description }}</p>
+          <div class="formation-tags">
+            <span class="tag" *ngIf="f.level"><i class="fa-solid fa-signal"></i> {{ f.level }}</span>
+            <span class="tag" *ngIf="f.language"><i class="fa-solid fa-language"></i> {{ f.language }}</span>
+            <span class="tag" *ngIf="f.duration"><i class="fa-solid fa-clock"></i> {{ f.duration }}</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-stats">
+            <span><i class="fa-solid fa-mouse-pointer"></i> {{ f.clicksCount }} clics</span>
+          </div>
+          <button class="btn-access" (click)="accederFormation(f)">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Accéder
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
