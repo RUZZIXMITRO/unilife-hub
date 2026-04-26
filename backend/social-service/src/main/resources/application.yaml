@@ -6,9 +6,9 @@ spring:
     name: social-service
 
   datasource:
-    url: jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=social_db;encrypt=false;trustServerCertificate=true
-    username: sa
-    password: UniLife2026!
+    url: ${SPRING_DATASOURCE_URL:jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=social_db;encrypt=false;trustServerCertificate=true}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:UniLife2026!}
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   jpa:
@@ -22,6 +22,6 @@ spring:
         dialect: org.hibernate.dialect.SQLServerDialect
 
 jwt:
-  secret: SuperSecretKeyForJWTAuthentication2024VeryLongAndComplexKey!@#$%^&*()
+  secret: ${JWT_SECRET:SuperSecretKeyForJWTAuthentication2024VeryLongAndComplexKey!@#$%^&*()}
   issuer: UniLifeHub
   audience: UniLifeHubUsers

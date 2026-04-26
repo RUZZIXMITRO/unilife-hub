@@ -78,6 +78,26 @@ services:
       - unilifehub-network
     restart: unless-stopped
 
+  # ========== SOCIAL SERVICE ==========
+  socialservice:
+    build:
+      context: ./backend/social-service
+      dockerfile: Dockerfile
+    container_name: unilifehub-social
+    ports:
+      - "7084:8084"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;databaseName=social_db;encrypt=false;trustServerCertificate=true
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=UniLife@2024!Strong
+      - JWT_SECRET=SuperSecretKeyForJWTAuthentication2024VeryLongAndComplexKey!@#$%^&*()
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+    
 networks:
   unilifehub-network:
     driver: bridge
