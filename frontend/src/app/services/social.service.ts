@@ -99,22 +99,49 @@ export interface Conversation {
   updatedAt: string;
 }
 
+export interface GroupMember {
+  id: number;
+  userId: number;
+  groupId: number;
+  role: string;
+  status: string;
+  joinedAt: string;
+}
+
+export interface GroupPost {
+  id: number;
+  groupId: number;
+  postId: number;
+  postedBy: number;
+  postedAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class SocialService {
 
-  private apiUrl = 'http://localhost:8084/api/social';
+  private apiUrl = 'https://localhost:8084/api/social';
 
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('access_token');
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
+  const token = localStorage.getItem('access_token');
+  let userId = '1';
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Chercher l'ID numérique dans les claims ASP.NET
+      const nameId = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+      userId = payload.userId || payload.id || nameId || '1';
+    } catch (e) {}
   }
+  return new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+    'X-User-Id': userId
+  });
+}
 
   // ===== POSTS =====
   getFeed(): Observable<ApiResponse<Post[]>> {
@@ -202,13 +229,13 @@ export class SocialService {
     );
   }
 
-  addComment(postId: number, content: string): Observable<ApiResponse<Comment>> {
-    return this.http.post<ApiResponse<Comment>>(
-      `${this.apiUrl}/posts/${postId}/comments`,
-      { content },
-      { headers: this.getHeaders() }
-    );
-  }
+addComment(postId: number, content: string, parentCommentId?: number): Observable<ApiResponse<Comment>> {
+  return this.http.post<ApiResponse<Comment>>(
+    `${this.apiUrl}/posts/${postId}/comments`,
+    { content, parentCommentId: parentCommentId || null },
+    { headers: this.getHeaders() }
+  );
+}
 
   // ===== FRIENDS =====
   getFriends(): Observable<ApiResponse<Friendship[]>> {
@@ -316,6 +343,60 @@ export class SocialService {
       { headers: this.getHeaders() }
     );
   }
+
+  // Membres d'un groupe
+getGroupMembers(groupId: number): Observable<ApiResponse<GroupMember[]>> {
+  return this.http.get<ApiResponse<GroupMember[]>>(
+    `${this.apiUrl}/groups/${groupId}/members`,
+    { headers: this.getHeaders() }
+  );
+}
+
+getPendingMembers(groupId: number): Observable<ApiResponse<GroupMember[]>> {
+  return this.http.get<ApiResponse<GroupMember[]>>(
+    `${this.apiUrl}/groups/${groupId}/members/pending`,
+    { headers: this.getHeaders() }
+  );
+}
+
+approveMember(groupId: number, userId: number): Observable<ApiResponse<GroupMember>> {
+  return this.http.put<ApiResponse<GroupMember>>(
+    `${this.apiUrl}/groups/${groupId}/members/${userId}/approve`,
+    {},
+    { headers: this.getHeaders() }
+  );
+}
+
+rejectMember(groupId: number, userId: number): Observable<ApiResponse<void>> {
+  return this.http.put<ApiResponse<void>>(
+    `${this.apiUrl}/groups/${groupId}/members/${userId}/reject`,
+    {},
+    { headers: this.getHeaders() }
+  );
+}
+
+removeMember(groupId: number, userId: number): Observable<ApiResponse<void>> {
+  return this.http.delete<ApiResponse<void>>(
+    `${this.apiUrl}/groups/${groupId}/members/${userId}`,
+    { headers: this.getHeaders() }
+  );
+}
+
+// Posts dans un groupe
+getGroupPosts(groupId: number): Observable<ApiResponse<GroupPost[]>> {
+  return this.http.get<ApiResponse<GroupPost[]>>(
+    `${this.apiUrl}/groups/${groupId}/posts`,
+    { headers: this.getHeaders() }
+  );
+}
+
+addPostToGroup(groupId: number, postId: number): Observable<ApiResponse<GroupPost>> {
+  return this.http.post<ApiResponse<GroupPost>>(
+    `${this.apiUrl}/groups/${groupId}/posts/${postId}`,
+    {},
+    { headers: this.getHeaders() }
+  );
+}
 
   // ===== MESSAGES =====
   getConversation(userId: number): Observable<ApiResponse<Message[]>> {

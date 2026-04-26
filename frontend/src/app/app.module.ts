@@ -60,6 +60,7 @@ import { AdminSidebarComponent } from './components/admin/layout/sidebar/sidebar
 import { AdminTopbarComponent } from './components/admin/layout/topbar/topbar.component';
 import { UsersManagementComponent } from './components/admin/users-management/users-management.component';
 import { ProfileComponent } from './components/admin/pages/profile/profile.component';
+import { ReportsComponent } from './components/admin/pages/reports/reports.component';
 // Enregistrer la locale française pour le DatePipe
 registerLocaleData(localeFr);
 
@@ -109,6 +110,7 @@ registerLocaleData(localeFr);
           AdminTopbarComponent,
           UsersManagementComponent,
           ProfileComponent,
+          ReportsComponent
   ],
   imports: [
     BrowserModule,

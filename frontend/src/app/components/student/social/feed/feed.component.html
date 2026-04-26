@@ -131,26 +131,93 @@
       </div>
 
       <!-- Commentaires -->
-      <div *ngIf="showComments[post.id]" class="comments-section">
-        <div class="comment-input-row">
-          <div class="post-avatar small">
-            <i class="fa-solid fa-user"></i>
-          </div>
-          <input
-            [(ngModel)]="newComment[post.id]"
-            (keyup.enter)="addComment(post.id)"
-            placeholder="Écrire un commentaire..."
-            class="comment-input">
-          <button (click)="addComment(post.id)"
-                  [disabled]="!newComment[post.id] || !newComment[post.id].trim()"
-                  class="btn-send-comment">
-            <i class="fa-solid fa-paper-plane"></i>
+<div *ngIf="showComments[post.id]" class="comments-section">
+
+  <!-- Input nouveau commentaire -->
+  <div class="comment-input-row">
+    <div class="post-avatar small">
+      <i class="fa-solid fa-user"></i>
+    </div>
+    <input
+      [(ngModel)]="newComment[post.id]"
+      (keyup.enter)="addComment(post.id)"
+      placeholder="Écrire un commentaire..."
+      class="comment-input">
+    <button (click)="addComment(post.id)"
+            [disabled]="!newComment[post.id] || !newComment[post.id].trim()"
+            class="btn-send-comment">
+      <i class="fa-solid fa-paper-plane"></i>
+    </button>
+  </div>
+
+  <!-- Loading commentaires -->
+  <div *ngIf="!loadedComments[post.id]" class="comments-loading">
+    <i class="fa-solid fa-spinner fa-spin"></i> Chargement...
+  </div>
+
+  <!-- Liste commentaires racine -->
+  <div *ngFor="let comment of getRootComments(post.id)" class="comment-thread">
+
+    <!-- Commentaire principal -->
+    <div class="comment-item">
+      <div class="comment-avatar">
+        <span>{{ comment.userName ? comment.userName[0].toUpperCase() : 'U' }}</span>
+      </div>
+      <div class="comment-body">
+        <div class="comment-bubble">
+          <span class="comment-author">{{ comment.userName || 'Étudiant' }}</span>
+          <p>{{ comment.content }}</p>
+        </div>
+        <div class="comment-meta">
+          <span class="comment-time">{{ getTimeAgo(comment.createdAt) }}</span>
+          <button (click)="setReply(post.id, comment.id)" class="btn-reply">
+            <i class="fa-solid fa-reply"></i> Répondre
           </button>
         </div>
       </div>
-
     </div>
+
+    <!-- Réponses au commentaire -->
+    <div class="replies-list" *ngIf="getReplies(post.id, comment.id).length > 0">
+      <div *ngFor="let reply of getReplies(post.id, comment.id)" class="comment-item reply-item">
+        <div class="comment-avatar reply-avatar">
+          <span>{{ reply.userName ? reply.userName[0].toUpperCase() : 'U' }}</span>
+        </div>
+        <div class="comment-body">
+          <div class="comment-bubble reply-bubble">
+            <span class="comment-author">{{ reply.userName || 'Étudiant' }}</span>
+            <p>{{ reply.content }}</p>
+          </div>
+          <div class="comment-meta">
+            <span class="comment-time">{{ getTimeAgo(reply.createdAt) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input répondre -->
+    <div *ngIf="replyTo[post.id] === comment.id" class="reply-input-row">
+      <div class="comment-avatar reply-avatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <input
+        [(ngModel)]="replyContent[post.id]"
+        (keyup.enter)="sendReply(post.id)"
+        placeholder="Écrire une réponse..."
+        class="comment-input">
+      <button (click)="sendReply(post.id)"
+              [disabled]="!replyContent[post.id] || !replyContent[post.id].trim()"
+              class="btn-send-comment">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+      <button (click)="cancelReply(post.id)" class="btn-cancel-reply">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
   </div>
+
+</div>
 
   <!-- ===== MODAL SIGNALEMENT ✅ NOUVEAU ===== -->
   <div *ngIf="showReportModal" class="modal-overlay" (click)="closeReportModal()">

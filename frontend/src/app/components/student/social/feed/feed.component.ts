@@ -15,6 +15,13 @@ export class FeedComponent implements OnInit {
   showComments: { [key: number]: boolean } = {};
   newComment: { [key: number]: string } = {};
 
+  // Commentaires chargés par post
+  loadedComments: { [key: number]: any[] } = {};
+
+  // Réponse en cours
+  replyTo: { [key: number]: number | null } = {};
+  replyContent: { [key: number]: string } = {};
+
   // Signalement
   showReportModal = false;
   reportPostId: number | null = null;
@@ -26,7 +33,6 @@ export class FeedComponent implements OnInit {
   constructor(private socialService: SocialService) {}
 
   ngOnInit(): void {
-    // Récupérer l'userId depuis le token JWT stocké
     const token = localStorage.getItem('access_token');
     if (token) {
       try {
@@ -76,17 +82,18 @@ export class FeedComponent implements OnInit {
     });
   }
 
+  // ===== COMMENTAIRES =====
   toggleComments(postId: number): void {
     this.showComments[postId] = !this.showComments[postId];
+    if (this.showComments[postId] && !this.loadedComments[postId]) {
+      this.loadComments(postId);
+    }
   }
 
-  deletePost(postId: number): void {
-    if (!confirm('Supprimer ce post ?')) return;
-    this.socialService.deletePost(postId).subscribe({
+  loadComments(postId: number): void {
+    this.socialService.getComments(postId).subscribe({
       next: (res) => {
-        if (res.success) {
-          this.posts = this.posts.filter(p => p.id !== postId);
-        }
+        if (res.success) this.loadedComments[postId] = res.data;
       }
     });
   }
@@ -98,9 +105,59 @@ export class FeedComponent implements OnInit {
       next: (res) => {
         if (res.success) {
           this.newComment[postId] = '';
+          if (!this.loadedComments[postId]) this.loadedComments[postId] = [];
+          this.loadedComments[postId].push(res.data);
           const post = this.posts.find(p => p.id === postId);
           if (post) post.commentsCount++;
         }
+      }
+    });
+  }
+
+  // ===== RÉPONSES =====
+  setReply(postId: number, commentId: number): void {
+    this.replyTo[postId] = commentId;
+    this.replyContent[postId] = '';
+  }
+
+  cancelReply(postId: number): void {
+    this.replyTo[postId] = null;
+    this.replyContent[postId] = '';
+  }
+
+  sendReply(postId: number): void {
+    const content = this.replyContent[postId];
+    const parentId = this.replyTo[postId];
+    if (!content?.trim() || !parentId) return;
+    this.socialService.addComment(postId, content, parentId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.replyContent[postId] = '';
+          this.replyTo[postId] = null;
+          this.loadComments(postId);
+          const post = this.posts.find(p => p.id === postId);
+          if (post) post.commentsCount++;
+        }
+      }
+    });
+  }
+
+  getRootComments(postId: number): any[] {
+    if (!this.loadedComments[postId]) return [];
+    return this.loadedComments[postId].filter(c => !c.parentCommentId);
+  }
+
+  getReplies(postId: number, commentId: number): any[] {
+    if (!this.loadedComments[postId]) return [];
+    return this.loadedComments[postId].filter(c => c.parentCommentId === commentId);
+  }
+
+  // ===== SUPPRIMER POST =====
+  deletePost(postId: number): void {
+    if (!confirm('Supprimer ce post ?')) return;
+    this.socialService.deletePost(postId).subscribe({
+      next: (res) => {
+        if (res.success) this.posts = this.posts.filter(p => p.id !== postId);
       }
     });
   }
@@ -109,13 +166,9 @@ export class FeedComponent implements OnInit {
   sharePost(postId: number): void {
     this.socialService.sharePost(postId).subscribe({
       next: (res) => {
-        if (res.success) {
-          alert('Post partagé avec succès !');
-        }
+        if (res.success) alert('Post partagé avec succès !');
       },
-      error: () => {
-        alert('Vous avez déjà partagé ce post.');
-      }
+      error: () => alert('Vous avez déjà partagé ce post.')
     });
   }
 
@@ -146,6 +199,7 @@ export class FeedComponent implements OnInit {
     });
   }
 
+  // ===== HELPERS =====
   getTimeAgo(dateString: string): string {
     const date = new Date(dateString);
     const now = new Date();

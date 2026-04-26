@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SocialService, Group } from '../../../../services/social.service';
+import { SocialService, Group, GroupMember, GroupPost } from '../../../../services/social.service';
 
 @Component({
   selector: 'app-groups',
@@ -13,6 +13,15 @@ export class GroupsComponent implements OnInit {
   showCreateForm = false;
   isLoading = false;
 
+  // Groupe sélectionné pour voir détails
+  selectedGroup: Group | null = null;
+  groupMembers: GroupMember[] = [];
+  pendingMembers: GroupMember[] = [];
+  groupPosts: GroupPost[] = [];
+  activeTab: 'posts' | 'members' | 'pending' = 'posts';
+
+  currentUserId: number = 0;
+
   newGroup = {
     name: '',
     description: '',
@@ -23,6 +32,14 @@ export class GroupsComponent implements OnInit {
   constructor(private socialService: SocialService) {}
 
   ngOnInit(): void {
+    // Récupérer userId depuis JWT
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        this.currentUserId = payload.userId || payload.sub || 0;
+      } catch (e) { this.currentUserId = 0; }
+    }
     this.loadGroups();
   }
 
@@ -38,10 +55,7 @@ export class GroupsComponent implements OnInit {
   }
 
   searchGroups(): void {
-    if (!this.searchKeyword.trim()) {
-      this.loadGroups();
-      return;
-    }
+    if (!this.searchKeyword.trim()) { this.loadGroups(); return; }
     this.socialService.searchGroups(this.searchKeyword).subscribe({
       next: (res) => { if (res.success) this.groups = res.data; }
     });
@@ -50,10 +64,8 @@ export class GroupsComponent implements OnInit {
   createGroup(): void {
     if (!this.newGroup.name.trim()) return;
     this.socialService.createGroup(
-      this.newGroup.name,
-      this.newGroup.description,
-      this.newGroup.subject,
-      this.newGroup.type
+      this.newGroup.name, this.newGroup.description,
+      this.newGroup.subject, this.newGroup.type
     ).subscribe({
       next: (res) => {
         if (res.success) {
@@ -72,7 +84,8 @@ export class GroupsComponent implements OnInit {
           const index = this.groups.findIndex(g => g.id === groupId);
           if (index !== -1) this.groups[index] = res.data;
         }
-      }
+      },
+      error: () => alert('Erreur lors de la demande')
     });
   }
 
@@ -82,8 +95,96 @@ export class GroupsComponent implements OnInit {
         if (res.success) {
           const index = this.groups.findIndex(g => g.id === groupId);
           if (index !== -1) this.groups[index].isMember = false;
+          if (this.selectedGroup?.id === groupId) this.selectedGroup = null;
         }
       }
     });
+  }
+
+  // ===== DÉTAILS GROUPE =====
+  openGroup(group: Group): void {
+    this.selectedGroup = group;
+    this.activeTab = 'posts';
+    this.loadGroupPosts(group.id);
+    this.loadGroupMembers(group.id);
+  }
+
+  closeGroup(): void {
+    this.selectedGroup = null;
+  }
+
+  setTab(tab: 'posts' | 'members' | 'pending'): void {
+    this.activeTab = tab;
+    if (tab === 'pending' && this.selectedGroup) {
+      this.loadPendingMembers(this.selectedGroup.id);
+    }
+  }
+
+  // ===== POSTS DU GROUPE =====
+  loadGroupPosts(groupId: number): void {
+    this.socialService.getGroupPosts(groupId).subscribe({
+      next: (res) => { if (res.success) this.groupPosts = res.data; }
+    });
+  }
+
+  // ===== MEMBRES =====
+  loadGroupMembers(groupId: number): void {
+    this.socialService.getGroupMembers(groupId).subscribe({
+      next: (res) => { if (res.success) this.groupMembers = res.data; }
+    });
+  }
+
+  loadPendingMembers(groupId: number): void {
+    this.socialService.getPendingMembers(groupId).subscribe({
+      next: (res) => { if (res.success) this.pendingMembers = res.data; }
+    });
+  }
+
+  approveMember(userId: number): void {
+    if (!this.selectedGroup) return;
+    this.socialService.approveMember(this.selectedGroup.id, userId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.pendingMembers = this.pendingMembers.filter(m => m.userId !== userId);
+          this.loadGroupMembers(this.selectedGroup!.id);
+          alert('Membre approuvé !');
+        }
+      }
+    });
+  }
+
+  rejectMember(userId: number): void {
+    if (!this.selectedGroup) return;
+    this.socialService.rejectMember(this.selectedGroup.id, userId).subscribe({
+      next: () => {
+        this.pendingMembers = this.pendingMembers.filter(m => m.userId !== userId);
+      }
+    });
+  }
+
+  removeMember(userId: number): void {
+    if (!this.selectedGroup || !confirm('Retirer ce membre ?')) return;
+    this.socialService.removeMember(this.selectedGroup.id, userId).subscribe({
+      next: () => {
+        this.groupMembers = this.groupMembers.filter(m => m.userId !== userId);
+      }
+    });
+  }
+
+  isGroupAdmin(): boolean {
+    return this.groupMembers.some(
+      m => m.userId === this.currentUserId && m.role === 'ADMIN'
+    );
+  }
+
+  getTimeAgo(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+    if (diff < 60) return 'À l\'instant';
+    if (diff < 3600) return `Il y a ${Math.floor(diff / 60)} min`;
+    if (diff < 86400) return `Il y a ${Math.floor(diff / 3600)}h`;
+    return `Il y a ${Math.floor(diff / 86400)}j`;
   }
 }

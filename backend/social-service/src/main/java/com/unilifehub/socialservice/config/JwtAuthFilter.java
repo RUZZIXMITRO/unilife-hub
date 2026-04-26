@@ -24,16 +24,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Récupérer le header Authorization
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
 
             if (jwtUtils.validateToken(token)) {
-                Long userId = jwtUtils.getUserIdFromToken(token);
+                Long userId = 0L;
 
-                // Mettre l'userId dans le contexte Spring Security
+                // 1. Priorité : header X-User-Id (injecté par Gateway ou frontend)
+                String xUserId = request.getHeader("X-User-Id");
+                if (xUserId != null && !xUserId.isEmpty()) {
+                    try {
+                        userId = Long.parseLong(xUserId);
+                    } catch (NumberFormatException e) {
+                        userId = 0L;
+                    }
+                } else {
+                    // 2. Fallback : essayer le sub du JWT
+                    userId = jwtUtils.getUserIdFromToken(token);
+                }
+
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userId, null, new ArrayList<>()

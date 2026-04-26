@@ -19,8 +19,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.SQLServerDialect
 
-# JWT - identique à AuthService ASP.NET
 jwt:
   secret: SuperSecretKeyForJWTAuthentication2024VeryLongAndComplexKey!@#$%^&*()
   issuer: UniLifeHub

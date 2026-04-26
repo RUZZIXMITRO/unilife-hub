@@ -15,6 +15,7 @@ import { PromoteAdminComponent } from './components/setup/promote-admin/promote-
 import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
 import { UsersManagementComponent } from './components/admin/users-management/users-management.component';
 import { ProfileComponent } from './components/admin/pages/profile/profile.component';
+import { ReportsComponent } from './components/admin/pages/reports/reports.component';
 // Guards
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
@@ -66,7 +67,8 @@ const routes: Routes = [
     { path: 'settings', component: SettingsComponent },
     { path: 'help', component: HelpComponent },
     { path: 'users', component: UsersManagementComponent } ,
-    { path: 'profile', component: ProfileComponent }
+    { path: 'profile', component: ProfileComponent },
+    { path: 'reports', component: ReportsComponent }
   ]
 },
 

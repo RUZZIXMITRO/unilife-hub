@@ -20,7 +20,17 @@ public class JwtUtils {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return Long.parseLong(claims.getSubject());
+
+        // ASP.NET met l'userId dans le header X-User-Id
+        // Le sub contient un UUID credential ID — on retourne 0
+        // Le vrai userId vient du header X-User-Id injecté par le frontend
+        try {
+            String subject = claims.getSubject();
+            return Long.parseLong(subject); // si c'est un Long
+        } catch (NumberFormatException e) {
+            // sub est un UUID → retourner 0, userId viendra du header X-User-Id
+            return 0L;
+        }
     }
 
     // Valider le token
