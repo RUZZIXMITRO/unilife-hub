@@ -36,6 +36,7 @@ services:
     depends_on:
       - authservice
       - userservice
+      - socialservice
     networks:
       - unilifehub-network
     restart: unless-stopped

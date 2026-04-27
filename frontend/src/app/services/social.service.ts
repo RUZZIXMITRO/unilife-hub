@@ -121,12 +121,15 @@ export interface GroupPost {
 })
 export class SocialService {
 
-  private apiUrl = 'https://localhost:8084/api/social';
+private apiUrl = 'http://localhost:5000/api/social';
 
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
   const token = localStorage.getItem('access_token');
+  if (!token) {
+    return new HttpHeaders({ 'Content-Type': 'application/json' });
+  }
   let userId = '1';
   if (token) {
     try {
@@ -206,20 +209,20 @@ export class SocialService {
 
   // ===== SIGNALEMENT (NOUVEAU) =====
   reportPost(postId: number, reason: string): Observable<ApiResponse<void>> {
-    return this.http.post<ApiResponse<void>>(
-      `${this.apiUrl}/posts/${postId}/report`,
-      { reason },
-      { headers: this.getHeaders() }
-    );
-  }
+  return this.http.post<ApiResponse<void>>(
+    `${this.apiUrl}/reports`,
+    { contentId: postId, contentType: 'POST', reason },
+    { headers: this.getHeaders() }
+  );
+}
 
   reportComment(commentId: number, reason: string): Observable<ApiResponse<void>> {
-    return this.http.post<ApiResponse<void>>(
-      `${this.apiUrl}/comments/${commentId}/report`,
-      { reason },
-      { headers: this.getHeaders() }
-    );
-  }
+  return this.http.post<ApiResponse<void>>(
+    `${this.apiUrl}/reports`,
+    { contentId: commentId, contentType: 'COMMENT', reason },
+    { headers: this.getHeaders() }
+  );
+}
 
   // ===== COMMENTS =====
   getComments(postId: number): Observable<ApiResponse<Comment[]>> {
@@ -271,13 +274,6 @@ addComment(postId: number, content: string, parentCommentId?: number): Observabl
   rejectFriendRequest(friendshipId: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(
       `${this.apiUrl}/friends/reject/${friendshipId}`,
-      { headers: this.getHeaders() }
-    );
-  }
-
-  searchUsers(keyword: string): Observable<ApiResponse<any[]>> {
-    return this.http.get<ApiResponse<any[]>>(
-      `${this.apiUrl}/friends/search?keyword=${keyword}`,
       { headers: this.getHeaders() }
     );
   }

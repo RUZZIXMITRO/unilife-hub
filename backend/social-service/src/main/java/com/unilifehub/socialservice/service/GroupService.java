@@ -87,7 +87,7 @@ public class GroupService {
         memberRepository.delete(member);
 
         StudyGroup group = groupRepository.findById(groupId).get();
-        group.setMembersCount(group.getMembersCount() - 1);
+        group.setMembersCount(Math.max(0, group.getMembersCount() - 1));
         groupRepository.save(group);
     }
 

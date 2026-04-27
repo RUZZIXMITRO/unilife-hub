@@ -2,6 +2,7 @@ package com.unilifehub.socialservice.service;
 
 import com.unilifehub.socialservice.dto.request.CreatePostRequest;
 import com.unilifehub.socialservice.dto.response.PostResponse;
+import com.unilifehub.socialservice.entity.Notification;
 import com.unilifehub.socialservice.entity.Post;
 import com.unilifehub.socialservice.entity.PostLike;
 import com.unilifehub.socialservice.repository.PostLikeRepository;
@@ -19,6 +20,9 @@ public class PostService {
 
     @Autowired
     private PostLikeRepository postLikeRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     // Créer un post
     public PostResponse createPost(Long userId, CreatePostRequest request) {
@@ -100,10 +104,28 @@ public class PostService {
                     .build();
             postLikeRepository.save(like);
             post.setLikesCount(post.getLikesCount() + 1);
+
+            // Notifier le propriétaire du post (sauf si c'est soi-même)
+            if (!post.getUserId().equals(userId)) {
+                notificationService.createNotification(
+                        post.getUserId(),
+                        userId,
+                        Notification.NotificationType.LIKE,
+                        "Quelqu'un a aimé votre post",
+                        post.getId()
+                );
+            }
         }
 
         Post updated = postRepository.save(post);
         return mapToResponse(updated, userId);
+    }
+
+    // Récupérer un post par ID
+    public PostResponse getPostById(Long postId, Long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post non trouvé"));
+        return mapToResponse(post, userId);
     }
 
     // Convertir Post → PostResponse
@@ -122,11 +144,5 @@ public class PostService {
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();
-    }
-    // Récupérer un post par ID
-    public PostResponse getPostById(Long postId, Long userId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post non trouvé"));
-        return mapToResponse(post, userId);
     }
 }

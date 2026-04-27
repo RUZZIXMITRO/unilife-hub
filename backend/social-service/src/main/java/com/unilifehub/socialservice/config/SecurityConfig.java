@@ -31,7 +31,7 @@ public class SecurityConfig {
                         // Routes publiques
                         .requestMatchers("/actuator/**").permitAll()
                         // Toutes les autres routes nécessitent un token JWT
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter,
                         UsernamePasswordAuthenticationFilter.class);

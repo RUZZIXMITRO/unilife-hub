@@ -3,6 +3,7 @@ package com.unilifehub.socialservice.service;
 import com.unilifehub.socialservice.dto.request.CreateCommentRequest;
 import com.unilifehub.socialservice.dto.response.CommentResponse;
 import com.unilifehub.socialservice.entity.Comment;
+import com.unilifehub.socialservice.entity.Notification;
 import com.unilifehub.socialservice.entity.Post;
 import com.unilifehub.socialservice.repository.CommentRepository;
 import com.unilifehub.socialservice.repository.PostRepository;
@@ -19,6 +20,9 @@ public class CommentService {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     // Ajouter un commentaire
     public CommentResponse addComment(Long postId, Long userId,
@@ -38,6 +42,17 @@ public class CommentService {
         // Mettre à jour le compteur de commentaires
         post.setCommentsCount(post.getCommentsCount() + 1);
         postRepository.save(post);
+
+        // Notifier le propriétaire du post (sauf si c'est soi-même)
+        if (!post.getUserId().equals(userId)) {
+            notificationService.createNotification(
+                    post.getUserId(),
+                    userId,
+                    Notification.NotificationType.COMMENT,
+                    "Quelqu'un a commenté votre post",
+                    post.getId()
+            );
+        }
 
         return mapToResponse(saved);
     }

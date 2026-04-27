@@ -37,7 +37,8 @@ export class FeedComponent implements OnInit {
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        this.currentUserId = payload.userId || payload.sub || 0;
+        const nameId = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+        this.currentUserId = payload.userId || payload.id || nameId || 0;
       } catch (e) {
         this.currentUserId = 0;
       }

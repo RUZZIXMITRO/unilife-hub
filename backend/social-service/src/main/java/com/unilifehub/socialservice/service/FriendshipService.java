@@ -2,6 +2,7 @@ package com.unilifehub.socialservice.service;
 
 import com.unilifehub.socialservice.dto.response.FriendshipResponse;
 import com.unilifehub.socialservice.entity.Friendship;
+import com.unilifehub.socialservice.entity.Notification;
 import com.unilifehub.socialservice.repository.FriendshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,9 @@ public class FriendshipService {
 
     @Autowired
     private FriendshipRepository friendshipRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     // Envoyer une demande d'ami
     public FriendshipResponse sendFriendRequest(Long requesterId, Long addresseeId) {
@@ -38,7 +42,18 @@ public class FriendshipService {
                 .status(Friendship.FriendshipStatus.PENDING)
                 .build();
 
-        return mapToResponse(friendshipRepository.save(friendship));
+        Friendship saved = friendshipRepository.save(friendship);
+
+        // Notifier le destinataire
+        notificationService.createNotification(
+                addresseeId,
+                requesterId,
+                Notification.NotificationType.FRIEND_REQUEST,
+                "Vous avez reçu une demande d'ami",
+                saved.getId()
+        );
+
+        return mapToResponse(saved);
     }
 
     // Accepter une demande
@@ -51,7 +66,18 @@ public class FriendshipService {
         }
 
         friendship.setStatus(Friendship.FriendshipStatus.ACCEPTED);
-        return mapToResponse(friendshipRepository.save(friendship));
+        Friendship saved = friendshipRepository.save(friendship);
+
+        // Notifier l'envoyeur que sa demande a été acceptée
+        notificationService.createNotification(
+                friendship.getRequesterId(),
+                userId,
+                Notification.NotificationType.FRIEND_ACCEPTED,
+                "Votre demande d'ami a été acceptée",
+                friendshipId
+        );
+
+        return mapToResponse(saved);
     }
 
     // Refuser une demande
