@@ -6,7 +6,7 @@ using Yarp.ReverseProxy.Transforms;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ===== JWT — même config que AuthService =====
+// ===== JWT ï¿½ mï¿½me config que AuthService =====
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 var jwtAudience = builder.Configuration["Jwt:Audience"];
@@ -28,13 +28,13 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtAudience,
         IssuerSigningKey = new SymmetricSecurityKey(
                                        Encoding.UTF8.GetBytes(jwtKey!)),
-        ClockSkew = TimeSpan.Zero  // même que ton AuthService
+        ClockSkew = TimeSpan.Zero  // mï¿½me que ton AuthService
     };
 });
 
 builder.Services.AddAuthorization();
 
-// ===== CORS — même que AuthService =====
+// ===== CORS ï¿½ mï¿½me que AuthService =====
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
@@ -88,6 +88,24 @@ var app = builder.Build();
 app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapReverseProxy();
+app.MapReverseProxy(proxyPipeline =>
+{
+    proxyPipeline.Use(async (context, next) =>
+    {
+        // Transmettre le userId extrait du JWT vers les services en aval
+        if (context.User.Identity?.IsAuthenticated == true)
+        {
+            var nameId = context.User.FindFirst(
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+            )?.Value
+            ?? context.User.FindFirst("sub")?.Value
+            ?? "0";
+
+            context.Request.Headers["X-User-Id"] = nameId;
+        }
+        await next();
+    });
+});
+
 
 app.Run();

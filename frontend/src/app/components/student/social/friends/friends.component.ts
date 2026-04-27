@@ -11,6 +11,7 @@ export class FriendsComponent implements OnInit {
   friends: Friendship[] = [];
   pendingRequests: Friendship[] = [];
   blockedUsers: BlockList[] = [];
+  filteredFriends: Friendship[] = [];
   activeTab = 'friends';
   isLoading = false;
 
@@ -30,25 +31,30 @@ export class FriendsComponent implements OnInit {
 
   loadFriends(): void {
     this.socialService.getFriends().subscribe({
-      next: (res) => { if (res.success) this.friends = res.data; }
+      next: (res: any) => {
+        if (res.success) {
+          this.friends = res.data;
+          this.filteredFriends = res.data;
+        }
+      }
     });
   }
 
   loadPendingRequests(): void {
     this.socialService.getPendingRequests().subscribe({
-      next: (res) => { if (res.success) this.pendingRequests = res.data; }
+      next: (res: any) => { if (res.success) this.pendingRequests = res.data; }
     });
   }
 
   loadBlockedUsers(): void {
     this.socialService.getBlockedUsers().subscribe({
-      next: (res) => { if (res.success) this.blockedUsers = res.data; }
+      next: (res: any) => { if (res.success) this.blockedUsers = res.data; }
     });
   }
 
   acceptRequest(friendshipId: number): void {
     this.socialService.acceptFriendRequest(friendshipId).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         if (res.success) {
           this.pendingRequests = this.pendingRequests
             .filter(r => r.id !== friendshipId);
@@ -60,7 +66,7 @@ export class FriendsComponent implements OnInit {
 
   rejectRequest(friendshipId: number): void {
     this.socialService.rejectFriendRequest(friendshipId).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         if (res.success) {
           this.pendingRequests = this.pendingRequests
             .filter(r => r.id !== friendshipId);
@@ -69,32 +75,28 @@ export class FriendsComponent implements OnInit {
     });
   }
 
-  // ===== RECHERCHE =====
+  // ===== RECHERCHE (côté frontend sur la liste d'amis) =====
   searchUsers(): void {
-    if (!this.searchKeyword.trim()) return;
-    this.isSearching = true;
-    this.searchDone = false;
-    this.socialService.searchUsers(this.searchKeyword).subscribe({
-      next: (res) => {
-        if (res.success) this.searchResults = res.data;
-        this.isSearching = false;
-        this.searchDone = true;
-      },
-      error: () => {
-        this.isSearching = false;
-        this.searchDone = true;
-        this.searchResults = [];
-      }
-    });
+    this.searchDone = true;
+    if (!this.searchKeyword.trim()) {
+      this.filteredFriends = this.friends;
+      this.searchResults = [];
+      return;
+    }
+    const keyword = this.searchKeyword.toLowerCase();
+    this.filteredFriends = this.friends.filter(f =>
+      f.requesterId.toString().includes(keyword) ||
+      f.addresseeId.toString().includes(keyword)
+    );
+    this.searchResults = this.filteredFriends;
   }
 
   sendFriendRequest(userId: number): void {
     this.socialService.sendFriendRequest(userId).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         if (res.success) {
           alert('Demande d\'ami envoyée !');
-          // Marquer l'utilisateur comme "demande envoyée"
-          const user = this.searchResults.find(u => u.id === userId);
+          const user = this.searchResults.find((u: any) => u.id === userId);
           if (user) user.requestSent = true;
         }
       },
@@ -108,7 +110,7 @@ export class FriendsComponent implements OnInit {
   blockUser(userId: number): void {
     if (!confirm('Bloquer cet utilisateur ?')) return;
     this.socialService.blockUser(userId).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         if (res.success) {
           alert('Utilisateur bloqué.');
           this.loadBlockedUsers();
@@ -121,7 +123,7 @@ export class FriendsComponent implements OnInit {
 
   unblockUser(userId: number): void {
     this.socialService.unblockUser(userId).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         if (res.success) {
           this.blockedUsers = this.blockedUsers
             .filter(b => b.blockedId !== userId);
@@ -134,6 +136,7 @@ export class FriendsComponent implements OnInit {
     this.activeTab = tab;
     if (tab === 'search') {
       this.searchResults = [];
+      this.filteredFriends = this.friends;
       this.searchKeyword = '';
       this.searchDone = false;
     }

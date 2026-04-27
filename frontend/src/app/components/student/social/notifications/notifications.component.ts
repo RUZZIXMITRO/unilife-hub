@@ -11,6 +11,7 @@ export class NotificationsComponent implements OnInit {
   notifications: Notification[] = [];
   unreadCount = 0;
   isLoading = false;
+  errorMessage = '';
 
   constructor(private socialService: SocialService) {}
 
@@ -20,21 +21,39 @@ export class NotificationsComponent implements OnInit {
 
   loadNotifications(): void {
     this.isLoading = true;
+    this.errorMessage = '';
+
     this.socialService.getNotifications().subscribe({
-      next: (res) => {
-        if (res.success) this.notifications = res.data;
+      next: (res: any) => {
+        console.log('✅ Notifications response:', res);
+        if (res.success) {
+          this.notifications = res.data;
+        } else {
+          console.warn('⚠️ success=false:', res);
+        }
         this.isLoading = false;
       },
-      error: () => { this.isLoading = false; }
+      error: (err: any) => {
+        console.error('❌ Notifications error:', err);
+        this.errorMessage = `Erreur ${err.status}: ${err.message}`;
+        this.isLoading = false;
+      }
     });
+
     this.socialService.getUnreadCount().subscribe({
-      next: (res) => { if (res.success) this.unreadCount = res.data; }
+      next: (res: any) => {
+        console.log('✅ UnreadCount response:', res);
+        if (res.success) this.unreadCount = res.data;
+      },
+      error: (err: any) => {
+        console.error('❌ UnreadCount error:', err);
+      }
     });
   }
 
   markAsRead(id: number): void {
     this.socialService.markNotificationAsRead(id).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         if (res.success) {
           const notif = this.notifications.find(n => n.id === id);
           if (notif && !notif.isRead) {
@@ -48,7 +67,7 @@ export class NotificationsComponent implements OnInit {
 
   markAllAsRead(): void {
     this.socialService.markAllNotificationsAsRead().subscribe({
-      next: (res) => {
+      next: (res: any) => {
         if (res.success) {
           this.notifications.forEach(n => n.isRead = true);
           this.unreadCount = 0;
