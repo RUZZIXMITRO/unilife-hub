@@ -17,8 +17,8 @@ public class GroupPost {
     @Column(name = "post_id", nullable = false)
     private Long postId;
 
-    @Column(name = "posted_by", nullable = false)
-    private Long postedBy;
+    @Column(name = "posted_by", nullable = false, length = 36)
+    private String postedBy;
 
     @Column(name = "posted_at")
     private LocalDateTime postedAt;
@@ -38,8 +38,8 @@ public class GroupPost {
     public Long getPostId() { return postId; }
     public void setPostId(Long postId) { this.postId = postId; }
 
-    public Long getPostedBy() { return postedBy; }
-    public void setPostedBy(Long postedBy) { this.postedBy = postedBy; }
+    public String getPostedBy() { return postedBy; }
+    public void setPostedBy(String postedBy) { this.postedBy = postedBy; }
 
     public LocalDateTime getPostedAt() { return postedAt; }
     public void setPostedAt(LocalDateTime postedAt) { this.postedAt = postedAt; }

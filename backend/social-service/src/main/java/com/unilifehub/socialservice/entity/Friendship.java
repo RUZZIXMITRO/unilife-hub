@@ -16,11 +16,11 @@ public class Friendship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long requesterId;
+    @Column(nullable = false, length = 36)
+    private String requesterId;
 
-    @Column(nullable = false)
-    private Long addresseeId;
+    @Column(nullable = false, length = 36)
+    private String addresseeId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

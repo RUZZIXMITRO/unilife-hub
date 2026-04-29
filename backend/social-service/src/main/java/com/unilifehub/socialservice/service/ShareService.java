@@ -15,7 +15,7 @@ public class ShareService {
     private ShareRepository shareRepository;
 
     // Partager un post
-    public ShareResponse sharePost(Long postId, Long userId) {
+    public ShareResponse sharePost(Long postId, String userId) {
         // Vérifier si déjà partagé
         if (shareRepository.existsByPostIdAndUserId(postId, userId)) {
             throw new RuntimeException("Vous avez déjà partagé ce post");
@@ -42,7 +42,7 @@ public class ShareService {
     }
 
     // Annuler un partage
-    public void unsharePost(Long postId, Long userId) {
+    public void unsharePost(Long postId, String userId) {
         List<Share> shares = shareRepository.findByPostId(postId)
                 .stream()
                 .filter(s -> s.getUserId().equals(userId))

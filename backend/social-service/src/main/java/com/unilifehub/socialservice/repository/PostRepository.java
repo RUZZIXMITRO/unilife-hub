@@ -9,7 +9,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     // Récupérer tous les posts d'un utilisateur
-    List<Post> findByUserIdOrderByCreatedAtDesc(Long userId);
+    List<Post> findByUserIdOrderByCreatedAtDesc(String userId);
 
     // Récupérer les posts publics (feed)
     List<Post> findByVisibilityOrderByCreatedAtDesc(Post.Visibility visibility);

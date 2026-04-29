@@ -1,8 +1,12 @@
 package com.unilifehub.socialservice.controller;
+
+import com.unilifehub.socialservice.config.AuthUtils;
+import com.unilifehub.socialservice.dto.response.ApiResponse;
 import com.unilifehub.socialservice.dto.response.BlockListResponse;
 import com.unilifehub.socialservice.service.BlockListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,7 +14,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/social/users")
-@CrossOrigin(origins = "*")
 public class BlockListController {
 
     @Autowired
@@ -18,63 +21,45 @@ public class BlockListController {
 
     // POST /api/social/users/{userId}/block
     @PostMapping("/{userId}/block")
-    public ResponseEntity<?> blockUser(
-            @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long blockerId) {
-        try {
-            BlockListResponse dto = blockListService.blockUser(blockerId, userId);
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "Utilisateur bloqué avec succès",
-                    "data", dto
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", e.getMessage()
-            ));
-        }
+    public ResponseEntity<ApiResponse<BlockListResponse>> blockUser(
+            @PathVariable String userId,
+            Authentication auth) {
+        String blockerId = AuthUtils.getRequiredUserId(auth);
+        return ResponseEntity.ok(
+                ApiResponse.success("Utilisateur bloqué avec succès",
+                        blockListService.blockUser(blockerId, userId)));
     }
 
     // DELETE /api/social/users/{userId}/unblock
     @DeleteMapping("/{userId}/unblock")
-    public ResponseEntity<?> unblockUser(
-            @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long blockerId) {
-        try {
-            blockListService.unblockUser(blockerId, userId);
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "Utilisateur débloqué"
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", e.getMessage()
-            ));
-        }
+    public ResponseEntity<ApiResponse<Void>> unblockUser(
+            @PathVariable String userId,
+            Authentication auth) {
+        String blockerId = AuthUtils.getRequiredUserId(auth);
+        blockListService.unblockUser(blockerId, userId);
+        return ResponseEntity.ok(
+                ApiResponse.success("Utilisateur débloqué"));
     }
 
     // GET /api/social/users/blocked
     @GetMapping("/blocked")
-    public ResponseEntity<?> getBlockedUsers(
-            @RequestHeader("X-User-Id") Long blockerId) {
-        List<BlockListResponse> list = blockListService.getBlockedUsers(blockerId);
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "data", list
-        ));
+    public ResponseEntity<ApiResponse<List<BlockListResponse>>> getBlockedUsers(
+            Authentication auth) {
+        String blockerId = AuthUtils.getRequiredUserId(auth);
+        return ResponseEntity.ok(
+                ApiResponse.success("Liste récupérée",
+                        blockListService.getBlockedUsers(blockerId)));
     }
 
     // GET /api/social/users/{userId}/is-blocked
     @GetMapping("/{userId}/is-blocked")
-    public ResponseEntity<?> isBlocked(
-            @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long blockerId) {
+    public ResponseEntity<ApiResponse<Map<String, Boolean>>> isBlocked(
+            @PathVariable String userId,
+            Authentication auth) {
+        String blockerId = AuthUtils.getRequiredUserId(auth);
         boolean blocked = blockListService.isBlocked(blockerId, userId);
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "data", Map.of("isBlocked", blocked)
-        ));
+        return ResponseEntity.ok(
+                ApiResponse.success("Statut vérifié",
+                        Map.of("isBlocked", blocked)));
     }
 }

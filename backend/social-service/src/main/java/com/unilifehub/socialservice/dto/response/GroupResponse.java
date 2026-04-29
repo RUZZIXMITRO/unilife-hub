@@ -13,7 +13,7 @@ public class GroupResponse {
     private String name;
     private String description;
     private String subject;
-    private Long creatorId;
+    private String creatorId;  // ✅ Long → String
     private String type;
     private int membersCount;
     private boolean isMember;   // est-ce que l'utilisateur connecté est membre ?

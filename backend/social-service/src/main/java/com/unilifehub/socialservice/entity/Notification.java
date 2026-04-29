@@ -16,10 +16,11 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long userId;
+    @Column(nullable = false, length = 36)
+    private String userId;
 
-    private Long relatedUserId;
+    @Column(length = 36)
+    private String relatedUserId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -33,7 +34,6 @@ public class Notification {
     @Column(nullable = false)
     @Builder.Default
     private boolean isRead = false;
-
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

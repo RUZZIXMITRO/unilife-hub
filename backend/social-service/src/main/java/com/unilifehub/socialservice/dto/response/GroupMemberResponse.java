@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class GroupMemberResponse {
 
     private Long id;
-    private Long userId;
+    private String userId;  // ✅ Long → String
     private Long groupId;
     private GroupMember.MemberRole role;
     private GroupMember.MemberStatus status;

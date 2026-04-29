@@ -25,8 +25,8 @@ public class StudyGroup {
 
     private String subject;
 
-    @Column(nullable = false)
-    private Long creatorId;
+    @Column(nullable = false, length = 36)
+    private String creatorId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

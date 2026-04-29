@@ -6,6 +6,7 @@ import com.unilifehub.socialservice.repository.ConversationRepository;
 import com.unilifehub.socialservice.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +21,8 @@ public class ConversationService {
     private MessageRepository messageRepository;
 
     // Démarrer ou récupérer une conversation existante
-    public ConversationResponse startOrGetConversation(Long currentUserId, Long otherUserId) {
+    @Transactional
+    public ConversationResponse startOrGetConversation(String currentUserId, String otherUserId) {
         if (currentUserId.equals(otherUserId)) {
             throw new RuntimeException("Vous ne pouvez pas démarrer une conversation avec vous-même");
         }
@@ -39,7 +41,7 @@ public class ConversationService {
     }
 
     // Récupérer toutes les conversations du user
-    public List<ConversationResponse> getMyConversations(Long userId) {
+    public List<ConversationResponse> getMyConversations(String userId) {
         return conversationRepository.findAllByUserId(userId)
                 .stream()
                 .map(this::mapToDto)

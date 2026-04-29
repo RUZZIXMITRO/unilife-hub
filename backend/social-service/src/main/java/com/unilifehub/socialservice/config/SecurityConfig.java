@@ -30,6 +30,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Routes publiques
                         .requestMatchers("/actuator/**").permitAll()
+                        // Routes admin (IMPORTANT : avant .anyRequest())
+                        .requestMatchers("/api/social/admin/**").hasRole("ADMIN")
                         // Toutes les autres routes nécessitent un token JWT
                         .anyRequest().authenticated()
                 )
@@ -42,7 +44,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        // Ajouter les deux origines
+        config.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "http://localhost:5000"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

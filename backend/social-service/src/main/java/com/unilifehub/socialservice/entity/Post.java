@@ -18,8 +18,8 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long userId;
+    @Column(nullable = false, length = 36)
+    private String userId;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -36,7 +36,6 @@ public class Post {
     @Column(nullable = false)
     @Builder.Default
     private int commentsCount = 0;
-
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

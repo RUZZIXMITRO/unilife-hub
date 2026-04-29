@@ -1,9 +1,9 @@
 package com.unilifehub.socialservice.controller;
 
+import com.unilifehub.socialservice.config.AuthUtils;
 import com.unilifehub.socialservice.dto.request.CreateGroupRequest;
 import com.unilifehub.socialservice.dto.response.ApiResponse;
 import com.unilifehub.socialservice.dto.response.GroupMemberResponse;
-import java.util.Map;
 import com.unilifehub.socialservice.dto.response.GroupResponse;
 import com.unilifehub.socialservice.service.GroupService;
 import jakarta.validation.Valid;
@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/social/groups")
-@CrossOrigin(origins = "http://localhost:4200")
 public class GroupController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class GroupController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<GroupResponse>>> getPublicGroups(
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         return ResponseEntity.ok(
                 ApiResponse.success("Groupes récupérés",
                         groupService.getPublicGroups(userId)));
@@ -36,7 +36,7 @@ public class GroupController {
     public ResponseEntity<ApiResponse<List<GroupResponse>>> searchGroups(
             @RequestParam String keyword,
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         return ResponseEntity.ok(
                 ApiResponse.success("Résultats",
                         groupService.searchGroups(keyword, userId)));
@@ -46,7 +46,8 @@ public class GroupController {
     @PostMapping
     public ResponseEntity<ApiResponse<GroupResponse>> createGroup(
             @Valid @RequestBody CreateGroupRequest request,
-            @RequestHeader("X-User-Id") Long userId) {
+            Authentication auth) {
+        String userId = AuthUtils.getRequiredUserId(auth);
         return ResponseEntity.ok(
                 ApiResponse.success("Groupe créé",
                         groupService.createGroup(userId, request)));
@@ -56,7 +57,8 @@ public class GroupController {
     @PostMapping("/{id}/join")
     public ResponseEntity<ApiResponse<GroupResponse>> joinGroup(
             @PathVariable Long id,
-            @RequestHeader("X-User-Id") Long userId) {
+            Authentication auth) {
+        String userId = AuthUtils.getRequiredUserId(auth);
         return ResponseEntity.ok(
                 ApiResponse.success("Groupe rejoint",
                         groupService.joinGroup(id, userId)));
@@ -67,11 +69,12 @@ public class GroupController {
     public ResponseEntity<ApiResponse<Void>> leaveGroup(
             @PathVariable Long id,
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         groupService.leaveGroup(id, userId);
         return ResponseEntity.ok(
                 ApiResponse.success("Groupe quitté"));
     }
+
     // GET /api/social/groups/{id}/members — liste des membres
     @GetMapping("/{id}/members")
     public ResponseEntity<ApiResponse<List<GroupMemberResponse>>> getMembers(
@@ -94,8 +97,9 @@ public class GroupController {
     @PutMapping("/{id}/members/{userId}/approve")
     public ResponseEntity<ApiResponse<GroupMemberResponse>> approveMember(
             @PathVariable Long id,
-            @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long adminId) {
+            @PathVariable String userId,
+            Authentication auth) {
+        String adminId = AuthUtils.getRequiredUserId(auth);
         return ResponseEntity.ok(
                 ApiResponse.success("Membre approuvé",
                         groupService.approveMember(id, userId, adminId)));
@@ -103,31 +107,23 @@ public class GroupController {
 
     // PUT /api/social/groups/{id}/members/{userId}/reject
     @PutMapping("/{id}/members/{userId}/reject")
-    public ResponseEntity<?> rejectMember(
+    public ResponseEntity<ApiResponse<Void>> rejectMember(
             @PathVariable Long id,
-            @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long adminId) {
-        try {
-            groupService.rejectMember(id, userId, adminId);
-            return ResponseEntity.ok(ApiResponse.success("Membre rejeté"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("success", false, "message", e.getMessage()));
-        }
+            @PathVariable String userId,
+            Authentication auth) {
+        String adminId = AuthUtils.getRequiredUserId(auth);
+        groupService.rejectMember(id, userId, adminId);
+        return ResponseEntity.ok(ApiResponse.success("Membre rejeté"));
     }
 
     // DELETE /api/social/groups/{id}/members/{userId}
     @DeleteMapping("/{id}/members/{userId}")
-    public ResponseEntity<?> removeMember(
+    public ResponseEntity<ApiResponse<Void>> removeMember(
             @PathVariable Long id,
-            @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long adminId) {
-        try {
-            groupService.removeMember(id, userId, adminId);
-            return ResponseEntity.ok(ApiResponse.success("Membre retiré"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("success", false, "message", e.getMessage()));
-        }
+            @PathVariable String userId,
+            Authentication auth) {
+        String adminId = AuthUtils.getRequiredUserId(auth);
+        groupService.removeMember(id, userId, adminId);
+        return ResponseEntity.ok(ApiResponse.success("Membre retiré"));
     }
 }

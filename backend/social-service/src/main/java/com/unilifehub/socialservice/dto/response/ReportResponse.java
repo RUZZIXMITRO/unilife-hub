@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 public class ReportResponse {
 
     private Long id;
-    private Long reporterId;
-    private Long reportedUserId;
+    private String reporterId;       // ✅ Long → String
+    private String reportedUserId;   // ✅ Long → String
     private Long contentId;
     private Report.ContentType contentType;
     private String reason;

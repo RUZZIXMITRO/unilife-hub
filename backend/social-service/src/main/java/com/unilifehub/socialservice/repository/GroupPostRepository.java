@@ -11,7 +11,7 @@ public interface GroupPostRepository extends JpaRepository<GroupPost, Long> {
 
     List<GroupPost> findByGroupIdOrderByPostedAtDesc(Long groupId);
 
-    List<GroupPost> findByPostedBy(Long postedBy);
+    List<GroupPost> findByPostedBy(String postedBy);
 
     boolean existsByGroupIdAndPostId(Long groupId, Long postId);
 

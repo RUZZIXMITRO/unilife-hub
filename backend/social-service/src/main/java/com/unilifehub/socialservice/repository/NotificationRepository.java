@@ -9,8 +9,8 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
     // Récupérer les notifications d'un utilisateur
-    List<Notification> findByUserIdOrderByCreatedAtDesc(Long userId);
+    List<Notification> findByUserIdOrderByCreatedAtDesc(String userId);
 
     // Compter les non lues
-    int countByUserIdAndIsRead(Long userId, boolean isRead);
+    int countByUserIdAndIsRead(String userId, boolean isRead);
 }

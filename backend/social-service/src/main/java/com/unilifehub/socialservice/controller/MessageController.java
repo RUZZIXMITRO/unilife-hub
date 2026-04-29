@@ -1,5 +1,6 @@
 package com.unilifehub.socialservice.controller;
 
+import com.unilifehub.socialservice.config.AuthUtils;
 import com.unilifehub.socialservice.dto.request.SendMessageRequest;
 import com.unilifehub.socialservice.dto.response.ApiResponse;
 import com.unilifehub.socialservice.dto.response.MessageResponse;
@@ -9,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/social/messages")
-@CrossOrigin(origins = "http://localhost:4200")
 public class MessageController {
 
     @Autowired
@@ -22,9 +23,9 @@ public class MessageController {
     // GET /api/social/messages/{userId} → conversation
     @GetMapping("/{userId}")
     public ResponseEntity<ApiResponse<List<MessageResponse>>> getConversation(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             Authentication auth) {
-        Long currentUserId = (Long) auth.getPrincipal();
+        String currentUserId = AuthUtils.getRequiredUserId(auth);
         return ResponseEntity.ok(
                 ApiResponse.success("Conversation récupérée",
                         messageService.getConversation(currentUserId, userId)));
@@ -35,7 +36,7 @@ public class MessageController {
     public ResponseEntity<ApiResponse<MessageResponse>> sendMessage(
             @Valid @RequestBody SendMessageRequest request,
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         return ResponseEntity.ok(
                 ApiResponse.success("Message envoyé",
                         messageService.sendMessage(userId, request)));
@@ -46,9 +47,8 @@ public class MessageController {
     public ResponseEntity<ApiResponse<Void>> markAsRead(
             @PathVariable Long id,
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         messageService.markAsRead(id, userId);
-        return ResponseEntity.ok(
-                ApiResponse.success("Message lu"));
+        return ResponseEntity.ok(ApiResponse.success("Message lu"));
     }
 }

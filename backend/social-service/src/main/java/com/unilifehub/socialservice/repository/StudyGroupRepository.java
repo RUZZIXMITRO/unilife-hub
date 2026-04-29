@@ -15,5 +15,5 @@ public interface StudyGroupRepository extends JpaRepository<StudyGroup, Long> {
     List<StudyGroup> findByType(StudyGroup.GroupType type);
 
     // Récupérer les groupes créés par un utilisateur
-    List<StudyGroup> findByCreatorId(Long creatorId);
+    List<StudyGroup> findByCreatorId(String creatorId);
 }

@@ -1,17 +1,18 @@
 package com.unilifehub.socialservice.controller;
 
+import com.unilifehub.socialservice.config.AuthUtils;
+import com.unilifehub.socialservice.dto.response.ApiResponse;
 import com.unilifehub.socialservice.dto.response.GroupPostResponse;
 import com.unilifehub.socialservice.service.GroupPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/social/groups")
-@CrossOrigin(origins = "*")
 public class GroupPostController {
 
     @Autowired
@@ -19,51 +20,30 @@ public class GroupPostController {
 
     // POST /api/social/groups/{groupId}/posts/{postId}
     @PostMapping("/{groupId}/posts/{postId}")
-    public ResponseEntity<?> addPostToGroup(
+    public ResponseEntity<ApiResponse<GroupPostResponse>> addPostToGroup(
             @PathVariable Long groupId,
             @PathVariable Long postId,
-            @RequestHeader("X-User-Id") Long userId) {
-        try {
-            GroupPostResponse dto = groupPostService.addPostToGroup(groupId, postId, userId);
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "Post publié dans le groupe",
-                    "data", dto
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", e.getMessage()
-            ));
-        }
+            Authentication auth) {
+        String userId = AuthUtils.getRequiredUserId(auth);
+        GroupPostResponse dto = groupPostService.addPostToGroup(groupId, postId, userId);
+        return ResponseEntity.ok(ApiResponse.success("Post publié dans le groupe", dto));
     }
 
     // GET /api/social/groups/{groupId}/posts
     @GetMapping("/{groupId}/posts")
-    public ResponseEntity<?> getGroupPosts(@PathVariable Long groupId) {
+    public ResponseEntity<ApiResponse<List<GroupPostResponse>>> getGroupPosts(
+            @PathVariable Long groupId) {
         List<GroupPostResponse> list = groupPostService.getGroupPosts(groupId);
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "data", list
-        ));
+        return ResponseEntity.ok(ApiResponse.success("Posts du groupe récupérés", list));
     }
 
     // DELETE /api/social/groups/posts/{groupPostId}
     @DeleteMapping("/posts/{groupPostId}")
-    public ResponseEntity<?> removePost(
+    public ResponseEntity<ApiResponse<Void>> removePost(
             @PathVariable Long groupPostId,
-            @RequestHeader("X-User-Id") Long userId) {
-        try {
-            groupPostService.removePostFromGroup(groupPostId, userId);
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "Post retiré du groupe"
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", e.getMessage()
-            ));
-        }
+            Authentication auth) {
+        String userId = AuthUtils.getRequiredUserId(auth);
+        groupPostService.removePostFromGroup(groupPostId, userId);
+        return ResponseEntity.ok(ApiResponse.success("Post retiré du groupe"));
     }
 }

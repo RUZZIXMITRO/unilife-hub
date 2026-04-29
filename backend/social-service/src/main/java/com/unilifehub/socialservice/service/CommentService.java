@@ -9,6 +9,8 @@ import com.unilifehub.socialservice.repository.CommentRepository;
 import com.unilifehub.socialservice.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,11 +26,20 @@ public class CommentService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private BlockListService blockListService;
+
     // Ajouter un commentaire
-    public CommentResponse addComment(Long postId, Long userId,
+    @Transactional
+    public CommentResponse addComment(Long postId, String userId,
                                       CreateCommentRequest request) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post non trouvé"));
+
+        // ✅ BUG #15 : Vérifier blocage
+        if (blockListService.isBlocked(post.getUserId(), userId)) {
+            throw new RuntimeException("Vous ne pouvez pas commenter ce post");
+        }
 
         Comment comment = Comment.builder()
                 .userId(userId)
@@ -67,7 +78,8 @@ public class CommentService {
     }
 
     // Supprimer un commentaire
-    public void deleteComment(Long commentId, Long userId) {
+    @Transactional
+    public void deleteComment(Long commentId, String userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Commentaire non trouvé"));
 

@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 public class NotificationResponse {
 
     private Long id;
-    private Long userId;
-    private Long relatedUserId;
+    private String userId;         // ✅ Long → String
+    private String relatedUserId;  // ✅ Long → String
     private String type;
     private String message;
     private Long referenceId;

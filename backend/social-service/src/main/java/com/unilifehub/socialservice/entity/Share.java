@@ -14,8 +14,8 @@ public class Share {
     @Column(name = "post_id", nullable = false)
     private Long postId;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Column(name = "user_id", nullable = false, length = 36)
+    private String userId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -32,8 +32,8 @@ public class Share {
     public Long getPostId() { return postId; }
     public void setPostId(Long postId) { this.postId = postId; }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

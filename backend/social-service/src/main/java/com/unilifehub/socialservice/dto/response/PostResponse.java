@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class PostResponse {
 
     private Long id;
-    private Long userId;
+    private String userId;      // ✅ Long → String
     private String userName;    // récupéré depuis UserService
     private String content;
     private String visibility;

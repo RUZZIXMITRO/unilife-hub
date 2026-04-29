@@ -10,9 +10,12 @@ import java.util.Optional;
 @Repository
 public interface BlockListRepository extends JpaRepository<BlockList, Long> {
 
-    boolean existsByBlockerIdAndBlockedId(Long blockerId, Long blockedId);
+    boolean existsByBlockerIdAndBlockedId(String blockerId, String blockedId);
 
-    Optional<BlockList> findByBlockerIdAndBlockedId(Long blockerId, Long blockedId);
+    Optional<BlockList> findByBlockerIdAndBlockedId(String blockerId, String blockedId);
 
-    List<BlockList> findByBlockerId(Long blockerId);
+    List<BlockList> findByBlockerId(String blockerId);
+
+    // ✅ AJOUT pour BUG #15 (Phase 2)
+    List<BlockList> findByBlockedId(String blockedId);
 }

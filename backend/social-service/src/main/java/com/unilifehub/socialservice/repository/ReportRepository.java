@@ -11,12 +11,12 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     List<Report> findByStatus(Report.ReportStatus status);
 
-    List<Report> findByReporterId(Long reporterId);
+    List<Report> findByReporterId(String reporterId);
 
     List<Report> findByContentIdAndContentType(Long contentId, Report.ContentType contentType);
 
     boolean existsByReporterIdAndContentIdAndContentType(
-            Long reporterId, Long contentId, Report.ContentType contentType);
+            String reporterId, Long contentId, Report.ContentType contentType);
 
     long countByStatus(Report.ReportStatus status);
 }

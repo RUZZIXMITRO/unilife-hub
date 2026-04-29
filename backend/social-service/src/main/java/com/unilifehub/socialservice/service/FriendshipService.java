@@ -6,6 +6,8 @@ import com.unilifehub.socialservice.entity.Notification;
 import com.unilifehub.socialservice.repository.FriendshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,11 +20,20 @@ public class FriendshipService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private BlockListService blockListService;
+
     // Envoyer une demande d'ami
-    public FriendshipResponse sendFriendRequest(Long requesterId, Long addresseeId) {
+    public FriendshipResponse sendFriendRequest(String requesterId, String addresseeId) {
 
         if (requesterId.equals(addresseeId)) {
             throw new RuntimeException("Vous ne pouvez pas vous ajouter vous-même");
+        }
+
+        // ✅ BUG #15 : Vérifier blocage
+        if (blockListService.isBlocked(addresseeId, requesterId)
+                || blockListService.isBlocked(requesterId, addresseeId)) {
+            throw new RuntimeException("Action impossible : blocage actif");
         }
 
         // Vérifier si une demande existe déjà
@@ -57,7 +68,8 @@ public class FriendshipService {
     }
 
     // Accepter une demande
-    public FriendshipResponse acceptRequest(Long friendshipId, Long userId) {
+    @Transactional
+    public FriendshipResponse acceptRequest(Long friendshipId, String userId) {
         Friendship friendship = friendshipRepository.findById(friendshipId)
                 .orElseThrow(() -> new RuntimeException("Demande non trouvée"));
 
@@ -81,7 +93,7 @@ public class FriendshipService {
     }
 
     // Refuser une demande
-    public void rejectRequest(Long friendshipId, Long userId) {
+    public void rejectRequest(Long friendshipId, String userId) {
         Friendship friendship = friendshipRepository.findById(friendshipId)
                 .orElseThrow(() -> new RuntimeException("Demande non trouvée"));
 
@@ -93,7 +105,7 @@ public class FriendshipService {
     }
 
     // Supprimer un ami
-    public void removeFriend(Long userId, Long friendId) {
+    public void removeFriend(String userId, String friendId) {
         Friendship friendship = friendshipRepository
                 .findFriendship(userId, friendId)
                 .orElseThrow(() -> new RuntimeException("Amitié non trouvée"));
@@ -102,7 +114,7 @@ public class FriendshipService {
     }
 
     // Récupérer la liste d'amis
-    public List<FriendshipResponse> getFriends(Long userId) {
+    public List<FriendshipResponse> getFriends(String userId) {
         return friendshipRepository.findAllFriends(userId)
                 .stream()
                 .map(this::mapToResponse)
@@ -110,7 +122,7 @@ public class FriendshipService {
     }
 
     // Récupérer les demandes reçues
-    public List<FriendshipResponse> getPendingRequests(Long userId) {
+    public List<FriendshipResponse> getPendingRequests(String userId) {
         return friendshipRepository
                 .findByAddresseeIdAndStatus(userId, Friendship.FriendshipStatus.PENDING)
                 .stream()

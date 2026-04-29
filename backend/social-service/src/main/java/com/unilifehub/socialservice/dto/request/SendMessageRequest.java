@@ -10,7 +10,7 @@ import lombok.*;
 public class SendMessageRequest {
 
     @NotNull(message = "Le destinataire est obligatoire")
-    private Long receiverId;
+    private String receiverId;  // ✅ Long → String
 
     @NotBlank(message = "Le message ne peut pas être vide")
     private String content;

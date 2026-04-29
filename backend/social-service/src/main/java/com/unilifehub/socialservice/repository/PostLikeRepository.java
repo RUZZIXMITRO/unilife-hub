@@ -9,8 +9,8 @@ import java.util.Optional;
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
 
     // Vérifier si un utilisateur a liké un post
-    Optional<PostLike> findByUserIdAndPostId(Long userId, Long postId);
+    Optional<PostLike> findByUserIdAndPostId(String userId, Long postId);
 
     // Vérifier existence
-    boolean existsByUserIdAndPostId(Long userId, Long postId);
+    boolean existsByUserIdAndPostId(String userId, Long postId);
 }

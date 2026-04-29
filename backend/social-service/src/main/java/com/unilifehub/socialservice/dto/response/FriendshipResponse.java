@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 public class FriendshipResponse {
 
     private Long id;
-    private Long requesterId;
-    private Long addresseeId;
+    private String requesterId;  // ✅ Long → String
+    private String addresseeId;  // ✅ Long → String
     private String status;
     private LocalDateTime createdAt;
 }

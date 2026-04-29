@@ -7,19 +7,19 @@ public final class AuthUtils {
     private AuthUtils() {
     }
 
-    public static Long getRequiredUserId(Authentication authentication) {
+    /**
+     * Récupère l'UUID (String) de l'utilisateur authentifié depuis le principal.
+     */
+    public static String getRequiredUserId(Authentication authentication) {
         if (authentication == null || authentication.getPrincipal() == null) {
             throw new SecurityException("Utilisateur non authentifié");
         }
 
         Object principal = authentication.getPrincipal();
-        if (principal instanceof Long userId) {
+        if (principal instanceof String userId && !userId.isEmpty()) {
             return userId;
         }
-        if (principal instanceof Number number) {
-            return number.longValue();
-        }
 
-        throw new SecurityException("Principal JWT invalide");
+        throw new SecurityException("Principal JWT invalide (attendu String UUID)");
     }
 }

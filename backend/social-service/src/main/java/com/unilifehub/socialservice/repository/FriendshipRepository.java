@@ -13,17 +13,17 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     // Vérifier si une amitié existe entre deux utilisateurs
     Optional<Friendship> findByRequesterIdAndAddresseeId(
-            Long requesterId, Long addresseeId);
+            String requesterId, String addresseeId);
 
     // Récupérer les demandes reçues en attente
     List<Friendship> findByAddresseeIdAndStatus(
-            Long addresseeId, Friendship.FriendshipStatus status);
+            String addresseeId, Friendship.FriendshipStatus status);
 
     // Récupérer tous les amis acceptés
     @Query("SELECT f FROM Friendship f WHERE " +
             "(f.requesterId = :userId OR f.addresseeId = :userId) " +
             "AND f.status = 'ACCEPTED'")
-    List<Friendship> findAllFriends(@Param("userId") Long userId);
+    List<Friendship> findAllFriends(@Param("userId") String userId);
 
     // Vérifier si deux utilisateurs sont amis
     @Query("SELECT f FROM Friendship f WHERE " +
@@ -31,6 +31,6 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
             "(f.requesterId = :userId2 AND f.addresseeId = :userId1)) " +
             "AND f.status = 'ACCEPTED'")
     Optional<Friendship> findFriendship(
-            @Param("userId1") Long userId1,
-            @Param("userId2") Long userId2);
+            @Param("userId1") String userId1,
+            @Param("userId2") String userId2);
 }

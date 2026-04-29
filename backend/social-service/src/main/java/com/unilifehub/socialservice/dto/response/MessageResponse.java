@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 public class MessageResponse {
 
     private Long id;
-    private Long senderId;
-    private Long receiverId;
+    private String senderId;     // ✅ Long → String
+    private String receiverId;   // ✅ Long → String
+    private Long conversationId; // ✅ AJOUT (pour BUG #2)
     private String content;
     private boolean isRead;
     private LocalDateTime createdAt;

@@ -1,5 +1,6 @@
 package com.unilifehub.socialservice.controller;
 
+import com.unilifehub.socialservice.config.AuthUtils;
 import com.unilifehub.socialservice.dto.response.ApiResponse;
 import com.unilifehub.socialservice.dto.response.NotificationResponse;
 import com.unilifehub.socialservice.service.NotificationService;
@@ -7,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/social/notifications")
-@CrossOrigin(origins = "http://localhost:4200")
 public class NotificationController {
 
     @Autowired
@@ -21,7 +22,7 @@ public class NotificationController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<NotificationResponse>>> getNotifications(
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         return ResponseEntity.ok(
                 ApiResponse.success("Notifications récupérées",
                         notificationService.getNotifications(userId)));
@@ -31,7 +32,7 @@ public class NotificationController {
     @GetMapping("/unread-count")
     public ResponseEntity<ApiResponse<Integer>> getUnreadCount(
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         return ResponseEntity.ok(
                 ApiResponse.success("Compteur récupéré",
                         notificationService.countUnread(userId)));
@@ -42,7 +43,7 @@ public class NotificationController {
     public ResponseEntity<ApiResponse<Void>> markAsRead(
             @PathVariable Long id,
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         notificationService.markAsRead(id, userId);
         return ResponseEntity.ok(ApiResponse.success("Notification lue"));
     }
@@ -51,9 +52,8 @@ public class NotificationController {
     @PutMapping("/read-all")
     public ResponseEntity<ApiResponse<Void>> markAllAsRead(
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         notificationService.markAllAsRead(userId);
-        return ResponseEntity.ok(
-                ApiResponse.success("Toutes les notifications lues"));
+        return ResponseEntity.ok(ApiResponse.success("Toutes les notifications lues"));
     }
 }

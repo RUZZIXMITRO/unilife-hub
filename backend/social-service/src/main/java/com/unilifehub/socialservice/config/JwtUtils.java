@@ -1,8 +1,9 @@
 package com.unilifehub.socialservice.config;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.security.Key;
@@ -10,30 +11,41 @@ import java.security.Key;
 @Component
 public class JwtUtils {
 
+    private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
+
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    // Extraire le userId depuis le token
-    public Long getUserIdFromToken(String token) {
+    /**
+     * Extrait l'UUID utilisateur depuis le claim 'sub' du JWT.
+     * @return String UUID ou null si non trouvé
+     */
+    public String getUserIdFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
-        // ASP.NET met l'userId dans le header X-User-Id
-        // Le sub contient un UUID credential ID — on retourne 0
-        // Le vrai userId vient du header X-User-Id injecté par le frontend
-        try {
-            String subject = claims.getSubject();
-            return Long.parseLong(subject); // si c'est un Long
-        } catch (NumberFormatException e) {
-            // sub est un UUID → retourner 0, userId viendra du header X-User-Id
-            return 0L;
-        }
+        return claims.getSubject(); // L'UUID sous forme de String
     }
 
-    // Valider le token
+    /**
+     * Extrait le rôle (STUDENT ou ADMIN) depuis le JWT.
+     */
+    public String getRoleFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSignKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        Object role = claims.get("http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+        if (role == null) role = claims.get("role");
+        return role != null ? role.toString() : "STUDENT";
+    }
+
+    /**
+     * Valide le token JWT.
+     */
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -42,17 +54,16 @@ public class JwtUtils {
                     .parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
-            System.out.println("Token expiré");
+            log.warn("Token expiré: {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            System.out.println("Token invalide");
+            log.warn("Token malformé: {}", e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erreur token: " + e.getMessage());
+            log.warn("Erreur validation token: {}", e.getMessage());
         }
         return false;
     }
 
     private Key getSignKey() {
-        // AuthService ASP.NET utilise plain text — pas Base64
         byte[] keyBytes = jwtSecret.getBytes(java.nio.charset.StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }

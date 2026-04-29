@@ -1,16 +1,18 @@
 package com.unilifehub.socialservice.controller;
+
+import com.unilifehub.socialservice.config.AuthUtils;
+import com.unilifehub.socialservice.dto.response.ApiResponse;
 import com.unilifehub.socialservice.dto.response.ConversationResponse;
 import com.unilifehub.socialservice.service.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/social/conversations")
-@CrossOrigin(origins = "*")
 public class ConversationController {
 
     @Autowired
@@ -18,32 +20,22 @@ public class ConversationController {
 
     // POST /api/social/conversations/{userId}/start
     @PostMapping("/{userId}/start")
-    public ResponseEntity<?> startConversation(
-            @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long currentUserId) {
-        try {
-            ConversationResponse dto = conversationService.startOrGetConversation(currentUserId, userId);
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "Conversation prête",
-                    "data", dto
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", e.getMessage()
-            ));
-        }
+    public ResponseEntity<ApiResponse<ConversationResponse>> startConversation(
+            @PathVariable String userId,
+            Authentication auth) {
+        String currentUserId = AuthUtils.getRequiredUserId(auth);
+        return ResponseEntity.ok(
+                ApiResponse.success("Conversation prête",
+                        conversationService.startOrGetConversation(currentUserId, userId)));
     }
 
     // GET /api/social/conversations
     @GetMapping
-    public ResponseEntity<?> getMyConversations(
-            @RequestHeader("X-User-Id") Long userId) {
-        List<ConversationResponse> list = conversationService.getMyConversations(userId);
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "data", list
-        ));
+    public ResponseEntity<ApiResponse<List<ConversationResponse>>> getMyConversations(
+            Authentication auth) {
+        String userId = AuthUtils.getRequiredUserId(auth);
+        return ResponseEntity.ok(
+                ApiResponse.success("Conversations récupérées",
+                        conversationService.getMyConversations(userId)));
     }
 }

@@ -16,10 +16,10 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             "(m.senderId = :userId2 AND m.receiverId = :userId1) " +
             "ORDER BY m.createdAt ASC")
     List<Message> findConversation(
-            @Param("userId1") Long userId1,
-            @Param("userId2") Long userId2);
+            @Param("userId1") String userId1,
+            @Param("userId2") String userId2);
 
     // Compter les messages non lus
     int countBySenderIdAndReceiverIdAndIsRead(
-            Long senderId, Long receiverId, boolean isRead);
+            String senderId, String receiverId, boolean isRead);
 }

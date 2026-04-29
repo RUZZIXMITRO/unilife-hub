@@ -7,13 +7,13 @@ public class GroupPostResponse {
     private Long id;
     private Long groupId;
     private Long postId;
-    private Long postedBy;
+    private String postedBy;  // ✅ Long → String
     private LocalDateTime postedAt;
 
     public GroupPostResponse() {}
 
     public GroupPostResponse(Long id, Long groupId, Long postId,
-                             Long postedBy, LocalDateTime postedAt) {
+                             String postedBy, LocalDateTime postedAt) {
         this.id = id;
         this.groupId = groupId;
         this.postId = postId;
@@ -30,8 +30,8 @@ public class GroupPostResponse {
     public Long getPostId() { return postId; }
     public void setPostId(Long postId) { this.postId = postId; }
 
-    public Long getPostedBy() { return postedBy; }
-    public void setPostedBy(Long postedBy) { this.postedBy = postedBy; }
+    public String getPostedBy() { return postedBy; }
+    public void setPostedBy(String postedBy) { this.postedBy = postedBy; }
 
     public LocalDateTime getPostedAt() { return postedAt; }
     public void setPostedAt(LocalDateTime postedAt) { this.postedAt = postedAt; }

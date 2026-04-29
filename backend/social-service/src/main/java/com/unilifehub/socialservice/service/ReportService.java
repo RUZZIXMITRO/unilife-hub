@@ -8,6 +8,7 @@ import com.unilifehub.socialservice.repository.PostRepository;
 import com.unilifehub.socialservice.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class ReportService {
     // ===== ÉTUDIANT =====
 
     // Créer un signalement
-    public ReportResponse createReport(Long reporterId, CreateReportRequest request) {
+    public ReportResponse createReport(String reporterId, CreateReportRequest request) {
         // Vérifier doublon
         if (reportRepository.existsByReporterIdAndContentIdAndContentType(
                 reporterId, request.getContentId(), request.getContentType())) {
@@ -79,6 +80,7 @@ public class ReportService {
     }
 
     // Supprimer un signalement + contenu signalé
+    @Transactional  // ✅ AJOUT Phase 3
     public void deleteReportAndContent(Long reportId) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new RuntimeException("Signalement introuvable"));

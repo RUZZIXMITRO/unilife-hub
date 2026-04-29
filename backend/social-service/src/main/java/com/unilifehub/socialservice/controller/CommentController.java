@@ -1,5 +1,6 @@
 package com.unilifehub.socialservice.controller;
 
+import com.unilifehub.socialservice.config.AuthUtils;
 import com.unilifehub.socialservice.dto.request.CreateCommentRequest;
 import com.unilifehub.socialservice.dto.response.ApiResponse;
 import com.unilifehub.socialservice.dto.response.CommentResponse;
@@ -9,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/social/posts/{postId}/comments")
-@CrossOrigin(origins = "http://localhost:4200")
 public class CommentController {
 
     @Autowired
@@ -34,7 +35,7 @@ public class CommentController {
             @PathVariable Long postId,
             @Valid @RequestBody CreateCommentRequest request,
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         return ResponseEntity.ok(
                 ApiResponse.success("Commentaire ajouté",
                         commentService.addComment(postId, userId, request)));
@@ -46,7 +47,7 @@ public class CommentController {
             @PathVariable Long postId,
             @PathVariable Long commentId,
             Authentication auth) {
-        Long userId = (auth != null) ? (Long) auth.getPrincipal() : 0L;
+        String userId = AuthUtils.getRequiredUserId(auth);
         commentService.deleteComment(commentId, userId);
         return ResponseEntity.ok(
                 ApiResponse.success("Commentaire supprimé"));

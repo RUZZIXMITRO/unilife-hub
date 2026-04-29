@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class CommentResponse {
 
     private Long id;
-    private Long userId;
+    private String userId;  // ✅ Long → String
     private String userName;
     private String content;
     private Long parentCommentId;

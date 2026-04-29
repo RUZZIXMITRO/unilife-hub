@@ -5,6 +5,8 @@ import com.unilifehub.socialservice.entity.Notification;
 import com.unilifehub.socialservice.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +17,7 @@ public class NotificationService {
     private NotificationRepository notificationRepository;
 
     // Récupérer les notifications d'un utilisateur
-    public List<NotificationResponse> getNotifications(Long userId) {
+    public List<NotificationResponse> getNotifications(String userId) {
         return notificationRepository
                 .findByUserIdOrderByCreatedAtDesc(userId)
                 .stream()
@@ -24,7 +26,7 @@ public class NotificationService {
     }
 
     // Marquer une notification comme lue
-    public void markAsRead(Long notificationId, Long userId) {
+    public void markAsRead(Long notificationId, String userId) {
         Notification notification = notificationRepository
                 .findById(notificationId)
                 .orElseThrow(() -> new RuntimeException("Notification non trouvée"));
@@ -38,7 +40,8 @@ public class NotificationService {
     }
 
     // Marquer toutes les notifications comme lues
-    public void markAllAsRead(Long userId) {
+    @Transactional  // ✅ AJOUT Phase 3
+    public void markAllAsRead(String userId) {
         List<Notification> notifications = notificationRepository
                 .findByUserIdOrderByCreatedAtDesc(userId);
 
@@ -47,12 +50,12 @@ public class NotificationService {
     }
 
     // Compter les non lues
-    public int countUnread(Long userId) {
+    public int countUnread(String userId) {
         return notificationRepository.countByUserIdAndIsRead(userId, false);
     }
 
     // Créer une notification (appelé par les autres services)
-    public void createNotification(Long userId, Long relatedUserId,
+    public void createNotification(String userId, String relatedUserId,
                                    Notification.NotificationType type,
                                    String message, Long referenceId) {
         Notification notification = Notification.builder()

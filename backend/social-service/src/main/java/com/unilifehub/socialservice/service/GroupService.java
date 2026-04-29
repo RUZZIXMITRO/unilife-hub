@@ -9,6 +9,8 @@ import com.unilifehub.socialservice.repository.GroupMemberRepository;
 import com.unilifehub.socialservice.repository.StudyGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +24,8 @@ public class GroupService {
     private GroupMemberRepository memberRepository;
 
     // Créer un groupe
-    public GroupResponse createGroup(Long userId, CreateGroupRequest request) {
+    @Transactional
+    public GroupResponse createGroup(String userId, CreateGroupRequest request) {
         StudyGroup group = StudyGroup.builder()
                 .name(request.getName())
                 .description(request.getDescription())
@@ -47,7 +50,8 @@ public class GroupService {
     }
 
     // Rejoindre un groupe
-    public GroupResponse joinGroup(Long groupId, Long userId) {
+    @Transactional
+    public GroupResponse joinGroup(Long groupId, String userId) {
         StudyGroup group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Groupe non trouvé"));
 
@@ -79,7 +83,8 @@ public class GroupService {
     }
 
     // Quitter un groupe
-    public void leaveGroup(Long groupId, Long userId) {
+    @Transactional
+    public void leaveGroup(Long groupId, String userId) {
         GroupMember member = memberRepository
                 .findByGroupIdAndUserId(groupId, userId)
                 .orElseThrow(() -> new RuntimeException("Vous n'êtes pas membre"));
@@ -92,7 +97,7 @@ public class GroupService {
     }
 
     // Rechercher des groupes
-    public List<GroupResponse> searchGroups(String keyword, Long userId) {
+    public List<GroupResponse> searchGroups(String keyword, String userId) {
         return groupRepository.findByNameContainingIgnoreCase(keyword)
                 .stream()
                 .map(group -> mapToResponse(group, userId))
@@ -100,14 +105,14 @@ public class GroupService {
     }
 
     // Récupérer tous les groupes publics
-    public List<GroupResponse> getPublicGroups(Long userId) {
+    public List<GroupResponse> getPublicGroups(String userId) {
         return groupRepository.findByType(StudyGroup.GroupType.PUBLIC)
                 .stream()
                 .map(group -> mapToResponse(group, userId))
                 .collect(Collectors.toList());
     }
 
-    private GroupResponse mapToResponse(StudyGroup group, Long currentUserId) {
+    private GroupResponse mapToResponse(StudyGroup group, String currentUserId) {
         boolean isMember = memberRepository
                 .existsByGroupIdAndUserId(group.getId(), currentUserId);
 
@@ -123,6 +128,7 @@ public class GroupService {
                 .createdAt(group.getCreatedAt())
                 .build();
     }
+
     // Récupérer les membres d'un groupe
     public List<GroupMemberResponse> getGroupMembers(Long groupId) {
         return memberRepository.findByGroupId(groupId)
@@ -140,7 +146,8 @@ public class GroupService {
     }
 
     // Approuver un membre
-    public GroupMemberResponse approveMember(Long groupId, Long userId, Long adminId) {
+    @Transactional
+    public GroupMemberResponse approveMember(Long groupId, String userId, String adminId) {
         // Vérifier que celui qui approuve est admin
         GroupMember admin = memberRepository.findByGroupIdAndUserId(groupId, adminId)
                 .orElseThrow(() -> new RuntimeException("Vous n'êtes pas membre de ce groupe"));
@@ -164,7 +171,8 @@ public class GroupService {
     }
 
     // Rejeter un membre
-    public void rejectMember(Long groupId, Long userId, Long adminId) {
+    @Transactional
+    public void rejectMember(Long groupId, String userId, String adminId) {
         // Vérifier que celui qui rejette est admin
         GroupMember admin = memberRepository.findByGroupIdAndUserId(groupId, adminId)
                 .orElseThrow(() -> new RuntimeException("Vous n'êtes pas membre de ce groupe"));
@@ -180,7 +188,8 @@ public class GroupService {
     }
 
     // Retirer un membre (kick)
-    public void removeMember(Long groupId, Long userId, Long adminId) {
+    @Transactional
+    public void removeMember(Long groupId, String userId, String adminId) {
         GroupMember admin = memberRepository.findByGroupIdAndUserId(groupId, adminId)
                 .orElseThrow(() -> new RuntimeException("Vous n'êtes pas membre de ce groupe"));
 

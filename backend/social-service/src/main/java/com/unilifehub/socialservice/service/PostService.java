@@ -9,7 +9,10 @@ import com.unilifehub.socialservice.repository.PostLikeRepository;
 import com.unilifehub.socialservice.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,8 +27,11 @@ public class PostService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private BlockListService blockListService;  // ✅ AJOUT Phase 2
+
     // Créer un post
-    public PostResponse createPost(Long userId, CreatePostRequest request) {
+    public PostResponse createPost(String userId, CreatePostRequest request) {
         Post post = Post.builder()
                 .userId(userId)
                 .content(request.getContent())
@@ -40,16 +46,20 @@ public class PostService {
     }
 
     // Récupérer le feed (posts publics)
-    public List<PostResponse> getFeed(Long userId) {
+    public List<PostResponse> getFeed(String userId) {
+        // ✅ AJOUT Phase 2 - BUG #15 : filtrer les bloqués
+        Set<String> blockedIds = blockListService.getMutuallyBlockedIds(userId);
+
         return postRepository
                 .findByVisibilityOrderByCreatedAtDesc(Post.Visibility.PUBLIC)
                 .stream()
+                .filter(p -> !blockedIds.contains(p.getUserId()))  // ← filtrer
                 .map(post -> mapToResponse(post, userId))
                 .collect(Collectors.toList());
     }
 
     // Récupérer les posts d'un utilisateur
-    public List<PostResponse> getUserPosts(Long userId) {
+    public List<PostResponse> getUserPosts(String userId) {
         return postRepository
                 .findByUserIdOrderByCreatedAtDesc(userId)
                 .stream()
@@ -58,7 +68,7 @@ public class PostService {
     }
 
     // Modifier un post
-    public PostResponse updatePost(Long postId, Long userId, CreatePostRequest request) {
+    public PostResponse updatePost(Long postId, String userId, CreatePostRequest request) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post non trouvé"));
 
@@ -74,7 +84,7 @@ public class PostService {
     }
 
     // Supprimer un post
-    public void deletePost(Long postId, Long userId) {
+    public void deletePost(Long postId, String userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post non trouvé"));
 
@@ -86,7 +96,8 @@ public class PostService {
     }
 
     // Liker / Unliker un post
-    public PostResponse toggleLike(Long postId, Long userId) {
+    @Transactional  // ✅ AJOUT Phase 3
+    public PostResponse toggleLike(Long postId, String userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post non trouvé"));
 
@@ -122,14 +133,14 @@ public class PostService {
     }
 
     // Récupérer un post par ID
-    public PostResponse getPostById(Long postId, Long userId) {
+    public PostResponse getPostById(Long postId, String userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post non trouvé"));
         return mapToResponse(post, userId);
     }
 
     // Convertir Post → PostResponse
-    private PostResponse mapToResponse(Post post, Long currentUserId) {
+    private PostResponse mapToResponse(Post post, String currentUserId) {
         boolean likedByMe = postLikeRepository
                 .existsByUserIdAndPostId(currentUserId, post.getId());
 

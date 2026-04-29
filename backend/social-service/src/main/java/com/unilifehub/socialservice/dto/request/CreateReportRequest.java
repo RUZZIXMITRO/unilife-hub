@@ -17,5 +17,5 @@ public class CreateReportRequest {
     @NotBlank(message = "La raison est obligatoire")
     private String reason;
 
-    private Long reportedUserId;
+    private String reportedUserId;  // ✅ Long → String
 }

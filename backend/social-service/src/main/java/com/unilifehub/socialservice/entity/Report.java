@@ -16,10 +16,11 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long reporterId;
+    @Column(nullable = false, length = 36)
+    private String reporterId;
 
-    private Long reportedUserId;
+    @Column(length = 36)
+    private String reportedUserId;
 
     private Long contentId;
 

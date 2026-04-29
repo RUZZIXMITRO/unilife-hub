@@ -19,16 +19,16 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
     @Query("SELECT m FROM GroupMember m WHERE m.group.id = :groupId AND m.userId = :userId")
     Optional<GroupMember> findByGroupIdAndUserId(
             @Param("groupId") Long groupId,
-            @Param("userId") Long userId);
+            @Param("userId") String userId);
 
     // Récupérer les groupes d'un utilisateur
-    List<GroupMember> findByUserId(Long userId);
+    List<GroupMember> findByUserId(String userId);
 
     // Vérifier si membre existe déjà
     @Query("SELECT COUNT(m) > 0 FROM GroupMember m WHERE m.group.id = :groupId AND m.userId = :userId")
     boolean existsByGroupIdAndUserId(
             @Param("groupId") Long groupId,
-            @Param("userId") Long userId);
+            @Param("userId") String userId);
 
     // Membres par statut
     @Query("SELECT m FROM GroupMember m WHERE m.group.id = :groupId AND m.status = :status")

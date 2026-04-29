@@ -16,11 +16,11 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long senderId;
+    @Column(nullable = false, length = 36)
+    private String senderId;
 
-    @Column(nullable = false)
-    private Long receiverId;
+    @Column(nullable = false, length = 36)
+    private String receiverId;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
@@ -29,12 +29,12 @@ public class Message {
     @Builder.Default
     private boolean isRead = false;
 
-
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "conversation_id")
     private Long conversationId;
+
     public Long getConversationId() { return conversationId; }
     public void setConversationId(Long conversationId) { this.conversationId = conversationId; }
 

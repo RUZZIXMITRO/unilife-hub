@@ -6,11 +6,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -30,27 +32,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
 
             if (jwtUtils.validateToken(token)) {
-                Long userId = 0L;
+                // Source unique de vérité : le JWT signé
+                String userId = jwtUtils.getUserIdFromToken(token); // retourne un String (UUID)
+                String role = jwtUtils.getRoleFromToken(token);     // "STUDENT" ou "ADMIN"
 
-                // 1. Priorité : header X-User-Id (injecté par Gateway ou frontend)
-                String xUserId = request.getHeader("X-User-Id");
-                if (xUserId != null && !xUserId.isEmpty()) {
-                    try {
-                        userId = Long.parseLong(xUserId);
-                    } catch (NumberFormatException e) {
-                        userId = 0L;
-                    }
-                } else {
-                    // 2. Fallback : essayer le sub du JWT
-                    userId = jwtUtils.getUserIdFromToken(token);
+                if (userId != null && !userId.isEmpty()) {
+                    List<GrantedAuthority> authorities = List.of(
+                            new SimpleGrantedAuthority("ROLE_" + role)
+                    );
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userId, null, authorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userId, null, new ArrayList<>()
-                        );
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authentication);
             }
         }
 

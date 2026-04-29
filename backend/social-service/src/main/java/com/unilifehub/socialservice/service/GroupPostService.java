@@ -16,7 +16,7 @@ public class GroupPostService {
     private GroupPostRepository groupPostRepository;
 
     // Publier un post dans un groupe
-    public GroupPostResponse addPostToGroup(Long groupId, Long postId, Long userId) {
+    public GroupPostResponse addPostToGroup(Long groupId, Long postId, String userId) {
         if (groupPostRepository.existsByGroupIdAndPostId(groupId, postId)) {
             throw new RuntimeException("Ce post est déjà publié dans ce groupe");
         }
@@ -39,7 +39,7 @@ public class GroupPostService {
     }
 
     // Supprimer un post d'un groupe
-    public void removePostFromGroup(Long groupPostId, Long userId) {
+    public void removePostFromGroup(Long groupPostId, String userId) {
         GroupPost gp = groupPostRepository.findById(groupPostId)
                 .orElseThrow(() -> new RuntimeException("GroupPost introuvable"));
 
