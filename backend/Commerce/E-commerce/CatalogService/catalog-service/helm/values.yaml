@@ -1,0 +1,30 @@
+replicaCount: 2
+image:
+  repository: yousra00/catalog-service
+  tag: "latest"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8081
+env:
+  MONGODB_URI: "mongodb://mongodb-service:27017/catalog_db"
+  INVENTORY_SERVICE_URL: "http://inventoryservice:8080"
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8081
+  initialDelaySeconds: 60
+  periodSeconds: 30
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8081
+  initialDelaySeconds: 30
+  periodSeconds: 10

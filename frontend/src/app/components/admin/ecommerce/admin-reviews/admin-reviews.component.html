@@ -1,0 +1,90 @@
+<div class="page">
+
+  <div class="toast-success" *ngIf="successMessage">
+    <i class="fa-solid fa-circle-check"></i> {{ successMessage }}
+  </div>
+
+  <div class="page-header">
+    <div>
+      <h2><i class="fa-solid fa-star"></i> Modération des Avis</h2>
+      <p>{{ reviews.length }} avis à traiter</p>
+    </div>
+  </div>
+
+  <div class="filters-row">
+    <button
+      *ngFor="let f of filters"
+      class="filter-btn"
+      [class.active]="selectedFilter === f.key"
+      (click)="selectedFilter = f.key"
+    >{{ f.label }}</button>
+  </div>
+
+  <div class="loading-col" *ngIf="loading">
+    <div class="skeleton" *ngFor="let i of [1,2,3]"></div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && filteredReviews.length === 0">
+    <i class="fa-regular fa-star"></i>
+    <p>Aucun avis dans cette catégorie</p>
+  </div>
+
+  <div class="reviews-list" *ngIf="!loading && filteredReviews.length > 0">
+    <div class="review-card" *ngFor="let review of filteredReviews">
+
+      <div class="review-header">
+        <div class="reviewer">
+   <div class="avatar">{{ getUserInitial(review.userId) }}</div>
+<div>
+  <p class="reviewer-name">{{ getUserName(review.userId) }}</p>
+            <span class="review-date">{{ review.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+        <div class="stars">
+          <span *ngFor="let s of getStars(review.rating)" class="star" [class.filled]="s===1">★</span>
+          <span class="rating-num">{{ review.rating }}/5</span>
+        </div>
+        <div class="product-ref">
+          <i class="fa-solid fa-box"></i>
+          Produit #{{ review.productId | slice:0:8 }}...
+        </div>
+        <span class="verified" *ngIf="review.verifiedPurchase">
+          <i class="fa-solid fa-circle-check"></i> Achat vérifié
+        </span>
+      </div>
+
+      <p class="review-comment">{{ review.comment }}</p>
+
+      <div class="review-actions" *ngIf="review.status === 'Pending'">
+        <button
+          class="btn-approve"
+          (click)="approve(review.id)"
+          [disabled]="processingId === review.id"
+        >
+          <i class="fa-solid fa-spinner fa-spin" *ngIf="processingId === review.id"></i>
+          <i class="fa-solid fa-check" *ngIf="processingId !== review.id"></i>
+          Approuver
+        </button>
+        <button
+          class="btn-reject"
+          (click)="reject(review.id)"
+          [disabled]="processingId === review.id"
+        >
+          <i class="fa-solid fa-xmark"></i>
+          Rejeter
+        </button>
+      </div>
+
+      <div class="status-row" *ngIf="review.status !== 'Pending'">
+        <span class="approved-badge" *ngIf="review.status === 'Approved'">
+          <i class="fa-solid fa-check"></i> Approuvé
+        </span>
+        <span class="rejected-badge" *ngIf="review.status === 'Rejected'">
+          <i class="fa-solid fa-xmark"></i> Rejeté
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,44 @@
+variables:
+  DOCKER_IMAGE: yousra00/catalog-service
+
+stages:
+  - build
+  - docker
+  - deploy
+
+build:
+  stage: build
+  image: maven:3.9.6-eclipse-temurin-17
+  script:
+    - mvn clean package -DskipTests -q
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 hour
+  only:
+    - main
+    - develop
+
+docker:
+  stage: docker
+  image: docker:24.0
+  services:
+    - docker:24.0-dind
+  before_script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  script:
+    - docker build -t $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker tag $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA $DOCKER_IMAGE:latest
+    - docker push $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA
+    - docker push $DOCKER_IMAGE:latest
+  needs: [build]
+  only: [main]
+
+deploy:
+  stage: deploy
+  image: alpine/helm:3.14.0
+  script:
+    - sed -i "s/tag: .*/tag: \"$CI_COMMIT_SHORT_SHA\"/" helm/values.yaml
+    - echo "ArgoCD sync automatique via GitOps"
+  needs: [docker]
+  only: [main]

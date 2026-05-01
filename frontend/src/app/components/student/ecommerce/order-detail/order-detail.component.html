@@ -1,0 +1,198 @@
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <button class="btn-back" (click)="goBack()">
+      <i class="fa-solid fa-arrow-left"></i> Mes commandes
+    </button>
+    <h2>Détail de la commande</h2>
+    <div></div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-wrap" *ngIf="loading">
+    <div class="skeleton-tall"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="detail-content" *ngIf="!loading && order">
+
+    <!-- Status banner -->
+    <div class="status-banner" [ngClass]="getStatusClass(order.status)">
+      <div class="banner-left">
+        <div class="status-icon">
+          <i class="fa-solid" [ngClass]="getStatusIcon(order.status)"></i>
+        </div>
+        <div>
+          <p class="status-label">Statut de la commande</p>
+          <h3>{{ getStatusLabel(order.status) }}</h3>
+        </div>
+      </div>
+      <div class="banner-right">
+        <p class="order-num">Commande #{{ order.id }}</p>
+        <p class="order-date">{{ order.createdAt | date:'dd MMMM yyyy à HH:mm' }}</p>
+      </div>
+    </div>
+
+    <!-- Progress tracker -->
+    <div class="progress-card" *ngIf="order.status !== 'Cancelled'">
+      <h4>Suivi de commande</h4>
+      <div class="tracker">
+        <div
+          class="track-step"
+          *ngFor="let step of ['Pending','Confirmed','Processing','Shipped','Delivered']"
+          [ngClass]="getStepStatus(step)"
+        >
+          <div class="track-circle">
+            <i class="fa-solid fa-check" *ngIf="getStepStatus(step) === 'done'"></i>
+            <i class="fa-solid fa-circle-dot" *ngIf="getStepStatus(step) === 'active'"></i>
+          </div>
+          <span class="track-label">{{ getStatusLabel(step) }}</span>
+        </div>
+        <div class="track-line"></div>
+      </div>
+      <div class="tracking-number" *ngIf="order.trackingNumber">
+        <i class="fa-solid fa-truck"></i>
+        Numéro de suivi : <strong>{{ order.trackingNumber }}</strong>
+      </div>
+    </div>
+
+    <div class="main-grid">
+
+      <!-- Left column -->
+      <div class="left-col">
+
+        <!-- Items -->
+        <div class="section-card">
+          <h4><i class="fa-solid fa-box"></i> Articles commandés</h4>
+          <div class="items-list">
+            <div class="order-item" *ngFor="let item of order.items">
+            <div class="item-img">
+  <img
+    [src]="productImages[item.productId] || 'https://placehold.co/400x400?text=no+image'"
+    [alt]="item.productTitle"
+  />
+</div>
+              <div class="item-info">
+                <p class="item-name">{{ item.productTitle }}</p>
+                <span class="item-qty">Quantité : {{ item.quantity }}</span>
+                <span class="item-unit">{{ item.unitPrice | number:'1.2-2' }} EUR / unité</span>
+              </div>
+              <div class="item-subtotal">
+                {{ item.subtotal | number:'1.2-2' }} EUR
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status history -->
+        <div class="section-card">
+          <h4><i class="fa-solid fa-timeline"></i> Historique</h4>
+          <div class="history-list">
+            <div class="history-item" *ngFor="let h of order.statusHistory">
+              <div class="history-dot" [ngClass]="getStatusClass(h.status)"></div>
+              <div class="history-info">
+                <p class="history-status">{{ getStatusLabel(h.status) }}</p>
+                <p class="history-comment" *ngIf="h.comment">{{ h.comment }}</p>
+                <span class="history-date">{{ h.changedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right column -->
+      <div class="right-col">
+
+        <!-- Summary -->
+        <div class="section-card">
+          <h4><i class="fa-solid fa-receipt"></i> Récapitulatif</h4>
+          <div class="summary-rows">
+            <div class="sum-row">
+              <span>Sous-total</span>
+              <span>{{ order.totalAmount | number:'1.2-2' }} EUR</span>
+            </div>
+            <div class="sum-row discount" *ngIf="order.discountAmount > 0">
+              <span>Remise ({{ order.promoCode }})</span>
+              <span>- {{ order.discountAmount | number:'1.2-2' }} EUR</span>
+            </div>
+            <div class="sum-row">
+              <span>Livraison</span>
+              <span class="free">Gratuite</span>
+            </div>
+            <div class="sum-divider"></div>
+            <div class="sum-row total">
+              <span>Total payé</span>
+              <span>{{ order.finalAmount | number:'1.2-2' }} EUR</span>
+            </div>
+          </div>
+          <div class="payment-info">
+            <div class="pay-row">
+              <span>Paiement</span>
+              <span class="pay-status" [class.paid]="order.paymentStatus === 'Paid'">
+                <i class="fa-solid fa-circle"></i>
+                {{ order.paymentStatus === 'Paid' ? 'Payée' : 'En attente' }}
+              </span>
+            </div>
+            <div class="pay-row" *ngIf="order.paidAt">
+              <span>Payée le</span>
+              <span>{{ order.paidAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping -->
+        <div class="section-card">
+          <h4><i class="fa-solid fa-truck"></i> Livraison</h4>
+          <div class="shipping-info">
+            <div class="ship-row">
+              <i class="fa-solid fa-location-dot"></i>
+              <div>
+                <p>{{ order.shippingAddress }}</p>
+                <p *ngIf="order.shippingCity" class="city">{{ order.shippingCity }}</p>
+              </div>
+            </div>
+            <div class="ship-row" *ngIf="order.shippingPhone">
+              <i class="fa-solid fa-phone"></i>
+              <p>{{ order.shippingPhone }}</p>
+            </div>
+            <div class="ship-row" *ngIf="order.notes">
+              <i class="fa-solid fa-note-sticky"></i>
+              <p>{{ order.notes }}</p>
+            </div>
+            <div class="ship-row" *ngIf="order.shippedAt">
+              <i class="fa-solid fa-calendar-check"></i>
+              <p>Expédiée le {{ order.shippedAt | date:'dd/MM/yyyy' }}</p>
+            </div>
+            <div class="ship-row delivered" *ngIf="order.deliveredAt">
+              <i class="fa-solid fa-box-open"></i>
+              <p>Livrée le {{ order.deliveredAt | date:'dd/MM/yyyy' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-card">
+          <button
+            class="btn-cancel"
+            *ngIf="canCancel()"
+            (click)="cancelOrder()"
+            [disabled]="cancelling"
+          >
+            <i class="fa-solid fa-spinner fa-spin" *ngIf="cancelling"></i>
+            <i class="fa-solid fa-xmark" *ngIf="!cancelling"></i>
+            {{ cancelling ? 'Annulation...' : 'Annuler la commande' }}
+          </button>
+          <button class="btn-shop" (click)="goToShop()">
+            <i class="fa-solid fa-store"></i>
+            Continuer mes achats
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
