@@ -86,6 +86,7 @@ import { AdminOrdersComponent } from './components/admin/ecommerce/admin-orders/
 import { AdminPromotionsComponent } from './components/admin/ecommerce/admin-promotions/admin-promotions.component';
 import { AdminReviewsComponent } from './components/admin/ecommerce/admin-reviews/admin-reviews.component';
 import { AdminInventoryComponent } from './components/admin/ecommerce/admin-inventory/admin-inventory.component';
+import { AssistantComponent } from './components/student/assistant/assistant.component';
 
 registerLocaleData(localeFr);
 
@@ -157,7 +158,8 @@ registerLocaleData(localeFr);
     AdminPromotionsComponent,
     AdminReviewsComponent,
     AdminInventoryComponent,
-    EcommerceMyFavoritesComponent
+    EcommerceMyFavoritesComponent,
+    AssistantComponent
   ],
   imports: [
     BrowserModule,

@@ -38,6 +38,7 @@ import { OrderDetailComponent } from './components/student/ecommerce/order-detai
 import { MyFavoritesComponent as EcommerceMyFavoritesComponent } from './components/student/ecommerce/my-favorites/my-favorites.component';
 import { MyReviewsComponent } from './components/student/ecommerce/my-reviews/my-reviews.component';
 import { AiAssistantComponent } from './components/student/ecommerce/ai-assistant/ai-assistant.component';
+import { AssistantComponent } from './components/student/assistant/assistant.component';
 
 // ✅ E-COMMERCE ADMIN
 import { AdminProductsComponent } from './components/admin/ecommerce/admin-products/admin-products.component';
@@ -78,6 +79,8 @@ const routes: Routes = [
       { path: 'marketplace/my-listings', component: MyListingsComponent },
       { path: 'marketplace/my-favorites', component: MyFavoritesComponent },
       { path: 'marketplace/:id', component: MarketplaceDetailComponent },
+      { path: 'assistant', component: AssistantComponent },
+
 
       // ✅ E-commerce
       { path: 'ecommerce', component: CatalogComponent },
