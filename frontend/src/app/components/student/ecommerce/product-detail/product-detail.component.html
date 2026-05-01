@@ -37,8 +37,8 @@
             <i class="fa-regular fa-heart" *ngIf="!isFavorite"></i>
           </button>
         </div>
-        <div class="thumbnails" *ngIf="product.images?.length > 1">
-          <img
+<div class="thumbnails" *ngIf="(product.images?.length || 0) > 1">
+              <img
             *ngFor="let img of product.images"
             [src]="img.imageUrl"
             [class.active]="selectedImage === img.imageUrl"
