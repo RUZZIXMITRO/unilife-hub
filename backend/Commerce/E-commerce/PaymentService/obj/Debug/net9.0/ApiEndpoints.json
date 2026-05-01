@@ -1,0 +1,126 @@
+[
+  {
+    "ContainingType": "PaymentService.Controllers.PaymentController",
+    "Method": "Refund",
+    "RelativePath": "api/payment/{paymentId}/refund",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "paymentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PaymentService.DTOs.Responses.ApiResponse\u00601[[PaymentService.DTOs.Responses.PaymentResponse, PaymentService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PaymentService.Controllers.PaymentController",
+    "Method": "ConfirmPayment",
+    "RelativePath": "api/payment/confirm",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PaymentService.DTOs.Requests.ConfirmPaymentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PaymentService.DTOs.Responses.ApiResponse\u00601[[PaymentService.DTOs.Responses.PaymentResponse, PaymentService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PaymentService.Controllers.PaymentController",
+    "Method": "CreatePaymentIntent",
+    "RelativePath": "api/payment/create-intent",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PaymentService.DTOs.Requests.CreatePaymentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PaymentService.DTOs.Responses.ApiResponse\u00601[[PaymentService.DTOs.Responses.PaymentIntentResponse, PaymentService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PaymentService.Controllers.PaymentController",
+    "Method": "GetMyPayments",
+    "RelativePath": "api/payment/my-payments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "PaymentService.DTOs.Responses.ApiResponse\u00601[[System.Collections.Generic.List\u00601[[PaymentService.DTOs.Responses.PaymentResponse, PaymentService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PaymentService.Controllers.PaymentController",
+    "Method": "GetByOrderId",
+    "RelativePath": "api/payment/order/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PaymentService.DTOs.Responses.ApiResponse\u00601[[PaymentService.DTOs.Responses.PaymentResponse, PaymentService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]

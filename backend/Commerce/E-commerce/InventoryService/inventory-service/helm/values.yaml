@@ -1,0 +1,56 @@
+# =====================================================
+# VALUES.YAML — InventoryService
+# Valeurs par défaut pour le déploiement Kubernetes
+# Override ces valeurs selon l'environnement
+# =====================================================
+
+replicaCount: 2
+
+image:
+  repository: yousra00/inventory-service
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+# Variables d'environnement injectées dans le pod
+env:
+  DB_HOST: "sqlserver-service"
+  DB_PORT: "1433"
+  DB_NAME: "inventory_db"
+  CATALOG_SERVICE_URL: "http://catalogservice:8080"
+  ORDER_SERVICE_URL: "http://orderservice:8080"
+
+# Secrets (DB_USERNAME et DB_PASSWORD viennent de Kubernetes Secret)
+secretName: inventory-secret
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+# Liveness et Readiness probes
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8080
+  initialDelaySeconds: 60
+  periodSeconds: 30
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70

@@ -1,0 +1,4 @@
+apiVersion: v2
+name: promotion-service
+description: UniLife Hub - Promotion Service
+version: 1.0.0

@@ -1,0 +1,11 @@
+replicaCount: 2
+image:
+  repository: yousra00/payment-service
+  tag: "latest"
+service:
+  type: ClusterIP
+  port: 8083
+env:
+  DB_CONNECTION: "Server=sqlserver-service;Database=payment_db;Integrated Security=True;TrustServerCertificate=True;"
+  STRIPE_SECRET_KEY: "sk_test_..."
+  STRIPE_PUBLISHABLE_KEY: "pk_test_..."

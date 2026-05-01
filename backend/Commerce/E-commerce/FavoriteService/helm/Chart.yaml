@@ -1,0 +1,4 @@
+apiVersion: v2
+name: favorite-service
+description: UniLife Hub - Favorite Service
+version: 1.0.0
