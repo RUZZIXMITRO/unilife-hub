@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SocialService, Group, GroupMember, GroupPost } from '../../../../services/social.service';
-
+import { AuthService } from '../../../../services/auth.service'; 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
@@ -20,7 +20,7 @@ export class GroupsComponent implements OnInit {
   groupPosts: GroupPost[] = [];
   activeTab: 'posts' | 'members' | 'pending' = 'posts';
 
-  currentUserId: number = 0;
+  currentUserId: string = '';
 
   newGroup = {
     name: '',
@@ -29,19 +29,12 @@ export class GroupsComponent implements OnInit {
     type: 'PUBLIC'
   };
 
-  constructor(private socialService: SocialService) {}
+  constructor(private socialService: SocialService , private authService: AuthService) {}
 
   ngOnInit(): void {
-    // Récupérer userId depuis JWT
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        this.currentUserId = payload.userId || payload.sub || 0;
-      } catch (e) { this.currentUserId = 0; }
-    }
-    this.loadGroups();
-  }
+  this.currentUserId = this.authService.getCurrentUserId() || '';
+  this.loadGroups();
+}
 
   loadGroups(): void {
     this.isLoading = true;
@@ -140,7 +133,7 @@ export class GroupsComponent implements OnInit {
     });
   }
 
-  approveMember(userId: number): void {
+  approveMember(userId: string): void {
     if (!this.selectedGroup) return;
     this.socialService.approveMember(this.selectedGroup.id, userId).subscribe({
       next: (res) => {
@@ -153,7 +146,7 @@ export class GroupsComponent implements OnInit {
     });
   }
 
-  rejectMember(userId: number): void {
+  rejectMember(userId: string): void {
     if (!this.selectedGroup) return;
     this.socialService.rejectMember(this.selectedGroup.id, userId).subscribe({
       next: () => {
@@ -162,7 +155,7 @@ export class GroupsComponent implements OnInit {
     });
   }
 
-  removeMember(userId: number): void {
+  removeMember(userId: string): void {
     if (!this.selectedGroup || !confirm('Retirer ce membre ?')) return;
     this.socialService.removeMember(this.selectedGroup.id, userId).subscribe({
       next: () => {
@@ -172,10 +165,10 @@ export class GroupsComponent implements OnInit {
   }
 
   isGroupAdmin(): boolean {
-    return this.groupMembers.some(
-      m => m.userId === this.currentUserId && m.role === 'ADMIN'
-    );
-  }
+  return this.groupMembers.some(
+    m => m.userId === this.currentUserId && m.role === 'ADMIN'
+  );
+}
 
   getTimeAgo(dateString: string): string {
     if (!dateString) return '';

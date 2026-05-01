@@ -11,6 +11,7 @@ public class PostResponse {
 
     private Long id;
     private String userId;      // ✅ Long → String
+    private String userAvatar;  // ✅ AJOUTER
     private String userName;    // récupéré depuis UserService
     private String content;
     private String visibility;

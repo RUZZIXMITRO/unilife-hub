@@ -29,6 +29,13 @@ public class Post {
 
     private Long groupId;
 
+    @Column(length = 255)
+    private String userName;    // ✅ AJOUTER
+
+    @Column(length = 500)
+    private String userAvatar;  // ✅ AJOUTER
+
+
     @Column(nullable = false)
     @Builder.Default
     private int likesCount = 0;

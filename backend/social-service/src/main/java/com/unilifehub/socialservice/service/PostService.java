@@ -37,6 +37,8 @@ public class PostService {
                 .content(request.getContent())
                 .visibility(request.getVisibility())
                 .groupId(request.getGroupId())
+                .userName(request.getUserName())    // ✅ AJOUTER
+                .userAvatar(request.getUserAvatar()) // ✅ AJOUTER
                 .likesCount(0)
                 .commentsCount(0)
                 .build();
@@ -147,6 +149,8 @@ public class PostService {
         return PostResponse.builder()
                 .id(post.getId())
                 .userId(post.getUserId())
+                .userName(post.getUserName())     // ✅ AJOUTER
+                .userAvatar(post.getUserAvatar()) // ✅ AJOUTER
                 .content(post.getContent())
                 .visibility(post.getVisibility().name())
                 .likesCount(post.getLikesCount())

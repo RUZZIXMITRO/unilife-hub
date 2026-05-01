@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
-// ===== INTERFACES EXISTANTES =====
+// ===== INTERFACES (userId: string partout — BUG #1 fix) =====
 export interface Post {
   id: number;
-  userId: number;
+  userId: string;        // ✅ string UUID
   userName: string;
+  userAvatar?: string | null; // ✅ AJOUTER
   content: string;
   visibility: string;
   likesCount: number;
@@ -18,7 +20,7 @@ export interface Post {
 
 export interface Comment {
   id: number;
-  userId: number;
+  userId: string;        // ✅ string UUID
   userName: string;
   content: string;
   parentCommentId: number | null;
@@ -28,8 +30,8 @@ export interface Comment {
 
 export interface Friendship {
   id: number;
-  requesterId: number;
-  addresseeId: number;
+  requesterId: string;   // ✅ string UUID
+  addresseeId: string;   // ✅ string UUID
   status: string;
   createdAt: string;
 }
@@ -39,7 +41,7 @@ export interface Group {
   name: string;
   description: string;
   subject: string;
-  creatorId: number;
+  creatorId: string;     // ✅ string UUID
   type: string;
   membersCount: number;
   isMember: boolean;
@@ -48,8 +50,8 @@ export interface Group {
 
 export interface Message {
   id: number;
-  senderId: number;
-  receiverId: number;
+  senderId: string;      // ✅ string UUID
+  receiverId: string;    // ✅ string UUID
   conversationId: number;
   content: string;
   isRead: boolean;
@@ -58,8 +60,8 @@ export interface Message {
 
 export interface Notification {
   id: number;
-  userId: number;
-  relatedUserId: number;
+  userId: string;        // ✅ string UUID
+  relatedUserId: string; // ✅ string UUID
   type: string;
   message: string;
   referenceId: number;
@@ -73,26 +75,25 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-// ===== NOUVELLES INTERFACES =====
 export interface Share {
   id: number;
   postId: number;
-  userId: number;
+  userId: string;        // ✅ string UUID
   createdAt: string;
   shareCount: number;
 }
 
 export interface BlockList {
   id: number;
-  blockerId: number;
-  blockedId: number;
+  blockerId: string;     // ✅ string UUID
+  blockedId: string;     // ✅ string UUID
   blockedAt: string;
 }
 
 export interface Conversation {
   id: number;
-  user1Id: number;
-  user2Id: number;
+  user1Id: string;       // ✅ string UUID
+  user2Id: string;       // ✅ string UUID
   lastMessage: string | null;
   lastMessageAt: string | null;
   createdAt: string;
@@ -101,7 +102,7 @@ export interface Conversation {
 
 export interface GroupMember {
   id: number;
-  userId: number;
+  userId: string;        // ✅ string UUID
   groupId: number;
   role: string;
   status: string;
@@ -112,7 +113,7 @@ export interface GroupPost {
   id: number;
   groupId: number;
   postId: number;
-  postedBy: number;
+  postedBy: string;      // ✅ string UUID
   postedAt: string;
 }
 
@@ -121,339 +122,207 @@ export interface GroupPost {
 })
 export class SocialService {
 
-private apiUrl = 'http://localhost:5000/api/social';
+  private apiUrl = 'http://localhost:5000/api/social';
 
+  // ✅ Phase 1.6 : Plus de getHeaders() — l'interceptor gère Authorization
   constructor(private http: HttpClient) {}
-
-  private getHeaders(): HttpHeaders {
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    return new HttpHeaders({ 'Content-Type': 'application/json' });
-  }
-  let userId = '1';
-  if (token) {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      // Chercher l'ID numérique dans les claims ASP.NET
-      const nameId = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-      userId = payload.userId || payload.id || nameId || '1';
-    } catch (e) {}
-  }
-  return new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-    'X-User-Id': userId
-  });
-}
 
   // ===== POSTS =====
   getFeed(): Observable<ApiResponse<Post[]>> {
-    return this.http.get<ApiResponse<Post[]>>(
-      `${this.apiUrl}/posts`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Post[]>>(`${this.apiUrl}/posts`);
   }
 
-  getUserPosts(userId: number): Observable<ApiResponse<Post[]>> {
-    return this.http.get<ApiResponse<Post[]>>(
-      `${this.apiUrl}/posts/user/${userId}`,
-      { headers: this.getHeaders() }
-    );
+  getUserPosts(userId: string): Observable<ApiResponse<Post[]>> {
+    return this.http.get<ApiResponse<Post[]>>(`${this.apiUrl}/posts/user/${userId}`);
   }
 
-  createPost(content: string, visibility: string): Observable<ApiResponse<Post>> {
-    return this.http.post<ApiResponse<Post>>(
-      `${this.apiUrl}/posts`,
-      { content, visibility },
-      { headers: this.getHeaders() }
-    );
-  }
+  createPost(content: string, visibility: string, userName: string = 'Utilisateur'): Observable<ApiResponse<Post>> {
+  return this.http.post<ApiResponse<Post>>(
+    `${this.apiUrl}/posts`,
+    {
+      content,
+      visibility,
+      userName,       // ✅ envoyé au backend
+      userAvatar: null
+    }
+  );
+}
 
   deletePost(postId: number): Observable<ApiResponse<void>> {
-    return this.http.delete<ApiResponse<void>>(
-      `${this.apiUrl}/posts/${postId}`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/posts/${postId}`);
   }
 
   toggleLike(postId: number): Observable<ApiResponse<Post>> {
-    return this.http.post<ApiResponse<Post>>(
-      `${this.apiUrl}/posts/${postId}/like`,
-      {},
-      { headers: this.getHeaders() }
-    );
+    return this.http.post<ApiResponse<Post>>(`${this.apiUrl}/posts/${postId}/like`, {});
   }
 
-  // ===== SHARE (NOUVEAU) =====
+  // ===== SHARE =====
   sharePost(postId: number): Observable<ApiResponse<Share>> {
-    return this.http.post<ApiResponse<Share>>(
-      `${this.apiUrl}/posts/${postId}/share`,
-      {},
-      { headers: this.getHeaders() }
-    );
+    return this.http.post<ApiResponse<Share>>(`${this.apiUrl}/posts/${postId}/share`, {});
   }
 
   unsharePost(postId: number): Observable<ApiResponse<void>> {
-    return this.http.delete<ApiResponse<void>>(
-      `${this.apiUrl}/posts/${postId}/share`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/posts/${postId}/share`);
   }
 
   getShareCount(postId: number): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(
-      `${this.apiUrl}/posts/${postId}/shares/count`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/posts/${postId}/shares/count`);
   }
 
-  // ===== SIGNALEMENT (NOUVEAU) =====
+  // ===== SIGNALEMENT =====
   reportPost(postId: number, reason: string): Observable<ApiResponse<void>> {
-  return this.http.post<ApiResponse<void>>(
-    `${this.apiUrl}/reports`,
-    { contentId: postId, contentType: 'POST', reason },
-    { headers: this.getHeaders() }
-  );
-}
+    return this.http.post<ApiResponse<void>>(`${this.apiUrl}/reports`,
+      { contentId: postId, contentType: 'POST', reason });
+  }
 
   reportComment(commentId: number, reason: string): Observable<ApiResponse<void>> {
-  return this.http.post<ApiResponse<void>>(
-    `${this.apiUrl}/reports`,
-    { contentId: commentId, contentType: 'COMMENT', reason },
-    { headers: this.getHeaders() }
-  );
-}
+    return this.http.post<ApiResponse<void>>(`${this.apiUrl}/reports`,
+      { contentId: commentId, contentType: 'COMMENT', reason });
+  }
 
   // ===== COMMENTS =====
   getComments(postId: number): Observable<ApiResponse<Comment[]>> {
-    return this.http.get<ApiResponse<Comment[]>>(
-      `${this.apiUrl}/posts/${postId}/comments`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Comment[]>>(`${this.apiUrl}/posts/${postId}/comments`);
   }
 
-addComment(postId: number, content: string, parentCommentId?: number): Observable<ApiResponse<Comment>> {
-  return this.http.post<ApiResponse<Comment>>(
-    `${this.apiUrl}/posts/${postId}/comments`,
-    { content, parentCommentId: parentCommentId || null },
-    { headers: this.getHeaders() }
-  );
-}
+  addComment(postId: number, content: string, parentCommentId?: number): Observable<ApiResponse<Comment>> {
+    return this.http.post<ApiResponse<Comment>>(`${this.apiUrl}/posts/${postId}/comments`,
+      { content, parentCommentId: parentCommentId || null });
+  }
 
   // ===== FRIENDS =====
   getFriends(): Observable<ApiResponse<Friendship[]>> {
-    return this.http.get<ApiResponse<Friendship[]>>(
-      `${this.apiUrl}/friends`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Friendship[]>>(`${this.apiUrl}/friends`);
   }
 
   getPendingRequests(): Observable<ApiResponse<Friendship[]>> {
-    return this.http.get<ApiResponse<Friendship[]>>(
-      `${this.apiUrl}/friends/requests`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Friendship[]>>(`${this.apiUrl}/friends/requests`);
   }
 
-  sendFriendRequest(addresseeId: number): Observable<ApiResponse<Friendship>> {
+  sendFriendRequest(addresseeId: string): Observable<ApiResponse<Friendship>> {
     return this.http.post<ApiResponse<Friendship>>(
-      `${this.apiUrl}/friends/request/${addresseeId}`,
-      {},
-      { headers: this.getHeaders() }
-    );
+      `${this.apiUrl}/friends/request/${addresseeId}`, {});
   }
 
   acceptFriendRequest(friendshipId: number): Observable<ApiResponse<Friendship>> {
     return this.http.put<ApiResponse<Friendship>>(
-      `${this.apiUrl}/friends/accept/${friendshipId}`,
-      {},
-      { headers: this.getHeaders() }
-    );
+      `${this.apiUrl}/friends/accept/${friendshipId}`, {});
   }
 
   rejectFriendRequest(friendshipId: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(
-      `${this.apiUrl}/friends/reject/${friendshipId}`,
-      { headers: this.getHeaders() }
-    );
+      `${this.apiUrl}/friends/reject/${friendshipId}`);
   }
 
-  // ===== BLOCAGE (NOUVEAU) =====
-  blockUser(userId: number): Observable<ApiResponse<BlockList>> {
+  // ===== BLOCAGE =====
+  blockUser(userId: string): Observable<ApiResponse<BlockList>> {
     return this.http.post<ApiResponse<BlockList>>(
-      `${this.apiUrl}/users/${userId}/block`,
-      {},
-      { headers: this.getHeaders() }
-    );
+      `${this.apiUrl}/users/${userId}/block`, {});
   }
 
-  unblockUser(userId: number): Observable<ApiResponse<void>> {
+  unblockUser(userId: string): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(
-      `${this.apiUrl}/users/${userId}/unblock`,
-      { headers: this.getHeaders() }
-    );
+      `${this.apiUrl}/users/${userId}/unblock`);
   }
 
   getBlockedUsers(): Observable<ApiResponse<BlockList[]>> {
-    return this.http.get<ApiResponse<BlockList[]>>(
-      `${this.apiUrl}/users/blocked`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<BlockList[]>>(`${this.apiUrl}/users/blocked`);
   }
 
   // ===== GROUPS =====
   getPublicGroups(): Observable<ApiResponse<Group[]>> {
-    return this.http.get<ApiResponse<Group[]>>(
-      `${this.apiUrl}/groups`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Group[]>>(`${this.apiUrl}/groups`);
   }
 
   searchGroups(keyword: string): Observable<ApiResponse<Group[]>> {
+    // ✅ BUG #26 : encodeURIComponent pour éviter injection dans l'URL
     return this.http.get<ApiResponse<Group[]>>(
-      `${this.apiUrl}/groups/search?keyword=${keyword}`,
-      { headers: this.getHeaders() }
-    );
+      `${this.apiUrl}/groups/search?keyword=${encodeURIComponent(keyword)}`);
   }
 
   createGroup(name: string, description: string,
               subject: string, type: string): Observable<ApiResponse<Group>> {
     return this.http.post<ApiResponse<Group>>(
-      `${this.apiUrl}/groups`,
-      { name, description, subject, type },
-      { headers: this.getHeaders() }
-    );
+      `${this.apiUrl}/groups`, { name, description, subject, type });
   }
 
   joinGroup(groupId: number): Observable<ApiResponse<Group>> {
-    return this.http.post<ApiResponse<Group>>(
-      `${this.apiUrl}/groups/${groupId}/join`,
-      {},
-      { headers: this.getHeaders() }
-    );
+    return this.http.post<ApiResponse<Group>>(`${this.apiUrl}/groups/${groupId}/join`, {});
   }
 
   leaveGroup(groupId: number): Observable<ApiResponse<void>> {
-    return this.http.delete<ApiResponse<void>>(
-      `${this.apiUrl}/groups/${groupId}/leave`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/groups/${groupId}/leave`);
   }
 
-  // Membres d'un groupe
-getGroupMembers(groupId: number): Observable<ApiResponse<GroupMember[]>> {
-  return this.http.get<ApiResponse<GroupMember[]>>(
-    `${this.apiUrl}/groups/${groupId}/members`,
-    { headers: this.getHeaders() }
-  );
-}
+  getGroupMembers(groupId: number): Observable<ApiResponse<GroupMember[]>> {
+    return this.http.get<ApiResponse<GroupMember[]>>(
+      `${this.apiUrl}/groups/${groupId}/members`);
+  }
 
-getPendingMembers(groupId: number): Observable<ApiResponse<GroupMember[]>> {
-  return this.http.get<ApiResponse<GroupMember[]>>(
-    `${this.apiUrl}/groups/${groupId}/members/pending`,
-    { headers: this.getHeaders() }
-  );
-}
+  getPendingMembers(groupId: number): Observable<ApiResponse<GroupMember[]>> {
+    return this.http.get<ApiResponse<GroupMember[]>>(
+      `${this.apiUrl}/groups/${groupId}/members/pending`);
+  }
 
-approveMember(groupId: number, userId: number): Observable<ApiResponse<GroupMember>> {
-  return this.http.put<ApiResponse<GroupMember>>(
-    `${this.apiUrl}/groups/${groupId}/members/${userId}/approve`,
-    {},
-    { headers: this.getHeaders() }
-  );
-}
+  approveMember(groupId: number, userId: string): Observable<ApiResponse<GroupMember>> {
+    return this.http.put<ApiResponse<GroupMember>>(
+      `${this.apiUrl}/groups/${groupId}/members/${userId}/approve`, {});
+  }
 
-rejectMember(groupId: number, userId: number): Observable<ApiResponse<void>> {
-  return this.http.put<ApiResponse<void>>(
-    `${this.apiUrl}/groups/${groupId}/members/${userId}/reject`,
-    {},
-    { headers: this.getHeaders() }
-  );
-}
+  rejectMember(groupId: number, userId: string): Observable<ApiResponse<void>> {
+    return this.http.put<ApiResponse<void>>(
+      `${this.apiUrl}/groups/${groupId}/members/${userId}/reject`, {});
+  }
 
-removeMember(groupId: number, userId: number): Observable<ApiResponse<void>> {
-  return this.http.delete<ApiResponse<void>>(
-    `${this.apiUrl}/groups/${groupId}/members/${userId}`,
-    { headers: this.getHeaders() }
-  );
-}
+  removeMember(groupId: number, userId: string): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(
+      `${this.apiUrl}/groups/${groupId}/members/${userId}`);
+  }
 
-// Posts dans un groupe
-getGroupPosts(groupId: number): Observable<ApiResponse<GroupPost[]>> {
-  return this.http.get<ApiResponse<GroupPost[]>>(
-    `${this.apiUrl}/groups/${groupId}/posts`,
-    { headers: this.getHeaders() }
-  );
-}
+  getGroupPosts(groupId: number): Observable<ApiResponse<GroupPost[]>> {
+    return this.http.get<ApiResponse<GroupPost[]>>(
+      `${this.apiUrl}/groups/${groupId}/posts`);
+  }
 
-addPostToGroup(groupId: number, postId: number): Observable<ApiResponse<GroupPost>> {
-  return this.http.post<ApiResponse<GroupPost>>(
-    `${this.apiUrl}/groups/${groupId}/posts/${postId}`,
-    {},
-    { headers: this.getHeaders() }
-  );
-}
+  addPostToGroup(groupId: number, postId: number): Observable<ApiResponse<GroupPost>> {
+    return this.http.post<ApiResponse<GroupPost>>(
+      `${this.apiUrl}/groups/${groupId}/posts/${postId}`, {});
+  }
 
   // ===== MESSAGES =====
-  getConversation(userId: number): Observable<ApiResponse<Message[]>> {
-    return this.http.get<ApiResponse<Message[]>>(
-      `${this.apiUrl}/messages/${userId}`,
-      { headers: this.getHeaders() }
-    );
+  getConversation(userId: string): Observable<ApiResponse<Message[]>> {
+    return this.http.get<ApiResponse<Message[]>>(`${this.apiUrl}/messages/${userId}`);
   }
 
-  sendMessage(receiverId: number, content: string): Observable<ApiResponse<Message>> {
+  sendMessage(receiverId: string, content: string): Observable<ApiResponse<Message>> {
     return this.http.post<ApiResponse<Message>>(
-      `${this.apiUrl}/messages`,
-      { receiverId, content },
-      { headers: this.getHeaders() }
-    );
+      `${this.apiUrl}/messages`, { receiverId, content });
   }
 
-  // ===== CONVERSATIONS (NOUVEAU) =====
+  // ===== CONVERSATIONS =====
   getConversations(): Observable<ApiResponse<Conversation[]>> {
-    return this.http.get<ApiResponse<Conversation[]>>(
-      `${this.apiUrl}/conversations`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Conversation[]>>(`${this.apiUrl}/conversations`);
   }
 
-  startConversation(userId: number): Observable<ApiResponse<Conversation>> {
+  startConversation(userId: string): Observable<ApiResponse<Conversation>> {
     return this.http.post<ApiResponse<Conversation>>(
-      `${this.apiUrl}/conversations/${userId}/start`,
-      {},
-      { headers: this.getHeaders() }
-    );
+      `${this.apiUrl}/conversations/${userId}/start`, {});
   }
 
   // ===== NOTIFICATIONS =====
   getNotifications(): Observable<ApiResponse<Notification[]>> {
-    return this.http.get<ApiResponse<Notification[]>>(
-      `${this.apiUrl}/notifications`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Notification[]>>(`${this.apiUrl}/notifications`);
   }
 
   getUnreadCount(): Observable<ApiResponse<number>> {
-    return this.http.get<ApiResponse<number>>(
-      `${this.apiUrl}/notifications/unread-count`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<number>>(`${this.apiUrl}/notifications/unread-count`);
   }
 
   markNotificationAsRead(id: number): Observable<ApiResponse<void>> {
-    return this.http.put<ApiResponse<void>>(
-      `${this.apiUrl}/notifications/${id}/read`,
-      {},
-      { headers: this.getHeaders() }
-    );
+    return this.http.put<ApiResponse<void>>(`${this.apiUrl}/notifications/${id}/read`, {});
   }
 
   markAllNotificationsAsRead(): Observable<ApiResponse<void>> {
-    return this.http.put<ApiResponse<void>>(
-      `${this.apiUrl}/notifications/read-all`,
-      {},
-      { headers: this.getHeaders() }
-    );
+    return this.http.put<ApiResponse<void>>(`${this.apiUrl}/notifications/read-all`, {});
   }
 }

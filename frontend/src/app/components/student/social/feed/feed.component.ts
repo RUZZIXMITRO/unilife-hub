@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SocialService, Post } from '../../../../services/social.service';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-feed',
@@ -14,35 +15,21 @@ export class FeedComponent implements OnInit {
   isLoading = false;
   showComments: { [key: number]: boolean } = {};
   newComment: { [key: number]: string } = {};
-
-  // Commentaires chargés par post
   loadedComments: { [key: number]: any[] } = {};
-
-  // Réponse en cours
   replyTo: { [key: number]: number | null } = {};
   replyContent: { [key: number]: string } = {};
-
-  // Signalement
   showReportModal = false;
   reportPostId: number | null = null;
   reportReason = '';
+  currentUserId: string = '';
 
-  // Utilisateur connecté
-  currentUserId: number = 0;
-
-  constructor(private socialService: SocialService) {}
+  constructor(
+    private socialService: SocialService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const nameId = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-        this.currentUserId = payload.userId || payload.id || nameId || 0;
-      } catch (e) {
-        this.currentUserId = 0;
-      }
-    }
+    this.currentUserId = this.authService.getCurrentUserId() || '';
     this.loadFeed();
   }
 
@@ -58,20 +45,27 @@ export class FeedComponent implements OnInit {
   }
 
   createPost(): void {
-    if (!this.newPostContent.trim()) return;
-    this.socialService.createPost(
-      this.newPostContent,
-      this.newPostVisibility
-    ).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.posts.unshift(res.data);
-          this.newPostContent = '';
-        }
-      }
-    });
-  }
+  if (!this.newPostContent.trim()) return;
 
+  // ✅ email avant le @ comme userName
+  const currentUser = this.authService.getCurrentUser();
+  const userName = currentUser?.email?.split('@')[0] || 'Utilisateur';
+
+  this.socialService.createPost(
+    this.newPostContent,
+    this.newPostVisibility,
+    userName
+  ).subscribe({
+    next: (res) => {
+      if (res.success) {
+        this.posts.unshift(res.data);
+        this.newPostContent = '';
+      }
+    }
+  });
+}
+
+  // ... reste du fichier inchangé
   toggleLike(post: Post): void {
     this.socialService.toggleLike(post.id).subscribe({
       next: (res) => {
@@ -83,7 +77,6 @@ export class FeedComponent implements OnInit {
     });
   }
 
-  // ===== COMMENTAIRES =====
   toggleComments(postId: number): void {
     this.showComments[postId] = !this.showComments[postId];
     if (this.showComments[postId] && !this.loadedComments[postId]) {
@@ -115,7 +108,6 @@ export class FeedComponent implements OnInit {
     });
   }
 
-  // ===== RÉPONSES =====
   setReply(postId: number, commentId: number): void {
     this.replyTo[postId] = commentId;
     this.replyContent[postId] = '';
@@ -153,7 +145,6 @@ export class FeedComponent implements OnInit {
     return this.loadedComments[postId].filter(c => c.parentCommentId === commentId);
   }
 
-  // ===== SUPPRIMER POST =====
   deletePost(postId: number): void {
     if (!confirm('Supprimer ce post ?')) return;
     this.socialService.deletePost(postId).subscribe({
@@ -163,7 +154,6 @@ export class FeedComponent implements OnInit {
     });
   }
 
-  // ===== PARTAGER =====
   sharePost(postId: number): void {
     this.socialService.sharePost(postId).subscribe({
       next: (res) => {
@@ -173,7 +163,6 @@ export class FeedComponent implements OnInit {
     });
   }
 
-  // ===== SIGNALER =====
   openReportModal(postId: number): void {
     this.reportPostId = postId;
     this.reportReason = '';
@@ -200,7 +189,6 @@ export class FeedComponent implements OnInit {
     });
   }
 
-  // ===== HELPERS =====
   getTimeAgo(dateString: string): string {
     const date = new Date(dateString);
     const now = new Date();

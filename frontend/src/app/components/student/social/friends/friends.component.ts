@@ -77,22 +77,23 @@ export class FriendsComponent implements OnInit {
 
   // ===== RECHERCHE (côté frontend sur la liste d'amis) =====
   searchUsers(): void {
-    this.searchDone = true;
-    if (!this.searchKeyword.trim()) {
-      this.filteredFriends = this.friends;
-      this.searchResults = [];
-      return;
-    }
-    const keyword = this.searchKeyword.toLowerCase();
-    this.filteredFriends = this.friends.filter(f =>
-      f.requesterId.toString().includes(keyword) ||
-      f.addresseeId.toString().includes(keyword)
-    );
-    this.searchResults = this.filteredFriends;
+  this.searchDone = true;
+  if (!this.searchKeyword.trim()) {
+    this.filteredFriends = this.friends;
+    this.searchResults = [];
+    return;
   }
+  const keyword = this.searchKeyword.toLowerCase();
+  this.filteredFriends = this.friends.filter(f =>
+    f.requesterId.toLowerCase().includes(keyword) ||
+    f.addresseeId.toLowerCase().includes(keyword)
+  );
+  this.searchResults = this.filteredFriends;
+}
 
-  sendFriendRequest(userId: number): void {
-    this.socialService.sendFriendRequest(userId).subscribe({
+
+  sendFriendRequest(userId: string): void {
+  this.socialService.sendFriendRequest(userId).subscribe({
       next: (res: any) => {
         if (res.success) {
           alert('Demande d\'ami envoyée !');
@@ -107,7 +108,7 @@ export class FriendsComponent implements OnInit {
   }
 
   // ===== BLOQUER =====
-  blockUser(userId: number): void {
+  blockUser(userId: string): void {
     if (!confirm('Bloquer cet utilisateur ?')) return;
     this.socialService.blockUser(userId).subscribe({
       next: (res: any) => {
@@ -121,12 +122,11 @@ export class FriendsComponent implements OnInit {
     });
   }
 
-  unblockUser(userId: number): void {
+  unblockUser(userId: string): void {
     this.socialService.unblockUser(userId).subscribe({
       next: (res: any) => {
         if (res.success) {
-          this.blockedUsers = this.blockedUsers
-            .filter(b => b.blockedId !== userId);
+          this.blockedUsers = this.blockedUsers.filter(b => b.blockedId !== userId);
         }
       }
     });

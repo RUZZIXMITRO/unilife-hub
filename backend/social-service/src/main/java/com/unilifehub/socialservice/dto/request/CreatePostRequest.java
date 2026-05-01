@@ -17,4 +17,7 @@ public class CreatePostRequest {
     private Post.Visibility visibility;
 
     private Long groupId; // optionnel
+
+    private String userName;    // ✅ AJOUTER
+    private String userAvatar;  // ✅ AJOUTER
 }
