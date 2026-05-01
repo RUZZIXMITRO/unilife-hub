@@ -52,6 +52,8 @@ import { StudentDashboardComponent } from './components/student/dashboard/studen
 import { ProfileModalComponent } from './components/student/profile-modal/profile-modal.component';
 import { SettingsModalComponent } from './components/student/settings-modal/settings-modal.component';
 import { HelpModalComponent } from './components/student/help-modal/help-modal.component';
+import { MyFavoritesComponent as EcommerceMyFavoritesComponent } from './components/student/ecommerce/my-favorites/my-favorites.component';
+
 
 // ========== COMPONENTS - INTERFACE ADMIN ==========
 import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
@@ -71,6 +73,19 @@ import { ToastComponent } from './components/shared/toast/toast.component';
 import { AdminMarketplaceComponent } from './components/admin/marketplace/admin-marketplace/admin-marketplace.component';
 import { AdminReportsComponent } from './components/admin/marketplace/admin-reports/admin-reports.component';
 import { PromoteAdminComponent } from './components/setup/promote-admin/promote-admin.component';
+import { CatalogComponent } from './components/student/ecommerce/catalog/catalog.component';
+import { ProductDetailComponent } from './components/student/ecommerce/product-detail/product-detail.component';
+import { CartComponent } from './components/student/ecommerce/cart/cart.component';
+import { CheckoutComponent } from './components/student/ecommerce/checkout/checkout.component';
+import { MyOrdersComponent } from './components/student/ecommerce/my-orders/my-orders.component';
+import { OrderDetailComponent } from './components/student/ecommerce/order-detail/order-detail.component';
+import { MyReviewsComponent } from './components/student/ecommerce/my-reviews/my-reviews.component';
+import { AiAssistantComponent } from './components/student/ecommerce/ai-assistant/ai-assistant.component';
+import { AdminProductsComponent } from './components/admin/ecommerce/admin-products/admin-products.component';
+import { AdminOrdersComponent } from './components/admin/ecommerce/admin-orders/admin-orders.component';
+import { AdminPromotionsComponent } from './components/admin/ecommerce/admin-promotions/admin-promotions.component';
+import { AdminReviewsComponent } from './components/admin/ecommerce/admin-reviews/admin-reviews.component';
+import { AdminInventoryComponent } from './components/admin/ecommerce/admin-inventory/admin-inventory.component';
 
 registerLocaleData(localeFr);
 
@@ -128,7 +143,21 @@ registerLocaleData(localeFr);
     ToastComponent,
     AdminMarketplaceComponent,
     AdminReportsComponent,
-    PromoteAdminComponent
+    PromoteAdminComponent,
+    CatalogComponent,
+    ProductDetailComponent,
+    CartComponent,
+    CheckoutComponent,
+    MyOrdersComponent,
+    OrderDetailComponent,
+    MyReviewsComponent,
+    AiAssistantComponent,
+    AdminProductsComponent,
+    AdminOrdersComponent,
+    AdminPromotionsComponent,
+    AdminReviewsComponent,
+    AdminInventoryComponent,
+    EcommerceMyFavoritesComponent
   ],
   imports: [
     BrowserModule,

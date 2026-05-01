@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-payment
+  labels:
+    app: payment-service
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8083"
+    spec:
+      containers:
+        - name: payment-service
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 8083
+          env:
+            - name: ConnectionStrings__DefaultConnection
+              value: {{ .Values.env.DB_CONNECTION }}
+            - name: Stripe__SecretKey
+              value: {{ .Values.env.STRIPE_SECRET_KEY }}
+            - name: Stripe__PublishableKey
+              value: {{ .Values.env.STRIPE_PUBLISHABLE_KEY }}

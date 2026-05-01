@@ -1,0 +1,88 @@
+<div class="page">
+
+  <!-- Toast -->
+  <div class="toast-success" *ngIf="successMessage">
+    <i class="fa-solid fa-circle-check"></i> {{ successMessage }}
+  </div>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2><i class="fa-solid fa-heart"></i> Mes Favoris</h2>
+      <p>{{ favorites.length }} produit(s) sauvegardé(s)</p>
+    </div>
+    <button class="btn-shop" (click)="goToShop()">
+      <i class="fa-solid fa-store"></i> Boutique
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-grid" *ngIf="loading">
+    <div class="skeleton" *ngFor="let i of [1,2,3,4]"></div>
+  </div>
+
+  <!-- Empty -->
+  <div class="empty-state" *ngIf="!loading && favorites.length === 0">
+    <div class="empty-icon">
+      <i class="fa-regular fa-heart"></i>
+    </div>
+    <h3>Aucun favori</h3>
+    <p>Ajoutez des produits à vos favoris pour les retrouver facilement</p>
+    <button class="btn-shop-empty" (click)="goToShop()">
+      <i class="fa-solid fa-store"></i> Découvrir la boutique
+    </button>
+  </div>
+
+  <!-- Favorites grid -->
+  <div class="favorites-grid" *ngIf="!loading && favorites.length > 0">
+    <div class="fav-card" *ngFor="let fav of favorites">
+
+      <!-- Image -->
+      <div class="fav-img" (click)="goToProduct(fav.productId)">
+        <img
+          [src]="fav.productImageUrl || 'https://placehold.co/400x400?text=no+image'"
+          [alt]="fav.productTitle"
+        />
+        <button
+          class="btn-remove-fav"
+          (click)="$event.stopPropagation(); removeFavorite(fav.productId)"
+          [disabled]="removingId === fav.productId"
+        >
+          <i class="fa-solid fa-spinner fa-spin" *ngIf="removingId === fav.productId"></i>
+          <i class="fa-solid fa-heart" *ngIf="removingId !== fav.productId"></i>
+        </button>
+      </div>
+
+      <!-- Info -->
+      <div class="fav-info">
+        <h4 (click)="goToProduct(fav.productId)">{{ fav.productTitle || 'Produit' }}</h4>
+        <div class="fav-price" *ngIf="fav.productPrice">
+          {{ fav.productPrice | number:'1.2-2' }} EUR
+        </div>
+        <div class="fav-date">
+          <i class="fa-regular fa-calendar"></i>
+          Ajouté le {{ fav.createdAt | date:'dd/MM/yyyy' }}
+        </div>
+        <div class="fav-actions">
+          <button
+            class="btn-view"
+            (click)="goToProduct(fav.productId)"
+          >
+            <i class="fa-solid fa-eye"></i> Voir
+          </button>
+          <button
+            class="btn-add-cart"
+            (click)="addToCart(fav)"
+            [disabled]="addingToCartId === fav.productId"
+          >
+            <i class="fa-solid fa-spinner fa-spin" *ngIf="addingToCartId === fav.productId"></i>
+            <i class="fa-solid fa-cart-plus" *ngIf="addingToCartId !== fav.productId"></i>
+            {{ addingToCartId === fav.productId ? '...' : 'Panier' }}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

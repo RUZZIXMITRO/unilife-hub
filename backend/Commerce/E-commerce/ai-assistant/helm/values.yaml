@@ -1,0 +1,10 @@
+replicaCount: 1
+image:
+  repository: yousra00/ai-assistant
+  tag: "latest"
+service:
+  type: ClusterIP
+  port: 8090
+env:
+  MONGODB_URI: "mongodb://mongodb-service:27017"
+  CATALOG_SERVICE_URL: "http://catalogservice:8081"

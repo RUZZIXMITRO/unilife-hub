@@ -1,0 +1,4 @@
+apiVersion: v2
+name: review-service
+description: UniLife Hub - Review Service
+version: 1.0.0

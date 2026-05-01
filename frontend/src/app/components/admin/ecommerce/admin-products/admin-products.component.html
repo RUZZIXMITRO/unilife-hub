@@ -1,0 +1,341 @@
+<div class="page">
+
+  <!-- Toast -->
+  <div class="toast-success" *ngIf="successMessage">
+    <i class="fa-solid fa-circle-check"></i> {{ successMessage }}
+  </div>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2><i class="fa-solid fa-box"></i> Gestion des Produits</h2>
+      <p>{{ products.length }} produit(s) dans le catalogue</p>
+    </div>
+    <button class="btn-add" (click)="openCreateForm()">
+      <i class="fa-solid fa-plus"></i> Nouveau produit
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="search-row">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        type="text"
+        placeholder="Rechercher un produit..."
+        [(ngModel)]="searchKeyword"
+      />
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-grid" *ngIf="loading">
+    <div class="skeleton" *ngFor="let i of [1,2,3,4,5,6]"></div>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid" *ngIf="!loading">
+
+    <div class="product-card" *ngFor="let product of filteredProducts">
+      <div class="product-img">
+        <img [src]="getPrimaryImage(product)" [alt]="product.title" />
+        <span class="badge-condition">{{ product.condition }}</span>
+      </div>
+      <div class="product-info">
+        <h4>{{ product.title }}</h4>
+        <p class="product-desc">{{ product.description | slice:0:60 }}...</p>
+        <div class="product-meta">
+          <span class="price">{{ product.price | number:'1.2-2' }} EUR</span>
+          <span class="stock" *ngIf="product.stockQuantity !== null">
+            Stock: {{ product.stockQuantity }}
+          </span>
+        </div>
+        <div class="product-actions">
+          <button class="btn-edit" (click)="openEditForm(product)">
+            <i class="fa-solid fa-pen"></i> Modifier
+          </button>
+          <button
+            class="btn-delete"
+            (click)="deleteProduct(product.id)"
+            [disabled]="deletingId === product.id"
+          >
+            <i class="fa-solid fa-spinner fa-spin" *ngIf="deletingId === product.id"></i>
+            <i class="fa-solid fa-trash" *ngIf="deletingId !== product.id"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="filteredProducts.length === 0">
+      <i class="fa-solid fa-box-open"></i>
+      <p>Aucun produit trouvé</p>
+      <button class="btn-add-empty" (click)="openCreateForm()">
+        <i class="fa-solid fa-plus"></i> Ajouter un produit
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Modal Form -->
+  <div class="modal-overlay" *ngIf="showForm" (click)="showForm = false">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3>
+          <i class="fa-solid fa-box"></i>
+          {{ editingProduct ? 'Modifier le produit' : 'Nouveau produit' }}
+        </h3>
+        <button class="btn-close" (click)="showForm = false">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- Error -->
+        <div class="error-box" *ngIf="errorMessage">
+          <i class="fa-solid fa-circle-exclamation"></i> {{ errorMessage }}
+        </div>
+
+        <!-- Image upload -->
+       <!-- Image upload -->
+<div class="form-group">
+  <label>Image du produit</label>
+  <div class="image-upload-area">
+    <div class="image-preview" *ngIf="uploadedImageUrl">
+      <img [src]="uploadedImageUrl" alt="Preview" />
+      <button class="btn-remove-img" (click)="removeImage()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <label class="upload-label" *ngIf="!uploadedImageUrl">
+      <input
+        type="file"
+        accept="image/*"
+        (change)="onImageSelected($event)"
+        style="display:none"
+      />
+      <div class="upload-placeholder" [class.uploading]="uploadingImage">
+        <i class="fa-solid fa-spinner fa-spin" *ngIf="uploadingImage"></i>
+        <i class="fa-solid fa-cloud-arrow-up" *ngIf="!uploadingImage"></i>
+        <span>{{ uploadingImage ? 'Upload en cours...' : 'Cliquez pour uploader une image' }}</span>
+        <span class="upload-hint">PNG, JPG — Max 5MB</span>
+      </div>
+    </label>
+  </div>
+</div>
+        <!-- Title -->
+        <div class="form-group">
+          <label>Titre *</label>
+          <input type="text" placeholder="Nom du produit" [(ngModel)]="form.title" />
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            placeholder="Description du produit..."
+            [(ngModel)]="form.description"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <!-- Price + Condition -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prix (EUR) *</label>
+            <input type="number" placeholder="0.00" [(ngModel)]="form.price" min="0" step="0.01" />
+          </div>
+          <div class="form-group">
+            <label>État</label>
+            <select [(ngModel)]="form.condition">
+              <option *ngFor="let c of conditions" [value]="c">{{ c }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Category -->
+<div class="form-group">
+  <label>Catégorie *</label>
+  <div class="category-row">
+    <select [(ngModel)]="form.categoryId" style="flex:1">
+      <option value="">-- Sélectionner une catégorie --</option>
+      <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+    </select>
+    <button class="btn-new-cat" type="button" (click)="showCategoryForm = !showCategoryForm" title="Ajouter">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+    <button class="btn-manage-cat" type="button" (click)="openCategoriesManager()" title="Gérer">
+      <i class="fa-solid fa-pen-to-square"></i>
+    </button>
+  </div>
+  <div class="new-cat-form" *ngIf="showCategoryForm">
+    <input type="text" placeholder="Nom de la catégorie" [(ngModel)]="newCategoryName" />
+    <button class="btn-save-cat" (click)="createCategory()" [disabled]="savingCategory">
+      <i class="fa-solid fa-spinner fa-spin" *ngIf="savingCategory"></i>
+      <i class="fa-solid fa-check" *ngIf="!savingCategory"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Categories Manager Modal -->
+<div class="modal-overlay" *ngIf="showCategoriesManager" (click)="showCategoriesManager = false">
+  <div class="modal" (click)="$event.stopPropagation()" style="max-width:480px">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-tags"></i> Gérer les catégories</h3>
+      <button class="btn-close" (click)="showCategoriesManager = false">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="cat-list">
+        <div class="cat-list-item" *ngFor="let cat of categories">
+          <div *ngIf="editingCategory?.id !== cat.id" class="cat-view">
+            <span class="cat-name">{{ cat.name }}</span>
+            <div class="cat-actions">
+              <button class="btn-cat-edit" (click)="startEditCategory(cat)">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button
+                class="btn-cat-delete"
+                (click)="deleteCategory(cat.id)"
+                [disabled]="deletingCategoryId === cat.id"
+              >
+                <i class="fa-solid fa-spinner fa-spin" *ngIf="deletingCategoryId === cat.id"></i>
+                <i class="fa-solid fa-trash" *ngIf="deletingCategoryId !== cat.id"></i>
+              </button>
+            </div>
+          </div>
+          <div *ngIf="editingCategory?.id === cat.id" class="cat-edit-row">
+            <input type="text" [(ngModel)]="editCategoryName" class="cat-edit-input" />
+            <button class="btn-save-cat" (click)="saveEditCategory()">
+              <i class="fa-solid fa-check"></i>
+            </button>
+            <button class="btn-cancel-edit" (click)="editingCategory = null">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="showCategoriesManager = false">Fermer</button>
+    </div>
+  </div>
+</div>
+
+        <!-- Stock (only for new products) -->
+        <div class="form-row" *ngIf="!editingProduct">
+          <div class="form-group">
+            <label>Stock initial</label>
+            <input type="number" [(ngModel)]="form.stockQuantity" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Seuil d'alerte</label>
+            <input type="number" [(ngModel)]="form.alertThreshold" min="0" />
+          </div>
+        </div>
+
+        <!-- Attributs -->
+<div class="form-group">
+  <label>Attributs (optionnel)</label>
+  <div class="attributes-list" *ngIf="getAttributeKeys().length > 0">
+    <div class="attr-tag" *ngFor="let key of getAttributeKeys()">
+      <span>{{ key }}: {{ form.attributes[key] }}</span>
+      <button (click)="removeAttribute(key)">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>
+  <div class="attr-input-row">
+    <input type="text" placeholder="Clé (ex: auteur)" [(ngModel)]="attributeKey" />
+    <input type="text" placeholder="Valeur (ex: Robert Martin)" [(ngModel)]="attributeValue" />
+    <button class="btn-add-attr" (click)="addAttribute()">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Couleurs -->
+<div class="form-group">
+  <label><i class="fa-solid fa-palette"></i> Couleurs disponibles</label>
+  <div class="variants-tags" *ngIf="colors.length > 0">
+    <div class="variant-tag color-tag" *ngFor="let color of colors">
+      <span class="color-dot" [style.background]="color.hex"></span>
+      <span>{{ color.name }}</span>
+      <img *ngIf="color.imageUrl" [src]="color.imageUrl" class="color-thumb" />
+      <button (click)="removeColor(color)"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+  <div class="color-input-row">
+    <input type="text" placeholder="Nom (ex: Rose)" [(ngModel)]="newColorName" />
+    <input type="color" [(ngModel)]="newColorHex" class="color-picker" />
+    <label class="btn-upload-color" [class.uploading]="uploadingColorImage">
+      <input type="file" accept="image/*" (change)="onColorImageSelected($event)" style="display:none" />
+      <i class="fa-solid fa-spinner fa-spin" *ngIf="uploadingColorImage"></i>
+      <i class="fa-solid fa-image" *ngIf="!uploadingColorImage"></i>
+    </label>
+    <div class="color-img-preview" *ngIf="colorImageUrl">
+      <img [src]="colorImageUrl" />
+    </div>
+    <button class="btn-add-attr" (click)="addColor()">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+  </div>
+</div>
+<!-- Tailles -->
+<div class="form-group">
+  <label><i class="fa-solid fa-ruler"></i> Tailles disponibles</label>
+  <div class="variants-tags" *ngIf="sizes.length > 0">
+    <div class="variant-tag size-tag" *ngFor="let size of sizes">
+      <span>{{ size }}</span>
+      <button (click)="removeSize(size)"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+  <div class="attr-input-row">
+    <input
+      type="text"
+      placeholder="Ex: S, M, L, XL ou 128GB, 256GB"
+      [(ngModel)]="newSize"
+      (keyup.enter)="addSize()"
+    />
+    <button class="btn-add-attr" (click)="addSize()">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+  </div>
+</div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="showForm = false">Annuler</button>
+        <button
+          class="btn-save"
+          (click)="saveProduct()"
+          [disabled]="savingProduct || uploadingImage"
+        >
+          <i class="fa-solid fa-spinner fa-spin" *ngIf="savingProduct"></i>
+          <i class="fa-solid fa-floppy-disk" *ngIf="!savingProduct"></i>
+          {{ savingProduct ? 'Enregistrement...' : (editingProduct ? 'Mettre à jour' : 'Créer le produit') }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+<!-- Confirm Delete Modal -->
+<div class="modal-overlay" *ngIf="productToDelete" (click)="productToDelete = null">
+  <div class="confirm-modal" (click)="$event.stopPropagation()">
+    <div class="confirm-icon">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <h3>Supprimer ce produit ?</h3>
+    <p>Cette action est irréversible.</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel" (click)="productToDelete = null">Annuler</button>
+      <button class="btn-confirm-delete" (click)="confirmDelete()">
+        <i class="fa-solid fa-trash"></i> Supprimer
+      </button>
+    </div>
+  </div>
+</div>
+</div>

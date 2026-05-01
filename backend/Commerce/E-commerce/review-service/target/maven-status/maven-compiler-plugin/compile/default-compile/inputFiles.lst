@@ -1,0 +1,16 @@
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\config\CorsConfig.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\controller\ReviewController.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\dto\request\AdminResponseRequest.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\dto\request\CreateReviewRequest.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\dto\response\ApiResponse.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\dto\response\ReviewResponse.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\exception\GlobalExceptionHandler.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\model\AdminResponse.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\model\ProductRating.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\model\Review.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\model\ReviewStatus.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\repository\ProductRatingRepository.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\repository\ReviewRepository.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\ReviewServiceApplication.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\service\impl\ReviewServiceImpl.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\review-service\src\main\java\com\unilife\review\service\IReviewService.java

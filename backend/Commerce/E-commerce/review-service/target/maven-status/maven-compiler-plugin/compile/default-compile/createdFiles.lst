@@ -1,0 +1,16 @@
+com\unilife\review\dto\request\AdminResponseRequest.class
+com\unilife\review\dto\response\ApiResponse.class
+com\unilife\review\model\ProductRating.class
+com\unilife\review\service\IReviewService.class
+com\unilife\review\ReviewServiceApplication.class
+com\unilife\review\dto\response\ReviewResponse.class
+com\unilife\review\repository\ProductRatingRepository.class
+com\unilife\review\service\impl\ReviewServiceImpl.class
+com\unilife\review\config\CorsConfig.class
+com\unilife\review\model\AdminResponse.class
+com\unilife\review\controller\ReviewController.class
+com\unilife\review\repository\ReviewRepository.class
+com\unilife\review\model\Review.class
+com\unilife\review\dto\request\CreateReviewRequest.class
+com\unilife\review\exception\GlobalExceptionHandler.class
+com\unilife\review\model\ReviewStatus.class

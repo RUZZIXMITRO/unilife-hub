@@ -1,0 +1,77 @@
+# =====================================================
+# .GITLAB-CI.YML — InventoryService
+# Pipeline : build → docker → deploy (ArgoCD)
+# =====================================================
+
+variables:
+  DOCKER_IMAGE: yousra00/inventory-service
+  SERVICE_NAME: inventory-service
+  HELM_RELEASE: inventory
+
+stages:
+  - build
+  - docker
+  - deploy
+
+# ── Stage 1 : Build Maven ─────────────────────────
+build:
+  stage: build
+  image: maven:3.9.6-eclipse-temurin-17
+  script:
+    - echo "==> Build du projet Maven..."
+    - mvn clean package -DskipTests -q
+    - echo "==> Build terminé."
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 hour
+  cache:
+    key: "$CI_COMMIT_REF_SLUG"
+    paths:
+      - .m2/repository
+  only:
+    - main
+    - develop
+
+# ── Stage 2 : Docker Build & Push ─────────────────
+docker:
+  stage: docker
+  image: docker:24.0
+  services:
+    - docker:24.0-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  script:
+    - echo "==> Build image Docker..."
+    - docker build -t $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker tag $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA $DOCKER_IMAGE:latest
+    - echo "==> Push vers Docker Hub..."
+    - docker push $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA
+    - docker push $DOCKER_IMAGE:latest
+    - echo "==> Image pushée : $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA"
+  needs:
+    - build
+  only:
+    - main
+
+# ── Stage 3 : Deploy via ArgoCD ───────────────────
+deploy:
+  stage: deploy
+  image: alpine/helm:3.14.0
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - echo "==> Mise à jour du tag image dans Helm values..."
+    - |
+      sed -i "s/tag: .*/tag: \"$CI_COMMIT_SHORT_SHA\"/" helm/values.yaml
+    - echo "==> ArgoCD sync déclenché automatiquement via GitOps"
+    - echo "==> Image déployée : $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA"
+  needs:
+    - docker
+  only:
+    - main
+  environment:
+    name: production
+    url: http://inventoryservice:8080/swagger-ui.html

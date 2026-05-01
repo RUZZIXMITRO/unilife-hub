@@ -361,3 +361,65 @@
 .sidebar.collapsed .toggle-btn {
   display: none;
 }
+
+.nav-sub {
+  padding-left: 2.2rem !important;
+  font-size: 0.82rem !important;
+  opacity: 0.85;
+}
+
+.nav-sub .nav-svg-wrap {
+  width: 28px !important;
+  height: 28px !important;
+}
+
+.nav-sub .nav-svg-wrap svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.nav-sub:hover { opacity: 1; }
+.nav-sub.active { opacity: 1; }
+.nav-toggle {
+  cursor: pointer;
+  user-select: none;
+}
+
+.arrow-icon {
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  flex-shrink: 0;
+  color: currentColor;
+  opacity: 0.6;
+  transition: transform 0.3s ease;
+}
+
+.arrow-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.submenu.expanded {
+  max-height: 500px;
+}
+
+.nav-sub {
+  padding-left: 1.8rem !important;
+  font-size: 0.82rem;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.nav-sub .nav-svg-wrap {
+  width: 26px !important;
+  height: 26px !important;
+}
+
+.nav-sub:hover { opacity: 1; }
+.nav-sub.active { opacity: 1; }

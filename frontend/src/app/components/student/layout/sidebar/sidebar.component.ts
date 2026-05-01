@@ -27,7 +27,14 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserName();
+    this.ecommerceExpanded = this.router.url.includes('/student/ecommerce');
   }
+
+  ecommerceExpanded = false;
+
+toggleEcommerce(): void {
+  this.ecommerceExpanded = !this.ecommerceExpanded;
+}
 
   loadUserName(): void {
     const userId = this.authService.getUserId();

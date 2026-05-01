@@ -1,0 +1,14 @@
+replicaCount: 2
+image:
+  repository: yousra00/order-service
+  tag: "latest"
+service:
+  type: ClusterIP
+  port: 8084
+env:
+  DB_CONNECTION: "Server=sqlserver-service;Database=order_db;Integrated Security=True;TrustServerCertificate=True;"
+  CART_URL: "http://cartservice:8082"
+  INVENTORY_URL: "http://inventoryservice:8080"
+  PAYMENT_URL: "http://paymentservice:8083"
+  CATALOG_URL: "http://catalogservice:8081"
+  PROMOTION_URL: "http://promotionservice:8085"

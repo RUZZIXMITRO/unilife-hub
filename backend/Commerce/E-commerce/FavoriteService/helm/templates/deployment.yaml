@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-favorite
+  labels:
+    app: favorite-service
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: favorite-service
+  template:
+    metadata:
+      labels:
+        app: favorite-service
+    spec:
+      containers:
+        - name: favorite-service
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 8083
+          env:
+            - name: CATALOG_SERVICE_URL
+              value: {{ .Values.env.CATALOG_SERVICE_URL }}
