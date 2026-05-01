@@ -26,7 +26,8 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html/var \
+RUN mkdir -p /var/www/html/var \
+    && chown -R www-data:www-data /var/www/html/var \
     && chmod -R 775 /var/www/html/var
 
 # Copy nginx config
