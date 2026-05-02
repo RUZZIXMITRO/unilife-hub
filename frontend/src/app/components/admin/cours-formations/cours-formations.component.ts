@@ -64,11 +64,17 @@ export class AdminCoursFormationsComponent implements OnInit {
     this.coursService.approuverCours(id).subscribe(() => this.loadAll());
   }
 
-  supprimerCours(id: number) {
-    if (confirm('Supprimer ce cours ?')) {
-      this.coursService.supprimerCours(id).subscribe(() => this.loadAll());
-    }
+supprimerCours(id: number) {
+  if (confirm('Supprimer ce cours ?')) {
+    this.coursService.supprimerCours(id).subscribe({
+      next: () => this.loadAll(),
+      error: (err) => {
+        console.error('Erreur suppression cours', err);
+        alert('Erreur: ' + (err.error?.message || err.status));
+      }
+    });
   }
+}
 
   ajouterFormation() {
     this.coursService.ajouterFormation(this.nouvelleFormation).subscribe(() => {
@@ -77,11 +83,17 @@ export class AdminCoursFormationsComponent implements OnInit {
     });
   }
 
-  supprimerFormation(id: number) {
-    if (confirm('Supprimer cette formation ?')) {
-      this.coursService.supprimerFormation(id).subscribe(() => this.loadAll());
-    }
+supprimerFormation(id: number) {
+  if (confirm('Supprimer cette formation ?')) {
+    this.coursService.supprimerFormation(id).subscribe({
+      next: () => this.loadAll(),
+      error: (err) => {
+        console.error('Erreur suppression formation', err);
+        alert('Erreur: ' + (err.error?.message || err.status));
+      }
+    });
   }
+}
 
   ajouterCategorie() {
     this.coursService.ajouterCategorie(this.nouvelleCategorie).subscribe(() => {

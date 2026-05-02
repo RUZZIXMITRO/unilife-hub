@@ -300,3 +300,66 @@
 :host-context(body.dark-theme) .card-body h3 { color: #e0eaf8; }
 :host-context(body.dark-theme) .tabs-bar { background: #0a1628; border-color: #0f1e30; }
 :host-context(body.dark-theme) .search-input-wrap, :host-context(body.dark-theme) .filter-select { background: #0a1628; border-color: #1a3050; color: #e0eaf8; }
+/* Actions en haut de la card */
+.card-top-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Bouton modifier */
+.btn-edit {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: #e8f4fd;
+  color: #2563eb;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.btn-edit:hover {
+  background: #2563eb;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Bouton supprimer (propre cours) */
+.btn-delete-own {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: #fde8e8;
+  color: #dc2626;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.btn-delete-own:hover {
+  background: #dc2626;
+  color: white;
+  transform: scale(1.05);
+}
+.favoris-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary, #1e3a5f);
+  margin: 1.5rem 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.favoris-section-title i {
+  color: #e74c3c;
+}

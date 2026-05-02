@@ -11,13 +11,56 @@ export class CoursService {
 
   constructor(private http: HttpClient) {}
 
+  private decodeTokenPayload(): any | null {
+    try {
+      const token = localStorage.getItem('access_token');
+      if (!token) return null;
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  private resolveUserId(): string {
+    const storedUserId = localStorage.getItem('user_id');
+    if (storedUserId && storedUserId !== 'undefined' && storedUserId !== 'null') {
+      return storedUserId;
+    }
+
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const idFromUser = user?.id || user?.userId;
+      if (idFromUser) return String(idFromUser);
+    } catch (e) {}
+
+    const payload = this.decodeTokenPayload();
+    const idFromToken = payload?.sub || payload?.nameid;
+    return idFromToken ? String(idFromToken) : '';
+  }
+
+  private getRoleFromToken(): string {
+    try {
+      const decoded = this.decodeTokenPayload();
+      if (!decoded) return 'STUDENT';
+      const role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+        || decoded['role'] || decoded['Role'] || 'STUDENT';
+      return role.replace('ROLE_', '').toUpperCase();
+    } catch (e) {
+      return 'STUDENT';
+    }
+  }
+
   private getHeaders(): HttpHeaders {
-  const token = localStorage.getItem('access_token');  // ← 'access_token' pas 'token'
-  return new HttpHeaders({
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  });
-}
+    const token = localStorage.getItem('access_token');
+    const userId = this.resolveUserId();
+    const role = this.getRoleFromToken();
+
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    if (token) headers = headers.set('Authorization', `Bearer ${token}`);
+    if (userId) headers = headers.set('X-User-Id', userId);
+    if (role) headers = headers.set('X-User-Role', role);
+    return headers;
+  }
 
   // ========== COURS ==========
   getAllCours(): Observable<any> {
@@ -37,15 +80,34 @@ export class CoursService {
   }
 
   uploadCours(formData: FormData): Observable<any> {
-  const token = localStorage.getItem('access_token');  // ← aussi ici
-  const headers = new HttpHeaders({
-    'Authorization': `Bearer ${token}`
-  });
-  return this.http.post(`${this.apiUrl}/courses`, formData, { headers });
-}
+    const token = localStorage.getItem('access_token');
+    const userId = this.resolveUserId();
+    const role = this.getRoleFromToken();
+    let headers = new HttpHeaders();
+    if (token) headers = headers.set('Authorization', `Bearer ${token}`);
+    if (userId) headers = headers.set('X-User-Id', userId);
+    if (role) headers = headers.set('X-User-Role', role);
+    return this.http.post(`${this.apiUrl}/courses`, formData, { headers });
+  }
 
   downloadCours(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/courses/${id}/download`,
+    const token = localStorage.getItem('access_token');
+    const userId = this.resolveUserId();
+    const role = this.getRoleFromToken();
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    if (token) headers = headers.set('Authorization', `Bearer ${token}`);
+    if (userId) headers = headers.set('X-User-Id', userId);
+    if (role) headers = headers.set('X-User-Role', role);
+    return this.http.get(`${this.apiUrl}/courses/${id}/download`, { headers });
+  }
+
+  modifierCours(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/courses/${id}`, data,
+      { headers: this.getHeaders() });
+  }
+
+  supprimerMonCours(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/courses/${id}/my-course`,
       { headers: this.getHeaders() });
   }
 
@@ -113,17 +175,25 @@ export class CoursService {
 
   // ========== FAVORIS ==========
   getMesFavoris(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/favorites`,
+    const userId = this.resolveUserId();
+    const query = userId ? `?userId=${encodeURIComponent(userId)}` : '';
+    return this.http.get(`${this.apiUrl}/favorites${query}`,
       { headers: this.getHeaders() });
   }
 
   ajouterFavori(resourceId: number, type: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/favorites/${resourceId}?type=${type}`, {},
+    const userId = this.resolveUserId();
+    const query = userId
+      ? `?type=${encodeURIComponent(type)}&userId=${encodeURIComponent(userId)}`
+      : `?type=${encodeURIComponent(type)}`;
+    return this.http.post(`${this.apiUrl}/favorites/${resourceId}${query}`, {},
       { headers: this.getHeaders() });
   }
 
   retirerFavori(resourceId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/favorites/${resourceId}`,
+    const userId = this.resolveUserId();
+    const query = userId ? `?userId=${encodeURIComponent(userId)}` : '';
+    return this.http.delete(`${this.apiUrl}/favorites/${resourceId}${query}`,
       { headers: this.getHeaders() });
   }
 
