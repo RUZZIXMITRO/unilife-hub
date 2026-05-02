@@ -15,7 +15,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final ResourceRepository resourceRepository;
 
-    public boolean toggleLike(Integer userId, Integer resourceId) {
+    public boolean toggleLike(String userId, Integer resourceId) {
         if (likeRepository.existsByUserIdAndResourceId(userId, resourceId)) {
             likeRepository.deleteByUserIdAndResourceId(userId, resourceId);
             return false; // unliked
@@ -35,7 +35,7 @@ public class LikeService {
         return likeRepository.countByResourceId(resourceId);
     }
 
-    public boolean isLiked(Integer userId, Integer resourceId) {
+    public boolean isLiked(String userId, Integer resourceId) {
         return likeRepository.existsByUserIdAndResourceId(userId, resourceId);
     }
 }

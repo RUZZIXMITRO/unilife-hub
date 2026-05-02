@@ -18,7 +18,7 @@ public class Like {
     private Integer id;
 
     @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resource_id", nullable = false)

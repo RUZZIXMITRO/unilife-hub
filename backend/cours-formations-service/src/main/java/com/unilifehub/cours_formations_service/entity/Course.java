@@ -20,7 +20,7 @@ public class Course {
     private Resource resource;
 
     @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    private String userId;
 
     @Column(name = "file_url", length = 500)
     private String fileUrl;

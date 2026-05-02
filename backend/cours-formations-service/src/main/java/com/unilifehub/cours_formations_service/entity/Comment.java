@@ -17,7 +17,7 @@ public class Comment {
     private Integer id;
 
     @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    private String userId;
 
     @Column(name = "user_name")
     private String userName;

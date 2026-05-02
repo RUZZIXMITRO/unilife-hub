@@ -18,14 +18,14 @@ public class FormationService {
     private final CategoryRepository categoryRepository;
     private final FavoriteRepository favoriteRepository;
 
-    public List<FormationResponse> getAllFormations(Integer userId) {
+    public List<FormationResponse> getAllFormations(String userId) {
         return formationRepository.findAll()
                 .stream()
                 .map(f -> toResponse(f, userId))
                 .collect(Collectors.toList());
     }
 
-    public FormationResponse getFormationById(Integer id, Integer userId) {
+    public FormationResponse getFormationById(Integer id, String userId) {
         Formation formation = formationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Formation non trouvée"));
         return toResponse(formation, userId);
@@ -79,7 +79,7 @@ public class FormationService {
                                                     String level,
                                                     String language,
                                                     Integer categoryId,
-                                                    Integer userId) {
+                                                    String userId) {
         return formationRepository.searchFormations(keyword, level, language, categoryId)
                 .stream()
                 .map(f -> toResponse(f, userId))
@@ -93,13 +93,14 @@ public class FormationService {
         formationRepository.save(formation);
     }
 
-    public FormationResponse toResponse(Formation formation, Integer userId) {
+    public FormationResponse toResponse(Formation formation, String userId) {
         boolean isFavorite = userId != null &&
                 favoriteRepository.existsByUserIdAndResourceId(
                         userId, formation.getResource().getId());
 
         return FormationResponse.builder()
                 .id(formation.getId())
+                .resourceId(formation.getResource().getId())
                 .title(formation.getResource().getTitle())
                 .description(formation.getResource().getDescription())
                 .categoryId(formation.getResource().getCategory().getId())

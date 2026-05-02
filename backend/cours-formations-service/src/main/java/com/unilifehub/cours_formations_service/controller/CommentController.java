@@ -37,7 +37,7 @@ public class CommentController {
             @RequestHeader("X-User-Id") String userId,
             @RequestHeader(value = "X-User-Name", defaultValue = "Anonyme") String userName) {
         Comment comment = commentService.addComment(
-                Integer.parseInt(userId), userName, resourceId, request.getContent());
+                userId, userName, resourceId, request.getContent());
         return ResponseEntity.ok(ApiResponse.success("Commentaire ajouté", toResponse(comment)));
     }
 
@@ -45,7 +45,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable Integer commentId,
             @RequestHeader("X-User-Id") String userId) {
-        commentService.deleteComment(commentId, Integer.parseInt(userId));
+        commentService.deleteComment(commentId, userId);
         return ResponseEntity.ok(ApiResponse.success("Commentaire supprimé", null));
     }
 

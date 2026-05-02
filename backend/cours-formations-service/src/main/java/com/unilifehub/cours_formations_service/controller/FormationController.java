@@ -21,7 +21,7 @@ public class FormationController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<FormationResponse>>> getAllFormations(
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
+        String uid = userId;
         return ResponseEntity.ok(ApiResponse.success(
                 "Formations récupérées",
                 formationService.getAllFormations(uid)));
@@ -31,7 +31,7 @@ public class FormationController {
     public ResponseEntity<ApiResponse<FormationResponse>> getFormationById(
             @PathVariable Integer id,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
+        String uid = userId;
         return ResponseEntity.ok(ApiResponse.success(
                 "Formation récupérée",
                 formationService.getFormationById(id, uid)));
@@ -44,14 +44,14 @@ public class FormationController {
             @RequestParam(required = false) String language,
             @RequestParam(required = false) Integer categoryId,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
+        String uid = userId;
         return ResponseEntity.ok(ApiResponse.success(
                 "Résultats de recherche",
                 formationService.searchFormations(keyword, level, language, categoryId, uid)));
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<FormationResponse>> createFormation(
             @Valid @RequestBody FormationRequest request) {
         return ResponseEntity.ok(ApiResponse.success(

@@ -9,5 +9,5 @@ import java.util.List;
 public interface ReportRepository extends JpaRepository<Report, Integer> {
     List<Report> findByIsResolvedFalse();
     List<Report> findByResourceId(Integer resourceId);
-    boolean existsByUserIdAndResourceId(Integer userId, Integer resourceId);
+    boolean existsByUserIdAndResourceId(String userId, Integer resourceId);
 }

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 public class FormationResponse {
     private Integer id;
+    private Integer resourceId;
     private String title;
     private String description;
     private String categoryName;

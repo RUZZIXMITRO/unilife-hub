@@ -19,7 +19,7 @@ public class CommentService {
         return commentRepository.findByResourceIdOrderByCreatedAtDesc(resourceId);
     }
 
-    public Comment addComment(Integer userId, String userName,
+    public Comment addComment(String userId, String userName,
                               Integer resourceId, String content) {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new RuntimeException("Ressource non trouvée"));
@@ -34,7 +34,7 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public void deleteComment(Integer commentId, Integer userId) {
+    public void deleteComment(Integer commentId, String userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Commentaire non trouvé"));
         if (!comment.getUserId().equals(userId))

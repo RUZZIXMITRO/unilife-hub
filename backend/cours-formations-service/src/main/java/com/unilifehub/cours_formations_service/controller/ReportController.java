@@ -26,7 +26,7 @@ public class ReportController {
             @Valid @RequestBody ReportRequest request,
             @RequestHeader("X-User-Id") String userId) {
         Report report = reportService.reportResource(
-                Integer.parseInt(userId), resourceId, request.getReason());
+                userId, resourceId, request.getReason());
         return ResponseEntity.ok(ApiResponse.success("Ressource signalée", toResponse(report)));
     }
 

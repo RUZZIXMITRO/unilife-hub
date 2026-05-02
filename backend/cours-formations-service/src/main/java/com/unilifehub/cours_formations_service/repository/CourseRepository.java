@@ -12,7 +12,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 
     List<Course> findByIsApprovedTrueOrderByResource_CreatedAtDesc();
 
-    List<Course> findByUserId(Integer userId);
+    List<Course> findByUserId(String userId);
 
     @Query("""
         SELECT c FROM Course c

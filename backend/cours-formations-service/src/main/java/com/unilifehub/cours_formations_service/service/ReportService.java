@@ -15,7 +15,7 @@ public class ReportService {
     private final ReportRepository reportRepository;
     private final ResourceRepository resourceRepository;
 
-    public Report reportResource(Integer userId, Integer resourceId, String reason) {
+    public Report reportResource(String userId, Integer resourceId, String reason) {
         if (reportRepository.existsByUserIdAndResourceId(userId, resourceId))
             throw new RuntimeException("Vous avez déjà signalé cette ressource");
 

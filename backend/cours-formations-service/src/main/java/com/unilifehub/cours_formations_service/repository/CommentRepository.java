@@ -8,7 +8,7 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     List<Comment> findByResourceIdOrderByCreatedAtDesc(Integer resourceId);
-    List<Comment> findByUserId(Integer userId);
+    List<Comment> findByUserId(String userId);
     List<Comment> findByIsReportedTrue();
     long countByResourceId(Integer resourceId);
 }

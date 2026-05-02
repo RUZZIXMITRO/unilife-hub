@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 public class LikeResponse {
     private Integer id;
-    private Integer userId;
+    private String userId;
     private Integer resourceId;
     private LocalDateTime createdAt;
 }

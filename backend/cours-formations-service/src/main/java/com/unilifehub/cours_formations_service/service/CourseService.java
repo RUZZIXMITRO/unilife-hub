@@ -6,6 +6,7 @@ import com.unilifehub.cours_formations_service.entity.*;
 import com.unilifehub.cours_formations_service.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,17 +22,16 @@ public class CourseService {
     private final DownloadRepository downloadRepository;
     private final FileStorageService fileStorageService;
 
-    public List<CourseResponse> getAllCourses(Integer userId) {
+    public List<CourseResponse> getAllCourses(String userId) {
         return courseRepository.findByIsApprovedTrueOrderByResource_CreatedAtDesc()
                 .stream()
                 .map(c -> toResponse(c, userId))
                 .collect(Collectors.toList());
     }
 
-    public CourseResponse getCourseById(Integer id, Integer userId) {
+    public CourseResponse getCourseById(Integer id, String userId) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cours non trouvé"));
-        // Incrémenter les vues
         course.setViewsCount(course.getViewsCount() + 1);
         courseRepository.save(course);
         return toResponse(course, userId);
@@ -39,14 +39,12 @@ public class CourseService {
 
     public CourseResponse uploadCourse(CourseRequest request,
                                        MultipartFile file,
-                                       Integer userId) {
+                                       String userId) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Catégorie non trouvée"));
 
-        // Sauvegarder le fichier
         String fileUrl = fileStorageService.saveFile(file);
 
-        // Créer la resource
         Resource resource = Resource.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
@@ -54,7 +52,6 @@ public class CourseService {
                 .build();
         resource = resourceRepository.save(resource);
 
-        // Créer le cours
         Course course = Course.builder()
                 .resource(resource)
                 .userId(userId)
@@ -77,24 +74,57 @@ public class CourseService {
         return toResponse(courseRepository.save(course), null);
     }
 
+    @Transactional
     public void deleteCourse(Integer id) {
+        downloadRepository.deleteByCourseId(id);
+        courseRepository.deleteById(id);
+    }
+
+    public CourseResponse updateCourse(Integer id, CourseRequest request, String userId) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cours non trouvé"));
+
+        if (!course.getUserId().equals(userId)) {
+            throw new RuntimeException("Non autorisé");
+        }
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Catégorie non trouvée"));
+
+        course.getResource().setTitle(request.getTitle());
+        course.getResource().setDescription(request.getDescription());
+        course.getResource().setCategory(category);
+        course.setIsApproved(false);
+
+        return toResponse(courseRepository.save(course), userId);
+    }
+
+    @Transactional
+    public void deleteMyCourse(Integer id, String userId) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cours non trouvé"));
+
+        if (!course.getUserId().equals(userId)) {
+            throw new RuntimeException("Non autorisé");
+        }
+
+        downloadRepository.deleteByCourseId(id);
         courseRepository.deleteById(id);
     }
 
     public List<CourseResponse> searchCourses(String keyword,
                                               Integer categoryId,
-                                              Integer userId) {
+                                              String userId) {
         return courseRepository.searchCourses(keyword, categoryId)
                 .stream()
                 .map(c -> toResponse(c, userId))
                 .collect(Collectors.toList());
     }
 
-    public String downloadCourse(Integer id, Integer userId) {
+    public String downloadCourse(Integer id, String userId) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cours non trouvé"));
 
-        // Enregistrer le téléchargement
         if (!downloadRepository.existsByUserIdAndCourseId(userId, id)) {
             Download download = Download.builder()
                     .course(course)
@@ -103,14 +133,13 @@ public class CourseService {
             downloadRepository.save(download);
         }
 
-        // Incrémenter le compteur
         course.setDownloadsCount(course.getDownloadsCount() + 1);
         courseRepository.save(course);
 
         return course.getFileUrl();
     }
 
-    public List<CourseResponse> getMyCourses(Integer userId) {
+    public List<CourseResponse> getMyCourses(String userId) {
         return courseRepository.findByUserId(userId)
                 .stream()
                 .map(c -> toResponse(c, userId))
@@ -125,13 +154,14 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
-    public CourseResponse toResponse(Course course, Integer userId) {
+    public CourseResponse toResponse(Course course, String userId) {
         boolean isFavorite = userId != null &&
                 favoriteRepository.existsByUserIdAndResourceId(
                         userId, course.getResource().getId());
 
         return CourseResponse.builder()
                 .id(course.getId())
+                .resourceId(course.getResource().getId())
                 .title(course.getResource().getTitle())
                 .description(course.getResource().getDescription())
                 .categoryId(course.getResource().getCategory().getId())

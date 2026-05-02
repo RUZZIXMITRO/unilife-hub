@@ -17,7 +17,7 @@ public class LikeController {
     public ResponseEntity<ApiResponse<?>> toggleLike(
             @PathVariable Integer resourceId,
             @RequestHeader("X-User-Id") String userId) {
-        boolean liked = likeService.toggleLike(Integer.parseInt(userId), resourceId);
+        boolean liked = likeService.toggleLike(userId, resourceId);
         return ResponseEntity.ok(ApiResponse.success(
                 liked ? "Liked" : "Unliked", liked));
     }
@@ -36,6 +36,6 @@ public class LikeController {
             @RequestHeader("X-User-Id") String userId) {
         return ResponseEntity.ok(ApiResponse.success(
                 "Statut like",
-                likeService.isLiked(Integer.parseInt(userId), resourceId)));
+                likeService.isLiked(userId, resourceId)));
     }
 }

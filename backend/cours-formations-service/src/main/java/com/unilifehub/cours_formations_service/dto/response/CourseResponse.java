@@ -1,5 +1,4 @@
 package com.unilifehub.cours_formations_service.dto.response;
-
 import lombok.*;
 import java.time.LocalDateTime;
 
@@ -9,11 +8,12 @@ import java.time.LocalDateTime;
 @Builder
 public class CourseResponse {
     private Integer id;
+    private Integer resourceId;  // ← AJOUTER
     private String title;
     private String description;
     private String categoryName;
     private Integer categoryId;
-    private Integer userId;
+    private String userId;
     private String fileUrl;
     private String fileName;
     private String fileType;

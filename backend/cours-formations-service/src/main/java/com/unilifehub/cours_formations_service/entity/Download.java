@@ -21,7 +21,7 @@ public class Download {
     private Course course;
 
     @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    private String userId;
 
     @Column(name = "downloaded_at")
     private LocalDateTime downloadedAt;

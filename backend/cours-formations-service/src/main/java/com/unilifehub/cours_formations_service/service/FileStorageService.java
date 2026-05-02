@@ -24,7 +24,8 @@ public class FileStorageService {
             Path filePath = uploadDir.resolve(fileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            return uploadPath + "/" + fileName;
+           // return uploadPath + "/" + fileName;
+            return "/uploads/" + fileName;  // remplace uploadPath + "/" + fileName
         } catch (IOException e) {
             throw new RuntimeException("Erreur lors de la sauvegarde du fichier", e);
         }

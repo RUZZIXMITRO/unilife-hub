@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ReportResponse {
     private Integer id;
-    private Integer userId;
+    private String userId;
     private Integer resourceId;
     private String reason;
     private Boolean isResolved;

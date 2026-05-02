@@ -20,29 +20,21 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    // Récupérer l'userId depuis le header injecté par l'API Gateway
-    private Integer getUserId(String userIdHeader) {
-        if (userIdHeader == null) throw new RuntimeException("Utilisateur non authentifié");
-        return Integer.parseInt(userIdHeader);
-    }
-
     @GetMapping
     public ResponseEntity<ApiResponse<List<CourseResponse>>> getAllCourses(
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
         return ResponseEntity.ok(ApiResponse.success(
                 "Cours récupérés",
-                courseService.getAllCourses(uid)));
+                courseService.getAllCourses(userId)));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CourseResponse>> getCourseById(
             @PathVariable Integer id,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
         return ResponseEntity.ok(ApiResponse.success(
                 "Cours récupéré",
-                courseService.getCourseById(id, uid)));
+                courseService.getCourseById(id, userId)));
     }
 
     @GetMapping("/search")
@@ -50,10 +42,9 @@ public class CourseController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Integer categoryId,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
         return ResponseEntity.ok(ApiResponse.success(
                 "Résultats de recherche",
-                courseService.searchCourses(keyword, categoryId, uid)));
+                courseService.searchCourses(keyword, categoryId, userId)));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -63,14 +54,14 @@ public class CourseController {
             @RequestHeader("X-User-Id") String userId) {
         return ResponseEntity.ok(ApiResponse.success(
                 "Cours uploadé avec succès",
-                courseService.uploadCourse(request, file, getUserId(userId))));
+                courseService.uploadCourse(request, file, userId)));
     }
 
     @GetMapping("/{id}/download")
     public ResponseEntity<ApiResponse<String>> downloadCourse(
             @PathVariable Integer id,
             @RequestHeader("X-User-Id") String userId) {
-        String fileUrl = courseService.downloadCourse(id, getUserId(userId));
+        String fileUrl = courseService.downloadCourse(id, userId);
         return ResponseEntity.ok(ApiResponse.success("URL de téléchargement", fileUrl));
     }
 
@@ -79,7 +70,25 @@ public class CourseController {
             @RequestHeader("X-User-Id") String userId) {
         return ResponseEntity.ok(ApiResponse.success(
                 "Mes cours",
-                courseService.getMyCourses(getUserId(userId))));
+                courseService.getMyCourses(userId)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<CourseResponse>> updateCourse(
+            @PathVariable Integer id,
+            @RequestBody CourseRequest request,
+            @RequestHeader("X-User-Id") String userId) {
+        return ResponseEntity.ok(ApiResponse.success(
+                "Cours mis à jour",
+                courseService.updateCourse(id, request, userId)));
+    }
+
+    @DeleteMapping("/{id}/my-course")
+    public ResponseEntity<ApiResponse<Void>> deleteMyCourse(
+            @PathVariable Integer id,
+            @RequestHeader("X-User-Id") String userId) {
+        courseService.deleteMyCourse(id, userId);
+        return ResponseEntity.ok(ApiResponse.success("Cours supprimé", null));
     }
 
     @PatchMapping("/{id}/approve")
