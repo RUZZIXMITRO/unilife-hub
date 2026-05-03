@@ -1,0 +1,197 @@
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="section-header">
+    <h3><i class="fa-solid fa-user-group"></i> Mes Relations</h3>
+    <div class="sh-right">
+      <button class="filter-btn"
+              [class.active]="activeTab === 'friends'"
+              (click)="setTab('friends')">
+        <i class="fa-solid fa-users"></i>
+        Amis ({{ friends.length }})
+      </button>
+      <button class="filter-btn"
+              [class.active]="activeTab === 'requests'"
+              (click)="setTab('requests')">
+        <i class="fa-solid fa-bell"></i>
+        Demandes
+        <span *ngIf="pendingRequests.length > 0" class="badge-count">
+          {{ pendingRequests.length }}
+        </span>
+      </button>
+      <button class="filter-btn"
+              [class.active]="activeTab === 'search'"
+              (click)="setTab('search')">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        Rechercher
+      </button>
+      <button class="filter-btn"
+              [class.active]="activeTab === 'blocked'"
+              (click)="setTab('blocked')">
+        <i class="fa-solid fa-ban"></i>
+        Bloqués
+        <span *ngIf="blockedUsers.length > 0" class="badge-count">
+          {{ blockedUsers.length }}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== LISTE AMIS ===== -->
+  <div *ngIf="activeTab === 'friends'">
+
+    <div *ngIf="friends.length === 0" class="perf-card empty-card">
+      <i class="fa-solid fa-user-plus"
+         style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+      <p>Vous n'avez pas encore d'amis.<br>
+         Utilisez la recherche pour vous connecter !</p>
+    </div>
+
+    <div *ngFor="let friend of friends" class="perf-card friend-card">
+      <div class="friend-avatar">
+        <!-- ✅ Initiale du vrai nom -->
+        {{ getInitial(getUserName(friend.requesterId)) }}
+      </div>
+      <div class="friend-info">
+        <!-- ✅ Vrai nom -->
+        <h4>{{ getUserName(friend.requesterId) }}</h4>
+        <span class="status online">
+          <i class="fa-solid fa-circle"></i> En ligne
+        </span>
+      </div>
+      <div class="friend-actions">
+        <button (click)="startConversation(friend.requesterId)"
+        class="filter-btn">
+  <i class="fa-solid fa-comment"></i> Message
+</button>
+        <button (click)="blockUser(friend.addresseeId)"
+                class="filter-btn block-btn"
+                title="Bloquer cet utilisateur">
+          <i class="fa-solid fa-ban"></i> Bloquer
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== DEMANDES REÇUES ===== -->
+  <div *ngIf="activeTab === 'requests'">
+
+    <div *ngIf="pendingRequests.length === 0" class="perf-card empty-card">
+      <i class="fa-regular fa-bell"
+         style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+      <p>Aucune demande d'ami en attente</p>
+    </div>
+
+    <div *ngFor="let request of pendingRequests" class="perf-card friend-card">
+      <div class="friend-avatar pending">
+        <!-- ✅ Initiale du vrai nom -->
+        {{ getInitial(getUserName(request.requesterId)) }}
+      </div>
+      <div class="friend-info">
+        <!-- ✅ Vrai nom -->
+        <h4>{{ getUserName(request.requesterId) }}</h4>
+        <span class="status pending-status">
+          <i class="fa-regular fa-clock"></i> Demande en attente
+        </span>
+      </div>
+      <div class="friend-actions">
+        <button (click)="acceptRequest(request.id)" class="btn-accept">
+          <i class="fa-solid fa-check"></i> Accepter
+        </button>
+        <button (click)="rejectRequest(request.id)" class="btn-reject">
+          <i class="fa-solid fa-xmark"></i> Refuser
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== RECHERCHE ===== -->
+  <div *ngIf="activeTab === 'search'">
+
+    <div class="perf-card search-card">
+      <h4><i class="fa-solid fa-magnifying-glass"></i> Rechercher des étudiants</h4>
+      <div class="search-row">
+        <input
+          [(ngModel)]="searchKeyword"
+          (keyup.enter)="searchUsers()"
+          placeholder="Nom, prénom ou email..."
+          class="search-input">
+        <button (click)="searchUsers()"
+                [disabled]="!searchKeyword.trim() || isSearching"
+                class="btn-create">
+          <i class="fa-solid fa-magnifying-glass" *ngIf="!isSearching"></i>
+          <i class="fa-solid fa-spinner fa-spin" *ngIf="isSearching"></i>
+          Rechercher
+        </button>
+      </div>
+    </div>
+
+    <!-- Résultats -->
+    <div *ngIf="searchDone">
+
+      <div *ngIf="searchResults.length === 0" class="perf-card empty-card">
+        <i class="fa-solid fa-user-slash"
+           style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+        <p>Aucun utilisateur trouvé pour "{{ searchKeyword }}"</p>
+      </div>
+
+      <!-- ✅ Utiliser credentialId pour sendFriendRequest -->
+      <div *ngFor="let user of searchResults" class="perf-card friend-card">
+        <div class="friend-avatar">
+          {{ getInitial(user.name) }}
+        </div>
+        <div class="friend-info">
+          <h4>{{ user.name }}</h4>
+          <span class="status">
+            <i class="fa-solid fa-university"></i>
+            {{ user.university || user.email }}
+          </span>
+        </div>
+        <div class="friend-actions">
+          <button *ngIf="!user.requestSent"
+                  (click)="sendFriendRequest(user.credentialId)"
+                  class="btn-accept">
+            <i class="fa-solid fa-user-plus"></i> Ajouter
+          </button>
+          <span *ngIf="user.requestSent" class="sent-label">
+            <i class="fa-solid fa-check"></i> Demande envoyée
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ===== UTILISATEURS BLOQUÉS ===== -->
+  <div *ngIf="activeTab === 'blocked'">
+
+    <div *ngIf="blockedUsers.length === 0" class="perf-card empty-card">
+      <i class="fa-solid fa-ban"
+         style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+      <p>Aucun utilisateur bloqué</p>
+    </div>
+
+    <div *ngFor="let blocked of blockedUsers" class="perf-card friend-card">
+      <div class="friend-avatar blocked-avatar">
+        {{ getInitial(getUserName(blocked.blockedId)) }}
+      </div>
+      <div class="friend-info">
+        <!-- ✅ Vrai nom si disponible -->
+        <h4>{{ getUserName(blocked.blockedId) }}</h4>
+        <span class="status" style="color:#ef4444">
+          <i class="fa-solid fa-ban"></i> Bloqué
+        </span>
+      </div>
+      <div class="friend-actions">
+        <button (click)="unblockUser(blocked.blockedId)" class="filter-btn">
+          <i class="fa-solid fa-unlock"></i> Débloquer
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

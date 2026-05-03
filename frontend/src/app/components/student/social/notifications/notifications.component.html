@@ -1,0 +1,61 @@
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="section-header">
+    <h3>
+      <i class="fa-solid fa-bell"></i>
+      Notifications
+      <span *ngIf="unreadCount > 0" class="unread-badge">{{ unreadCount }}</span>
+    </h3>
+    <div class="sh-right">
+      <button *ngIf="unreadCount > 0"
+              (click)="markAllAsRead()"
+              class="filter-btn">
+        <i class="fa-solid fa-check-double"></i> Tout lire
+      </button>
+      <button (click)="loadNotifications()" class="filter-btn">
+        <i class="fa-solid fa-rotate-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== LOADING ===== -->
+  <div *ngIf="isLoading" class="perf-card empty-card">
+    <i class="fa-solid fa-spinner fa-spin"></i> Chargement...
+  </div>
+
+  <!-- ===== NOTIFICATIONS ===== -->
+  <div *ngIf="!isLoading">
+
+    <div *ngIf="notifications.length === 0" class="perf-card empty-card">
+      <i class="fa-regular fa-bell-slash"
+         style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem">
+      </i>
+      <p>Aucune notification pour le moment</p>
+    </div>
+
+    <div *ngFor="let notif of notifications"
+         class="perf-card notif-card"
+         [class.unread]="!notif.read"
+         (click)="markAsRead(notif.id)">
+
+      <div class="notif-icon-wrap"
+           [style.background]="getIconBg(notif.type)">
+        <i [class]="getNotificationIcon(notif.type)"></i>
+      </div>
+
+      <div class="notif-content">
+        <p>{{ notif.message }}</p>
+        <span class="notif-time">
+          <i class="fa-regular fa-clock"></i>
+          {{ getTimeAgo(notif.createdAt) }}
+        </span>
+      </div>
+
+      <div *ngIf="!notif.read" class="unread-dot"></div>
+
+    </div>
+
+  </div>
+
+</div>

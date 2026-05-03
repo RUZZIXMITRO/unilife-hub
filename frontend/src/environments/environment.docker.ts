@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:7076',
-  authApiUrl: 'http://localhost:7076',
-  userApiUrl: 'http://localhost:7212'
+  apiUrl: 'https://localhost:7076',
+  authApiUrl: 'https://localhost:7076',
+  userApiUrl: 'https://localhost:7212',
+  socialApiUrl: 'http://localhost:5000'
 };

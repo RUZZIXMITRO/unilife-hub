@@ -1,0 +1,267 @@
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="section-header">
+    <h3><i class="fa-solid fa-rss"></i> Fil d'actualité</h3>
+    <div class="sh-right">
+      <button class="filter-btn active">Public</button>
+      <button class="filter-btn">Amis</button>
+    </div>
+  </div>
+
+  <!-- ===== CRÉER UN POST ===== -->
+  <div class="perf-card create-post-card">
+    <div class="create-post-header">
+      <div class="post-avatar-create">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <textarea
+        [(ngModel)]="newPostContent"
+        placeholder="Quoi de neuf ? Partagez avec la communauté..."
+        class="post-input"
+        rows="3">
+      </textarea>
+    </div>
+    <div class="create-post-footer">
+      <div class="footer-left">
+        <input #photoInput type="file" accept="image/*" style="display:none" (change)="onPhotoSelected($event)">
+        <button class="filter-btn" (click)="triggerPhotoPicker(photoInput)">
+          <i class="fa-solid fa-image"></i> Photo
+        </button>
+        <span *ngIf="selectedPhotoName" class="post-time">{{ selectedPhotoName }}</span>
+        <select [(ngModel)]="newPostVisibility" class="filter-btn visibility-select">
+          <option value="PUBLIC">🌍 Public</option>
+          <option value="FRIENDS">👥 Amis</option>
+        </select>
+      </div>
+      <button (click)="createPost()" class="btn-create"
+              [disabled]="!newPostContent.trim()">
+        <i class="fa-solid fa-paper-plane"></i> Publier
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== LOADING ===== -->
+  <div *ngIf="isLoading" class="perf-card loading-card">
+    <i class="fa-solid fa-spinner fa-spin"></i> Chargement...
+  </div>
+
+  <!-- ===== POSTS ===== -->
+  <div *ngIf="!isLoading">
+
+    <div *ngIf="posts.length === 0" class="perf-card empty-card">
+      <i class="fa-solid fa-newspaper"
+         style="font-size:2rem;color:#94a3b8;margin-bottom:0.75rem;display:block"></i>
+      <p>Aucun post pour le moment. Soyez le premier à publier !</p>
+    </div>
+
+    <div *ngFor="let post of posts" class="perf-card post-card">
+
+      <!-- En-tête -->
+      <div class="post-header">
+        <div class="post-avatar">
+          <span>{{ getInitial(post.userName) }}</span>
+        </div>
+        <div class="post-meta">
+          <h4>{{ post.userName || 'Étudiant' }}</h4>
+          <span class="post-time">
+            <i class="fa-regular fa-clock"></i>
+            {{ getTimeAgo(post.createdAt) }} ·
+            <i class="fa-solid fa-earth-africa"
+               *ngIf="post.visibility === 'PUBLIC'"></i>
+            <i class="fa-solid fa-user-group"
+               *ngIf="post.visibility === 'FRIENDS'"></i>
+          </span>
+        </div>
+        <!-- Bouton supprimer uniquement pour ses propres posts -->
+        <button *ngIf="post.userId === currentUserId"
+                (click)="deletePost(post.id)"
+                class="btn-delete"
+                title="Supprimer">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+
+      <!-- Contenu -->
+      <div class="post-content">
+        <p>{{ post.content }}</p>
+      </div>
+
+      <!-- Compteurs -->
+      <div class="post-counters">
+        <span *ngIf="post.likesCount > 0">
+          <i class="fa-solid fa-heart" style="color:#ef4444"></i>
+          {{ post.likesCount }}
+        </span>
+        <span *ngIf="post.commentsCount > 0">
+          {{ post.commentsCount }} commentaire(s)
+        </span>
+      </div>
+
+      <!-- ===== ACTIONS ===== -->
+      <div class="post-actions">
+
+        <!-- J'aime -->
+        <button (click)="toggleLike(post)"
+                [class.liked]="post.likedByMe"
+                class="action-btn">
+          <i class="fa-solid fa-heart" *ngIf="post.likedByMe"></i>
+          <i class="fa-regular fa-heart" *ngIf="!post.likedByMe"></i>
+          J'aime
+        </button>
+
+        <!-- Commenter -->
+        <button (click)="toggleComments(post.id)" class="action-btn">
+          <i class="fa-regular fa-comment"></i>
+          Commenter
+        </button>
+
+        <!-- Partager ✅ BRANCHÉ -->
+        <button (click)="sharePost(post.id)" class="action-btn">
+          <i class="fa-solid fa-share-nodes"></i>
+          Partager
+        </button>
+
+        <!-- Signaler ✅ NOUVEAU -->
+        <button (click)="openReportModal(post.id)"
+                class="action-btn report-btn"
+                title="Signaler ce post">
+          <i class="fa-solid fa-flag"></i>
+          Signaler
+        </button>
+
+      </div>
+
+      <!-- Commentaires -->
+<div *ngIf="showComments[post.id]" class="comments-section">
+
+  <!-- Input nouveau commentaire -->
+  <div class="comment-input-row">
+    <div class="post-avatar small">
+      <i class="fa-solid fa-user"></i>
+    </div>
+    <input
+      [(ngModel)]="newComment[post.id]"
+      (keyup.enter)="addComment(post.id)"
+      placeholder="Écrire un commentaire..."
+      class="comment-input">
+    <button (click)="addComment(post.id)"
+            [disabled]="!newComment[post.id] || !newComment[post.id].trim()"
+            class="btn-send-comment">
+      <i class="fa-solid fa-paper-plane"></i>
+    </button>
+  </div>
+
+  <!-- Loading commentaires -->
+  <div *ngIf="!loadedComments[post.id]" class="comments-loading">
+    <i class="fa-solid fa-spinner fa-spin"></i> Chargement...
+  </div>
+
+  <!-- Liste commentaires racine -->
+  <div *ngFor="let comment of getRootComments(post.id)" class="comment-thread">
+
+    <!-- Commentaire principal -->
+    <div class="comment-item">
+      <div class="comment-avatar">
+        <span>{{ comment.userName ? comment.userName[0].toUpperCase() : 'U' }}</span>
+      </div>
+      <div class="comment-body">
+        <div class="comment-bubble">
+          <span class="comment-author">{{ comment.userName || 'Étudiant' }}</span>
+          <p>{{ comment.content }}</p>
+        </div>
+        <div class="comment-meta">
+          <span class="comment-time">{{ getTimeAgo(comment.createdAt) }}</span>
+          <button (click)="setReply(post.id, comment.id)" class="btn-reply">
+            <i class="fa-solid fa-reply"></i> Répondre
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Réponses au commentaire -->
+    <div class="replies-list" *ngIf="getReplies(post.id, comment.id).length > 0">
+      <div *ngFor="let reply of getReplies(post.id, comment.id)" class="comment-item reply-item">
+        <div class="comment-avatar reply-avatar">
+          <span>{{ reply.userName ? reply.userName[0].toUpperCase() : 'U' }}</span>
+        </div>
+        <div class="comment-body">
+          <div class="comment-bubble reply-bubble">
+            <span class="comment-author">{{ reply.userName || 'Étudiant' }}</span>
+            <p>{{ reply.content }}</p>
+          </div>
+          <div class="comment-meta">
+            <span class="comment-time">{{ getTimeAgo(reply.createdAt) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input répondre -->
+    <div *ngIf="replyTo[post.id] === comment.id" class="reply-input-row">
+      <div class="comment-avatar reply-avatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <input
+        [(ngModel)]="replyContent[post.id]"
+        (keyup.enter)="sendReply(post.id)"
+        placeholder="Écrire une réponse..."
+        class="comment-input">
+      <button (click)="sendReply(post.id)"
+              [disabled]="!replyContent[post.id] || !replyContent[post.id].trim()"
+              class="btn-send-comment">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+      <button (click)="cancelReply(post.id)" class="btn-cancel-reply">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+  <!-- ===== MODAL SIGNALEMENT ✅ NOUVEAU ===== -->
+  <div *ngIf="showReportModal" class="modal-overlay" (click)="closeReportModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h4><i class="fa-solid fa-flag"></i> Signaler ce post</h4>
+        <button (click)="closeReportModal()" class="btn-close-modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Pourquoi signalez-vous ce contenu ?</p>
+        <div class="report-options">
+          <button *ngFor="let reason of ['Contenu inapproprié',
+                                         'Spam ou publicité',
+                                         'Harcèlement ou intimidation',
+                                         'Fausses informations',
+                                         'Autre']"
+                  (click)="reportReason = reason"
+                  [class.selected]="reportReason === reason"
+                  class="report-option-btn">
+            {{ reason }}
+          </button>
+        </div>
+        <textarea
+          [(ngModel)]="reportReason"
+          placeholder="Ou décrivez le problème..."
+          class="report-textarea"
+          rows="3">
+        </textarea>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeReportModal()" class="filter-btn">
+          Annuler
+        </button>
+        <button (click)="submitReport()"
+                [disabled]="!reportReason.trim()"
+                class="btn-create">
+          <i class="fa-solid fa-paper-plane"></i> Envoyer
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
