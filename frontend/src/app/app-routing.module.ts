@@ -72,6 +72,11 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: StudentDashboardComponent },
+      {
+  path: 'social',
+  loadChildren: () => import('./components/student/social/social.module')
+    .then(m => m.SocialModule)
+},
      
       // Marketplace Symfony
       { path: 'marketplace', component: MarketplaceListComponent },
