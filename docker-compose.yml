@@ -32,7 +32,7 @@ services:
       retries: 10
       start_period: 40s
 
-# ========== MYSQL ==========
+  # ========== MYSQL ==========
   mysql:
     image: mysql:8.0
     container_name: unilifehub-mysql
@@ -71,7 +71,7 @@ services:
       - unilifehub-network
     restart: unless-stopped
 
-      # ========== API GATEWAY ==========
+  # ========== API GATEWAY ==========
   apigateway:
     build:
       context: ./backend/ApiGateway
@@ -157,7 +157,6 @@ services:
       - unilifehub-network
     restart: unless-stopped
 
-
   # ========== AGENDA TODO SERVICE ==========
   agendaservice:
     build:
@@ -179,6 +178,31 @@ services:
     networks:
       - unilifehub-network
     restart: unless-stopped
+
+  # ========== COURS FORMATIONS SERVICE ==========
+  cours-formations-service:
+    build:
+      context: ./backend/cours-formations-service
+      dockerfile: Dockerfile
+    container_name: unilifehub-cours-formations
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;databaseName=courses_formations_db;encrypt=false;trustServerCertificate=true
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=UniLife@123!
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.microsoft.sqlserver.jdbc.SQLServerDriver
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.SQLServerDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    volumes:
+      - cours_uploads:/app/uploads
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+
 networks:
   unilifehub-network:
     driver: bridge
@@ -186,3 +210,4 @@ networks:
 volumes:
   sqldata:
   mysqldata:
+  cours_uploads:

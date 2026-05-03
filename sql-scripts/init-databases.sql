@@ -1,6 +1,5 @@
 -- ========================================
 -- Docker Init Script for UniLife Hub
--- Bases de données : authentication1_db + user_service_db
 -- ========================================
 
 WAITFOR DELAY '00:00:15';
@@ -160,8 +159,23 @@ BEGIN
     );
 END
 GO
+
+-- ==================== SOCIAL DB ====================
+USE master;
+GO
+
 IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'SocialDb')
 BEGIN
     CREATE DATABASE SocialDb;
+END
+GO
+
+-- ==================== COURSES FORMATIONS DB ====================
+USE master;
+GO
+
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'courses_formations_db')
+BEGIN
+    CREATE DATABASE courses_formations_db;
 END
 GO

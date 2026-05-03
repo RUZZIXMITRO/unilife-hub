@@ -5,9 +5,9 @@ spring:
   application:
     name: cours-formations-service
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=courses_formations_db;encrypt=false;trustServerCertificate=true
+    url: jdbc:sqlserver://sqlserver:1433;databaseName=courses_formations_db;encrypt=false;trustServerCertificate=true
     username: sa
-    password: Abdsamad123!
+    password: UniLife@123!
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     hibernate:
