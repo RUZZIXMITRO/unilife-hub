@@ -1,0 +1,33 @@
+<div class="notifs-page">
+  <div class="page-header">
+    <div>
+      <h1><i class="fa-regular fa-bell"></i> Notifications</h1>
+      <p class="subtitle">{{ unreadCount > 0 ? unreadCount + ' non lue(s)' : 'Tout est a jour' }}</p>
+    </div>
+    <button class="btn-secondary" (click)="markAllAsRead()" *ngIf="unreadCount > 0">
+      Tout marquer comme lu
+    </button>
+  </div>
+
+  <div class="tabs">
+    <button [class.active]="filter === 'all'" (click)="filter = 'all'">Toutes ({{ notifications.length }})</button>
+    <button [class.active]="filter === 'unread'" (click)="filter = 'unread'">Non lues ({{ unreadCount }})</button>
+  </div>
+
+  <div *ngIf="loading" class="empty">Chargement...</div>
+  <div *ngIf="!loading && filteredNotifications.length === 0" class="empty">Aucune notification</div>
+
+  <div class="notifs-list" *ngIf="filteredNotifications.length > 0">
+    <div *ngFor="let n of filteredNotifications" class="notif-row" [class.unread]="!n.isRead" (click)="markAsRead(n)">
+      <div class="icon">{{ getIcon(n.type) }}</div>
+      <div class="content">
+        <div class="top">
+          <strong>{{ n.title }}</strong>
+          <small>{{ timeAgo(n.createdAt) }}</small>
+        </div>
+        <p>{{ n.message }}</p>
+      </div>
+      <button class="del" (click)="$event.stopPropagation(); deleteNotif(n)"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+</div>

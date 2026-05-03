@@ -1,0 +1,32 @@
+<div class="agenda-layout">
+
+  <!-- ===== BARRE D ONGLETS ===== -->
+  <div class="tabs-bar">
+    <a [routerLink]="'/student/agenda'"
+       class="tab-item"
+       [class.active]="router.url === '/student/agenda'">
+      <i class="fa-regular fa-calendar tab-icon"></i>
+      <span class="tab-label">Agenda</span>
+    </a>
+
+    <a [routerLink]="'/student/agenda/todos'"
+       class="tab-item"
+       [class.active]="isActive('/student/agenda/todos')">
+      <i class="fa-regular fa-circle-check tab-icon"></i>
+      <span class="tab-label">Mes Taches</span>
+    </a>
+
+    <a [routerLink]="'/student/agenda/notifications'"
+       class="tab-item"
+       [class.active]="isActive('/student/agenda/notifications')">
+      <i class="fa-regular fa-bell tab-icon"></i>
+      <span class="tab-label">Notifications</span>
+    </a>
+  </div>
+
+  <!-- ===== CONTENU DE LA PAGE ACTIVE ===== -->
+  <div class="page-content">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

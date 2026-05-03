@@ -1,0 +1,51 @@
+version: "3.8"
+
+# ===========================================================
+# AgendaTodoService - Stack independante
+# Lance UNIQUEMENT le microservice Agenda + sa BDD
+# Pour le tester en isolation, utiliser :
+#   docker-compose -f docker-compose.agenda.yml up -d
+# ===========================================================
+
+services:
+  agendaservice:
+    image: agendaservice
+    build:
+      context: ./services/agenda-todo
+      dockerfile: Dockerfile
+    container_name: unilife-agenda-todo
+    ports:
+      - "5254:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=agenda-db,1433;Database=agenda_todo_db;User=sa;Password=YourStrong@Pass123;TrustServerCertificate=True;
+      - Jwt__Key=SuperSecretKeyForJWTAuthentication2024VeryLongAndComplexKey!@#$$%^&*()
+      - Jwt__Issuer=UniLifeHub
+      - Jwt__Audience=UniLifeHubUsers
+    depends_on:
+      - agenda-db
+    networks:
+      - agenda-network
+    restart: unless-stopped
+
+  agenda-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: unilife-agenda-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong@Pass123
+    ports:
+      - "1434:1433"
+    volumes:
+      - agenda-data:/var/opt/mssql
+    networks:
+      - agenda-network
+    restart: unless-stopped
+
+volumes:
+  agenda-data:
+
+networks:
+  agenda-network:
+    driver: bridge
