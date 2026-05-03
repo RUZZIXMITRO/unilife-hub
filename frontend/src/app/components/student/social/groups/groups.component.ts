@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SocialService, Group, GroupMember, GroupPost } from '../../../../services/social.service';
 import { AuthService } from '../../../../services/auth.service'; 
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
@@ -19,6 +20,7 @@ export class GroupsComponent implements OnInit {
   pendingMembers: GroupMember[] = [];
   groupPosts: GroupPost[] = [];
   activeTab: 'posts' | 'members' | 'pending' = 'posts';
+  joiningGroupIds = new Set<number>();
 
   currentUserId: string = '';
 
@@ -32,7 +34,8 @@ export class GroupsComponent implements OnInit {
   constructor(private socialService: SocialService , private authService: AuthService) {}
 
   ngOnInit(): void {
-  this.currentUserId = this.authService.getCurrentUserId() || '';
+  this.currentUserId =
+  this.authService.getCurrentUser()?.id || this.authService.getUserId() || '';
   this.loadGroups();
 }
 
@@ -71,14 +74,37 @@ export class GroupsComponent implements OnInit {
   }
 
   joinGroup(groupId: number): void {
+    if (this.joiningGroupIds.has(groupId)) return;
+    this.joiningGroupIds.add(groupId);
+
     this.socialService.joinGroup(groupId).subscribe({
       next: (res) => {
         if (res.success) {
           const index = this.groups.findIndex(g => g.id === groupId);
           if (index !== -1) this.groups[index] = res.data;
         }
+        this.joiningGroupIds.delete(groupId);
       },
-      error: () => alert('Erreur lors de la demande')
+      error: (error: HttpErrorResponse) => {
+        this.joiningGroupIds.delete(groupId);
+        const apiMessage = error?.error?.message || error?.error?.data?.message || '';
+        const normalized = String(apiMessage).toLowerCase();
+
+        // Si le backend renvoie "déjà membre", on synchronise l'UI au lieu d'afficher un faux échec bloquant.
+        if (normalized.includes('déjà')) {
+          const index = this.groups.findIndex(g => g.id === groupId);
+          if (index !== -1) {
+            this.groups[index] = {
+              ...this.groups[index],
+              isMember: true
+            };
+          }
+          alert(apiMessage || 'Vous êtes déjà membre de ce groupe.');
+          return;
+        }
+
+        alert(apiMessage || 'Erreur lors de la demande');
+      }
     });
   }
 

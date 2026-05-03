@@ -24,9 +24,11 @@
     </div>
     <div class="create-post-footer">
       <div class="footer-left">
-        <button class="filter-btn">
+        <input #photoInput type="file" accept="image/*" style="display:none" (change)="onPhotoSelected($event)">
+        <button class="filter-btn" (click)="triggerPhotoPicker(photoInput)">
           <i class="fa-solid fa-image"></i> Photo
         </button>
+        <span *ngIf="selectedPhotoName" class="post-time">{{ selectedPhotoName }}</span>
         <select [(ngModel)]="newPostVisibility" class="filter-btn visibility-select">
           <option value="PUBLIC">🌍 Public</option>
           <option value="FRIENDS">👥 Amis</option>

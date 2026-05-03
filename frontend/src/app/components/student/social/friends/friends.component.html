@@ -19,14 +19,12 @@
           {{ pendingRequests.length }}
         </span>
       </button>
-      <!-- Onglet Recherche ✅ NOUVEAU -->
       <button class="filter-btn"
               [class.active]="activeTab === 'search'"
               (click)="setTab('search')">
         <i class="fa-solid fa-magnifying-glass"></i>
         Rechercher
       </button>
-      <!-- Onglet Bloqués ✅ NOUVEAU -->
       <button class="filter-btn"
               [class.active]="activeTab === 'blocked'"
               (click)="setTab('blocked')">
@@ -51,19 +49,21 @@
 
     <div *ngFor="let friend of friends" class="perf-card friend-card">
       <div class="friend-avatar">
-        <i class="fa-solid fa-user"></i>
+        <!-- ✅ Initiale du vrai nom -->
+        {{ getInitial(getUserName(friend.requesterId)) }}
       </div>
       <div class="friend-info">
-        <h4>Étudiant #{{ friend.requesterId }}</h4>
+        <!-- ✅ Vrai nom -->
+        <h4>{{ getUserName(friend.requesterId) }}</h4>
         <span class="status online">
           <i class="fa-solid fa-circle"></i> En ligne
         </span>
       </div>
       <div class="friend-actions">
-        <button class="filter-btn">
-          <i class="fa-solid fa-comment"></i> Message
-        </button>
-        <!-- Bouton Bloquer ✅ NOUVEAU -->
+        <button (click)="startConversation(friend.requesterId)"
+        class="filter-btn">
+  <i class="fa-solid fa-comment"></i> Message
+</button>
         <button (click)="blockUser(friend.addresseeId)"
                 class="filter-btn block-btn"
                 title="Bloquer cet utilisateur">
@@ -85,10 +85,12 @@
 
     <div *ngFor="let request of pendingRequests" class="perf-card friend-card">
       <div class="friend-avatar pending">
-        <i class="fa-solid fa-user"></i>
+        <!-- ✅ Initiale du vrai nom -->
+        {{ getInitial(getUserName(request.requesterId)) }}
       </div>
       <div class="friend-info">
-        <h4>Étudiant #{{ request.requesterId }}</h4>
+        <!-- ✅ Vrai nom -->
+        <h4>{{ getUserName(request.requesterId) }}</h4>
         <span class="status pending-status">
           <i class="fa-regular fa-clock"></i> Demande en attente
         </span>
@@ -105,7 +107,7 @@
 
   </div>
 
-  <!-- ===== RECHERCHE D'AMIS ✅ NOUVEAU ===== -->
+  <!-- ===== RECHERCHE ===== -->
   <div *ngIf="activeTab === 'search'">
 
     <div class="perf-card search-card">
@@ -119,10 +121,8 @@
         <button (click)="searchUsers()"
                 [disabled]="!searchKeyword.trim() || isSearching"
                 class="btn-create">
-          <i class="fa-solid fa-magnifying-glass"
-             *ngIf="!isSearching"></i>
-          <i class="fa-solid fa-spinner fa-spin"
-             *ngIf="isSearching"></i>
+          <i class="fa-solid fa-magnifying-glass" *ngIf="!isSearching"></i>
+          <i class="fa-solid fa-spinner fa-spin" *ngIf="isSearching"></i>
           Rechercher
         </button>
       </div>
@@ -132,20 +132,26 @@
     <div *ngIf="searchDone">
 
       <div *ngIf="searchResults.length === 0" class="perf-card empty-card">
+        <i class="fa-solid fa-user-slash"
+           style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
         <p>Aucun utilisateur trouvé pour "{{ searchKeyword }}"</p>
       </div>
 
+      <!-- ✅ Utiliser credentialId pour sendFriendRequest -->
       <div *ngFor="let user of searchResults" class="perf-card friend-card">
         <div class="friend-avatar">
-          <i class="fa-solid fa-user"></i>
+          {{ getInitial(user.name) }}
         </div>
         <div class="friend-info">
-          <h4>{{ user.name || user.username || 'Étudiant #' + user.id }}</h4>
-          <span class="status">{{ user.email }}</span>
+          <h4>{{ user.name }}</h4>
+          <span class="status">
+            <i class="fa-solid fa-university"></i>
+            {{ user.university || user.email }}
+          </span>
         </div>
         <div class="friend-actions">
           <button *ngIf="!user.requestSent"
-                  (click)="sendFriendRequest(user.id)"
+                  (click)="sendFriendRequest(user.credentialId)"
                   class="btn-accept">
             <i class="fa-solid fa-user-plus"></i> Ajouter
           </button>
@@ -159,7 +165,7 @@
 
   </div>
 
-  <!-- ===== UTILISATEURS BLOQUÉS ✅ NOUVEAU ===== -->
+  <!-- ===== UTILISATEURS BLOQUÉS ===== -->
   <div *ngIf="activeTab === 'blocked'">
 
     <div *ngIf="blockedUsers.length === 0" class="perf-card empty-card">
@@ -170,17 +176,17 @@
 
     <div *ngFor="let blocked of blockedUsers" class="perf-card friend-card">
       <div class="friend-avatar blocked-avatar">
-        <i class="fa-solid fa-user"></i>
+        {{ getInitial(getUserName(blocked.blockedId)) }}
       </div>
       <div class="friend-info">
-        <h4>Utilisateur #{{ blocked.blockedId }}</h4>
+        <!-- ✅ Vrai nom si disponible -->
+        <h4>{{ getUserName(blocked.blockedId) }}</h4>
         <span class="status" style="color:#ef4444">
           <i class="fa-solid fa-ban"></i> Bloqué
         </span>
       </div>
       <div class="friend-actions">
-        <button (click)="unblockUser(blocked.blockedId)"
-                class="filter-btn">
+        <button (click)="unblockUser(blocked.blockedId)" class="filter-btn">
           <i class="fa-solid fa-unlock"></i> Débloquer
         </button>
       </div>

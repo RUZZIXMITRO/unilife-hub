@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
+import { BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { AuthService } from './auth.service';
 // ===== INTERFACES (userId: string partout — BUG #1 fix) =====
 export interface Post {
   id: number;
@@ -54,7 +56,7 @@ export interface Message {
   receiverId: string;    // ✅ string UUID
   conversationId: number;
   content: string;
-  isRead: boolean;
+  read: boolean;
   createdAt: string;
 }
 
@@ -65,7 +67,7 @@ export interface Notification {
   type: string;
   message: string;
   referenceId: number;
-  isRead: boolean;
+  read: boolean;
   createdAt: string;
 }
 
@@ -122,10 +124,10 @@ export interface GroupPost {
 })
 export class SocialService {
 
-  private apiUrl = 'http://localhost:5000/api/social';
+  private apiUrl = 'http://localhost:7084/api/social';
 
   // ✅ Phase 1.6 : Plus de getHeaders() — l'interceptor gère Authorization
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   // ===== POSTS =====
   getFeed(): Observable<ApiResponse<Post[]>> {
@@ -135,6 +137,7 @@ export class SocialService {
   getUserPosts(userId: string): Observable<ApiResponse<Post[]>> {
     return this.http.get<ApiResponse<Post[]>>(`${this.apiUrl}/posts/user/${userId}`);
   }
+  unreadCount$ = new BehaviorSubject<number>(0);
 
   createPost(content: string, visibility: string, userName: string = 'Utilisateur'): Observable<ApiResponse<Post>> {
   return this.http.post<ApiResponse<Post>>(
@@ -146,6 +149,7 @@ export class SocialService {
       userAvatar: null
     }
   );
+  
 }
 
   deletePost(postId: number): Observable<ApiResponse<void>> {
@@ -247,7 +251,17 @@ export class SocialService {
   }
 
   joinGroup(groupId: number): Observable<ApiResponse<Group>> {
-    return this.http.post<ApiResponse<Group>>(`${this.apiUrl}/groups/${groupId}/join`, {});
+    const token = this.authService.getToken();
+
+    const headers = token
+      ? new HttpHeaders({ Authorization: `Bearer ${token}` })
+      : undefined;
+
+    return this.http.post<ApiResponse<Group>>(
+      `${this.apiUrl}/groups/${groupId}/join`,
+      {},
+      headers ? { headers } : {}
+    );
   }
 
   leaveGroup(groupId: number): Observable<ApiResponse<void>> {
@@ -315,8 +329,15 @@ export class SocialService {
   }
 
   getUnreadCount(): Observable<ApiResponse<number>> {
-    return this.http.get<ApiResponse<number>>(`${this.apiUrl}/notifications/unread-count`);
-  }
+  return this.http.get<ApiResponse<number>>(
+    `${this.apiUrl}/notifications/unread-count`
+  ).pipe(
+    tap((res: any) => {
+      if (res.success) this.unreadCount$.next(res.data);
+    })
+  );
+}
+
 
   markNotificationAsRead(id: number): Observable<ApiResponse<void>> {
     return this.http.put<ApiResponse<void>>(`${this.apiUrl}/notifications/${id}/read`, {});

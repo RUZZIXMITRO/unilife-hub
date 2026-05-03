@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SocialService, Friendship, BlockList } from '../../../../services/social.service';
-
+import { UserService } from '../../../../services/user.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-friends',
   templateUrl: './friends.component.html',
@@ -15,13 +17,24 @@ export class FriendsComponent implements OnInit {
   activeTab = 'friends';
   isLoading = false;
 
-  // Recherche d'amis
+  // Recherche
   searchKeyword = '';
   searchResults: any[] = [];
   isSearching = false;
   searchDone = false;
 
-  constructor(private socialService: SocialService) {}
+  // ✅ Cache noms
+  private userNameCache: { [credentialId: string]: string } = {};
+
+  // ✅ URL directe UserService (pas via Gateway car 401)
+  private userApiUrl = 'http://localhost:7212/api/Users';
+
+  constructor(
+    private socialService: SocialService,
+    private userService: UserService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadFriends();
@@ -35,14 +48,103 @@ export class FriendsComponent implements OnInit {
         if (res.success) {
           this.friends = res.data;
           this.filteredFriends = res.data;
+          this.enrichFriendsWithNames(res.data);
         }
       }
     });
   }
 
+  startConversation(credentialId: string): void {
+  this.socialService.sendMessage(credentialId, '👋').subscribe({
+    next: (res: any) => {
+      if (res.success) {
+        this.router.navigate(['/student/social/messages']);
+      }
+    },
+    error: () => {
+      // Naviguer quand même vers Messages
+      this.router.navigate(['/student/social/messages']);
+    }
+  });
+}
+
+  // ✅ Enrichir les amis avec leurs vrais noms
+  private enrichFriendsWithNames(friendships: Friendship[]): void {
+    // Collecter tous les credentialIds uniques
+    const uniqueIds = [...new Set(
+      friendships.flatMap(f => [f.requesterId, f.addresseeId])
+        .filter(id => id && !this.userNameCache[id])
+    )];
+
+    uniqueIds.forEach(credentialId => {
+      this.userService.getUserByCredentialId(credentialId).subscribe({
+        next: (res) => {
+          if (res.success && res.data?.name) {
+            this.userNameCache[credentialId] = res.data.name;
+          }
+        }
+      });
+    });
+  }
+
+  // ✅ Recherche via UserService direct (port 7212)
+  searchUsers(): void {
+    this.searchDone = true;
+    if (!this.searchKeyword.trim()) {
+      this.searchResults = [];
+      return;
+    }
+
+    this.isSearching = true;
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    this.http.get<any>(
+      `${this.userApiUrl}?keyword=${encodeURIComponent(this.searchKeyword)}`,
+      { headers }
+    ).subscribe({
+      next: (res) => {
+        if (res.success) {
+          // ✅ Exclure l'utilisateur connecté des résultats
+          const currentCredentialId = localStorage.getItem('user_id');
+          this.searchResults = res.data
+            .filter((u: any) => u.credentialId !== currentCredentialId)
+            .map((u: any) => ({
+              ...u,
+              requestSent: false
+            }));
+
+          // ✅ Mettre en cache les noms trouvés
+          res.data.forEach((u: any) => {
+            if (u.credentialId && u.name) {
+              this.userNameCache[u.credentialId] = u.name;
+            }
+          });
+        }
+        this.isSearching = false;
+      },
+      error: () => {
+        this.isSearching = false;
+        this.searchResults = [];
+      }
+    });
+  }
+
+  // ✅ Retourne le nom depuis le cache
+  getUserName(credentialId: string): string {
+    return this.userNameCache[credentialId] || 'Étudiant';
+  }
+
   loadPendingRequests(): void {
     this.socialService.getPendingRequests().subscribe({
-      next: (res: any) => { if (res.success) this.pendingRequests = res.data; }
+      next: (res: any) => {
+        if (res.success) {
+          this.pendingRequests = res.data;
+          this.enrichFriendsWithNames(res.data);
+        }
+      }
     });
   }
 
@@ -56,8 +158,7 @@ export class FriendsComponent implements OnInit {
     this.socialService.acceptFriendRequest(friendshipId).subscribe({
       next: (res: any) => {
         if (res.success) {
-          this.pendingRequests = this.pendingRequests
-            .filter(r => r.id !== friendshipId);
+          this.pendingRequests = this.pendingRequests.filter(r => r.id !== friendshipId);
           this.loadFriends();
         }
       }
@@ -68,46 +169,24 @@ export class FriendsComponent implements OnInit {
     this.socialService.rejectFriendRequest(friendshipId).subscribe({
       next: (res: any) => {
         if (res.success) {
-          this.pendingRequests = this.pendingRequests
-            .filter(r => r.id !== friendshipId);
+          this.pendingRequests = this.pendingRequests.filter(r => r.id !== friendshipId);
         }
       }
     });
   }
 
-  // ===== RECHERCHE (côté frontend sur la liste d'amis) =====
-  searchUsers(): void {
-  this.searchDone = true;
-  if (!this.searchKeyword.trim()) {
-    this.filteredFriends = this.friends;
-    this.searchResults = [];
-    return;
-  }
-  const keyword = this.searchKeyword.toLowerCase();
-  this.filteredFriends = this.friends.filter(f =>
-    f.requesterId.toLowerCase().includes(keyword) ||
-    f.addresseeId.toLowerCase().includes(keyword)
-  );
-  this.searchResults = this.filteredFriends;
-}
-
-
-  sendFriendRequest(userId: string): void {
-  this.socialService.sendFriendRequest(userId).subscribe({
+  sendFriendRequest(credentialId: string): void {
+    this.socialService.sendFriendRequest(credentialId).subscribe({
       next: (res: any) => {
         if (res.success) {
-          alert('Demande d\'ami envoyée !');
-          const user = this.searchResults.find((u: any) => u.id === userId);
+          const user = this.searchResults.find((u: any) => u.credentialId === credentialId);
           if (user) user.requestSent = true;
         }
       },
-      error: () => {
-        alert('Demande déjà envoyée ou erreur.');
-      }
+      error: () => alert('Demande déjà envoyée ou erreur.')
     });
   }
 
-  // ===== BLOQUER =====
   blockUser(userId: string): void {
     if (!confirm('Bloquer cet utilisateur ?')) return;
     this.socialService.blockUser(userId).subscribe({
@@ -136,9 +215,12 @@ export class FriendsComponent implements OnInit {
     this.activeTab = tab;
     if (tab === 'search') {
       this.searchResults = [];
-      this.filteredFriends = this.friends;
       this.searchKeyword = '';
       this.searchDone = false;
     }
+  }
+
+  getInitial(name: string): string {
+    return name ? name[0].toUpperCase() : 'É';
   }
 }

@@ -40,8 +40,8 @@
         <div class="conv-info">
           <div class="conv-top">
             <span class="conv-name">
-              Étudiant #{{ getInterlocutorId(conv) }}
-            </span>
+  {{ getConvName(conv) }}
+</span>
             <span class="conv-time" *ngIf="conv.lastMessageAt">
               {{ getTimeAgo(conv.lastMessageAt) }}
             </span>
@@ -77,7 +77,7 @@
             <span class="online-dot-header"></span>
           </div>
           <div class="chat-user-info">
-            <h4>Étudiant #{{ selectedUserId }}</h4>
+            <h4>{{ selectedConversation ? getConvName(selectedConversation) : '' }}</h4>
             <span class="online-status">
               <i class="fa-solid fa-circle"></i> En ligne
             </span>
@@ -112,7 +112,7 @@
               {{ getTimeAgo(message.createdAt) }}
               <i class="fa-solid fa-check-double"
                  *ngIf="isMyMessage(message)"
-                 [style.color]="message.isRead ? '#2563eb' : '#94a3b8'">
+                 [style.color]="message.read ? '#2563eb' : '#94a3b8'">
               </i>
             </span>
           </div>

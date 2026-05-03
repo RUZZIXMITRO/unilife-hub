@@ -1,6 +1,10 @@
 import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 import { SocialService, Message, Conversation } from '../../../../services/social.service';
 import { AuthService } from '../../../../services/auth.service';
+import { UserService } from '../../../../services/user.service';
+import { forkJoin, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.component.html',
@@ -20,13 +24,20 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   currentUserId: string = '';
   shouldScroll = false;
 
-  constructor(private socialService: SocialService,
-  private authService: AuthService) {}
+  // ✅ Cache des noms
+  private userNameCache: { [userId: string]: string } = {};
+
+  constructor(
+    private socialService: SocialService,
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
-  this.currentUserId = this.authService.getCurrentUserId() || '';
-  this.loadConversations();
-}
+    this.currentUserId =
+    this.authService.getCurrentUser()?.id || this.authService.getUserId() || '';
+    this.loadConversations();
+  }
 
   ngAfterViewChecked(): void {
     if (this.shouldScroll) {
@@ -40,22 +51,51 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
     this.isLoadingConversations = true;
     this.socialService.getConversations().subscribe({
       next: (res) => {
-        if (res.success) this.conversations = res.data;
+        if (res.success) {
+          this.conversations = res.data;
+          this.enrichConversationsWithUserNames(this.conversations);
+        }
         this.isLoadingConversations = false;
       },
       error: () => { this.isLoadingConversations = false; }
     });
   }
 
-  // ===== SÉLECTIONNER UNE CONVERSATION =====
-  selectConversation(conv: Conversation): void {
-  this.selectedConversation = conv;
-  this.selectedUserId = conv.user1Id === this.currentUserId
-    ? conv.user2Id
-    : conv.user1Id;
-  this.loadMessages(this.selectedUserId);
+  // ✅ Enrichir les conversations avec les vrais noms
+  private enrichConversationsWithUserNames(conversations: Conversation[]): void {
+  const uniqueUserIds = [...new Set(
+    conversations
+      .map(c => this.getInterlocutorId(c))
+      .filter(id => id && !this.userNameCache[id])
+  )];
+
+  if (uniqueUserIds.length === 0) return;
+
+  const requests = uniqueUserIds.map(userId =>
+    this.userService.getUserByCredentialId(userId).pipe(
+      map(res => ({
+        userId,
+        name: res.success && res.data?.name ? res.data.name : this.shortId(userId)
+      })),
+      catchError(() => of({ userId, name: this.shortId(userId) }))
+    )
+  );
+
+  forkJoin(requests).subscribe(results => {
+    results.forEach(r => {
+      this.userNameCache[r.userId] = r.name;
+    });
+    // ✅ Forcer la mise à jour en recréant le tableau
+    this.conversations = [...this.conversations];
+  });
 }
 
+  // ===== SÉLECTIONNER UNE CONVERSATION =====
+  selectConversation(conv: Conversation): void {
+    this.selectedConversation = conv;
+    this.selectedUserId = this.getInterlocutorId(conv);
+    this.loadMessages(this.selectedUserId);
+  }
 
   loadMessages(userId: string): void {
     this.isLoading = true;
@@ -74,18 +114,21 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
 
   // ===== ENVOYER UN MESSAGE =====
   sendMessage(): void {
-  if (!this.newMessage.trim() || !this.selectedUserId) return;
-  const content = this.newMessage;
-  this.newMessage = '';
-  this.socialService.sendMessage(this.selectedUserId, content).subscribe({
+    if (!this.newMessage.trim() || !this.selectedUserId) return;
+    const content = this.newMessage;
+    this.newMessage = '';
+
+    this.socialService.sendMessage(this.selectedUserId, content).subscribe({
       next: (res) => {
         if (res.success) {
           this.messages.push(res.data);
           this.shouldScroll = true;
-          // Mettre à jour le lastMessage dans la sidebar
           if (this.selectedConversation) {
             this.selectedConversation.lastMessage = content;
+            this.selectedConversation.lastMessageAt = new Date().toISOString();
           }
+          // ✅ Recharger les conversations pour mettre à jour la sidebar
+          this.loadConversations();
         }
       }
     });
@@ -93,17 +136,28 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
 
   // ===== UTILITAIRES =====
   isMyMessage(message: Message): boolean {
-  return message.senderId === this.currentUserId;  // ← comparaison string === string ✅
-}
+    return message.senderId === this.currentUserId;
+  }
 
-  getInterlocutorId(conv: Conversation): string {   // ← retourne string
-  return conv.user1Id === this.currentUserId ? conv.user2Id : conv.user1Id;
-}
+  getInterlocutorId(conv: Conversation): string {
+    return conv.user1Id === this.currentUserId ? conv.user2Id : conv.user1Id;
+  }
 
+  // ✅ Retourne le vrai nom depuis le cache
+  getConvName(conv: Conversation): string {
+    const interlocutorId = this.getInterlocutorId(conv);
+    return this.userNameCache[interlocutorId] || this.shortId(interlocutorId);
+  }
+
+  // ✅ Initiale depuis le vrai nom
   getConvInitial(conv: Conversation): string {
-  const id = this.getInterlocutorId(conv);
-  return id.charAt(0).toUpperCase();  // UUID : prendre 1er char
-}
+    return this.getConvName(conv).charAt(0).toUpperCase();
+  }
+
+  // ✅ Fallback : 8 premiers chars de l'UUID
+  private shortId(userId: string): string {
+    return userId ? userId.substring(0, 8) + '...' : 'Étudiant';
+  }
 
   scrollToBottom(): void {
     try {

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SocialService, Post } from '../../../../services/social.service';
 import { AuthService } from '../../../../services/auth.service';
+import { UserService } from '../../../../services/user.service';
+import { forkJoin, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-feed',
@@ -22,14 +25,20 @@ export class FeedComponent implements OnInit {
   reportPostId: number | null = null;
   reportReason = '';
   currentUserId: string = '';
+  selectedPhotoName = '';
+
+  // Cache des noms pour éviter les appels répétés
+  private userNameCache: { [userId: string]: string } = {};
 
   constructor(
     private socialService: SocialService,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getCurrentUserId() || '';
+    this.currentUserId =
+    this.authService.getCurrentUser()?.id || this.authService.getUserId() || '';
     this.loadFeed();
   }
 
@@ -37,59 +46,184 @@ export class FeedComponent implements OnInit {
     this.isLoading = true;
     this.socialService.getFeed().subscribe({
       next: (res) => {
-        if (res.success) this.posts = res.data;
+        if (res.success) {
+          this.posts = res.data;
+          this.enrichPostsWithUserNames(this.posts);
+        }
         this.isLoading = false;
       },
       error: () => { this.isLoading = false; }
     });
   }
 
-  createPost(): void {
-  if (!this.newPostContent.trim()) return;
+  // ✅ Enrichir les posts avec les vrais noms
+  private enrichPostsWithUserNames(posts: Post[]): void {
+    // Récupérer les userId uniques (pas encore en cache)
+    const uniqueUserIds = [...new Set(
+      posts
+        .map(p => p.userId)
+        .filter(id => id && !this.userNameCache[id])
+    )];
 
-  // ✅ email avant le @ comme userName
-  const currentUser = this.authService.getCurrentUser();
-  const userName = currentUser?.email?.split('@')[0] || 'Utilisateur';
-
-  this.socialService.createPost(
-    this.newPostContent,
-    this.newPostVisibility,
-    userName
-  ).subscribe({
-    next: (res) => {
-      if (res.success) {
-        this.posts.unshift(res.data);
-        this.newPostContent = '';
-      }
+    if (uniqueUserIds.length === 0) {
+      this.applyUserNames();
+      return;
     }
-  });
-}
 
-  // ... reste du fichier inchangé
-  toggleLike(post: Post): void {
-    this.socialService.toggleLike(post.id).subscribe({
+    // Appeler UserService pour chaque userId unique
+    const requests = uniqueUserIds.map(userId =>
+      this.userService.getUserByCredentialId(userId).pipe(
+        map(res => ({
+          userId,
+          name: res.success && res.data?.name
+            ? res.data.name
+            : this.fallbackName(userId)
+        })),
+        catchError(() => of({
+          userId,
+          name: this.fallbackName(userId)
+        }))
+      )
+    );
+
+    forkJoin(requests).subscribe(results => {
+      results.forEach(r => {
+        this.userNameCache[r.userId] = r.name;
+      });
+      this.applyUserNames();
+    });
+  }
+
+  // ✅ Appliquer les noms mis en cache sur les posts
+  private applyUserNames(): void {
+    this.posts = this.posts.map(post => ({
+      ...post,
+      userName: this.userNameCache[post.userId] || this.fallbackName(post.userId)
+    }));
+  }
+
+  // ✅ Fallback : email depuis localStorage ou initiales UUID
+  private fallbackName(userId: string): string {
+    // Si c'est l'utilisateur connecté, utiliser son email
+    if (userId === this.currentUserId) {
+      const user = this.authService.getCurrentUser();
+      return user?.email?.split('@')[0] || 'Étudiant';
+    }
+    return 'Étudiant';
+  }
+
+  createPost(): void {
+    if (!this.newPostContent.trim()) return;
+    this.socialService.createPost(
+      this.newPostContent,
+      this.newPostVisibility
+    ).subscribe({
       next: (res) => {
         if (res.success) {
-          const index = this.posts.findIndex(p => p.id === post.id);
-          if (index !== -1) this.posts[index] = res.data;
+          // Enrichir le nouveau post avant de l'ajouter
+          const newPost = {
+            ...res.data,
+            userName: this.userNameCache[res.data.userId]
+              || this.authService.getCurrentUser()?.email?.split('@')[0]
+              || 'Étudiant'
+          };
+          this.posts.unshift(newPost);
+          this.newPostContent = '';
         }
       }
     });
   }
 
-  toggleComments(postId: number): void {
-    this.showComments[postId] = !this.showComments[postId];
-    if (this.showComments[postId] && !this.loadedComments[postId]) {
-      this.loadComments(postId);
-    }
+  triggerPhotoPicker(fileInput: HTMLInputElement): void {
+    fileInput.click();
+  }
+
+  onPhotoSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files.length > 0 ? input.files[0] : null;
+    this.selectedPhotoName = file ? file.name : '';
+  }
+
+  toggleLike(post: Post): void {
+    this.socialService.toggleLike(post.id).subscribe({
+      next: (res) => {
+        if (res.success) {
+          const index = this.posts.findIndex(p => p.id === post.id);
+          if (index !== -1) {
+            // ✅ Garder le userName existant
+            this.posts[index] = {
+              ...res.data,
+              userName: this.posts[index].userName
+            };
+          }
+        }
+      }
+    });
   }
 
   loadComments(postId: number): void {
     this.socialService.getComments(postId).subscribe({
       next: (res) => {
-        if (res.success) this.loadedComments[postId] = res.data;
+        if (res.success) {
+          this.loadedComments[postId] = res.data;
+          // ✅ Enrichir les commentaires aussi
+          this.enrichCommentsWithUserNames(postId, res.data);
+        }
       }
     });
+  }
+
+  // ✅ Enrichir les commentaires avec les vrais noms
+  private enrichCommentsWithUserNames(postId: number, comments: any[]): void {
+    const uniqueUserIds = [...new Set(
+      comments
+        .map((c: any) => c.userId)
+        .filter((id: string) => id && !this.userNameCache[id])
+    )];
+
+    if (uniqueUserIds.length === 0) {
+      this.applyCommentUserNames(postId);
+      return;
+    }
+
+    const requests = uniqueUserIds.map(userId =>
+      this.userService.getUserByCredentialId(userId).pipe(
+        map(res => ({
+          userId,
+          name: res.success && res.data?.name
+            ? res.data.name
+            : this.fallbackName(userId)
+        })),
+        catchError(() => of({
+          userId,
+          name: this.fallbackName(userId)
+        }))
+      )
+    );
+
+    forkJoin(requests).subscribe(results => {
+      results.forEach(r => {
+        this.userNameCache[r.userId] = r.name;
+      });
+      this.applyCommentUserNames(postId);
+    });
+  }
+
+  private applyCommentUserNames(postId: number): void {
+    if (this.loadedComments[postId]) {
+      this.loadedComments[postId] = this.loadedComments[postId].map(c => ({
+        ...c,
+        userName: this.userNameCache[c.userId] || this.fallbackName(c.userId)
+      }));
+    }
+  }
+
+  // ===== RESTE INCHANGÉ =====
+  toggleComments(postId: number): void {
+    this.showComments[postId] = !this.showComments[postId];
+    if (this.showComments[postId] && !this.loadedComments[postId]) {
+      this.loadComments(postId);
+    }
   }
 
   addComment(postId: number): void {
@@ -100,7 +234,14 @@ export class FeedComponent implements OnInit {
         if (res.success) {
           this.newComment[postId] = '';
           if (!this.loadedComments[postId]) this.loadedComments[postId] = [];
-          this.loadedComments[postId].push(res.data);
+          // ✅ Ajouter le userName au nouveau commentaire
+          const newComment = {
+            ...res.data,
+            userName: this.userNameCache[res.data.userId]
+              || this.authService.getCurrentUser()?.email?.split('@')[0]
+              || 'Étudiant'
+          };
+          this.loadedComments[postId].push(newComment);
           const post = this.posts.find(p => p.id === postId);
           if (post) post.commentsCount++;
         }
