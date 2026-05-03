@@ -41,6 +41,10 @@ import { MyFavoritesComponent as EcommerceMyFavoritesComponent } from './compone
 import { MyReviewsComponent } from './components/student/ecommerce/my-reviews/my-reviews.component';
 import { AiAssistantComponent } from './components/student/ecommerce/ai-assistant/ai-assistant.component';
 import { AssistantComponent } from './components/student/assistant/assistant.component';
+import { AgendaLayoutComponent } from './components/student/agenda/agenda-layout/agenda-layout.component';
+import { AgendaPageComponent } from './components/student/agenda/agenda-page/agenda-page.component';
+import { TodosPageComponent } from './components/student/agenda/todos-page/todos-page.component';
+import { NotificationsPageComponent } from './components/student/agenda/notifications-page/notifications-page.component';
 
 // ✅ E-COMMERCE ADMIN
 import { AdminProductsComponent } from './components/admin/ecommerce/admin-products/admin-products.component';
@@ -82,7 +86,15 @@ const routes: Routes = [
 },
      
       // Marketplace Symfony
-      { path: 'marketplace', component: MarketplaceListComponent },
+{
+  path: 'agenda',
+  component: AgendaLayoutComponent,
+  children: [
+    { path: '', component: AgendaPageComponent },
+    { path: 'todos', component: TodosPageComponent },
+    { path: 'notifications', component: NotificationsPageComponent }
+  ]
+},      { path: 'marketplace', component: MarketplaceListComponent },
       { path: 'marketplace/publish', component: MarketplacePublishComponent },
       { path: 'marketplace/my-listings', component: MyListingsComponent },
       { path: 'marketplace/my-favorites', component: MyFavoritesComponent },

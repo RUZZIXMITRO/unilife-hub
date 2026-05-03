@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TodoService } from '../../services/todo.service';
-import { TodoDto, CreateTodoDto, PRIORITIES } from '../../models/todo.model';
+import { TodoService } from '../../../../services/agenda/todo.service';
+import { TodoDto, CreateTodoDto, PRIORITIES } from '../../../../models/agenda/todo.model';
 
 @Component({
   selector: 'app-todos-page',

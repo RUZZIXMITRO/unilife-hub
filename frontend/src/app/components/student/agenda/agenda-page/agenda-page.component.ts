@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { EventService } from '../../services/event.service';
-import { EventDto, CreateEventDto, EVENT_TYPES } from '../../models/event.model';
+import { EventService } from '../../../../services/agenda/event.service';
+import { EventDto, CreateEventDto, EVENT_TYPES } from '../../../../models/agenda/event.model';
 
 interface CalendarDay {
   date: Date;

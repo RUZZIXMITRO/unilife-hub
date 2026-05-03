@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { AGENDA_API_URL } from '../agenda.config';
-import { NotificationDto } from '../models/notification.model';
+import { AGENDA_API_URL } from './agenda.config';
+import { NotificationDto } from '../../models/agenda/notification.model';
 
 @Injectable()
 export class AgendaNotificationService {

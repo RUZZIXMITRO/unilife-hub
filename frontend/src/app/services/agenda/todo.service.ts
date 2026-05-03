@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AGENDA_API_URL } from '../agenda.config';
-import { TodoDto, CreateTodoDto } from '../models/todo.model';
+import { AGENDA_API_URL } from './agenda.config';
+import { TodoDto, CreateTodoDto } from '../../models/agenda/todo.model';
 
 @Injectable()
 export class TodoService {

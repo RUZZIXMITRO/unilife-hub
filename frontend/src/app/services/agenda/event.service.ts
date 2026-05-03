@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AGENDA_API_URL } from '../agenda.config';
-import { EventDto, CreateEventDto } from '../models/event.model';
+import { AGENDA_API_URL } from './agenda.config';
+import { EventDto, CreateEventDto } from '../../models/agenda/event.model';
 
 @Injectable()
 export class EventService {
