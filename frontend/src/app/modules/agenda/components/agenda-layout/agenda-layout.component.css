@@ -1,0 +1,83 @@
+:host { display: block; }
+
+.agenda-layout {
+  font-family: 'Poppins', sans-serif;
+}
+
+.tabs-bar {
+  display: flex;
+  gap: 0.25rem;
+  background: white;
+  padding: 0.5rem 2rem;
+  border-bottom: 1px solid #dde3ef;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 1px 4px rgba(11, 22, 48, 0.06);
+}
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.2rem;
+  color: #7a90b0;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.tab-item:hover {
+  background: #f3f6fb;
+  color: #243d70;
+}
+
+.tab-item.active {
+  color: #1a2d55;
+  background: #eef4fb;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 1.2rem;
+  right: 1.2rem;
+  height: 3px;
+  background: #1a2d55;
+  border-radius: 3px 3px 0 0;
+}
+
+.tab-icon {
+  font-size: 1.05rem;
+}
+
+.tab-label {
+  font-weight: 600;
+}
+
+.page-content {
+  background: #f3f6fb;
+  min-height: calc(100vh - 130px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tabs-bar {
+    padding: 0.5rem 1rem;
+    overflow-x: auto;
+  }
+
+  .tab-item {
+    padding: 0.6rem 0.9rem;
+    white-space: nowrap;
+  }
+
+  .tab-label {
+    display: none;
+  }
+}

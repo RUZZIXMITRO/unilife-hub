@@ -1,0 +1,11 @@
+**/bin
+**/obj
+**/.vs
+**/node_modules
+**/.git
+**/.vscode
+**/logs
+**/*.user
+**/Dockerfile*
+**/.dockerignore
+**/docker-compose*

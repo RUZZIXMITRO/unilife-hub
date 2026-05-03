@@ -1,0 +1,102 @@
+:host { display: block; }
+.notifs-page { padding: 1.5rem 2rem; font-family: 'Poppins', sans-serif; }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #dde3ef;
+}
+
+.page-header h1 { font-size: 1.5rem; color: #0d1a30; }
+.subtitle { color: #7a90b0; font-size: 0.85rem; }
+
+.btn-secondary {
+  background: #eef4fb;
+  color: #243d70;
+  border: 1px solid #dce8f5;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+
+.tabs button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #dde3ef;
+  background: white;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.tabs button.active { background: #1a2d55; color: white; border-color: #1a2d55; }
+
+.empty {
+  padding: 3rem;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  color: #7a90b0;
+}
+
+.notifs-list {
+  background: white;
+  border: 1px solid #dde3ef;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.notif-row {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1rem;
+  border-bottom: 1px solid #dde3ef;
+  cursor: pointer;
+}
+
+.notif-row:last-child { border-bottom: none; }
+.notif-row:hover { background: #f8f9fc; }
+.notif-row.unread { background: #eef4fb; }
+
+.icon {
+  width: 40px; height: 40px;
+  background: #dce8f5;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.content { flex: 1; }
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.2rem;
+}
+
+.top strong { font-size: 0.875rem; color: #0d1a30; }
+.top small { font-size: 0.7rem; color: #a8bcd4; }
+
+.content p { font-size: 0.8rem; color: #3a4d6a; line-height: 1.4; margin: 0; }
+
+.del {
+  width: 28px; height: 28px;
+  border: 1px solid #dde3ef;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.del:hover { background: #fde8ec; border-color: #e03150; color: #e03150; }

@@ -157,6 +157,28 @@ services:
       - unilifehub-network
     restart: unless-stopped
 
+
+  # ========== AGENDA TODO SERVICE ==========
+  agendaservice:
+    build:
+      context: ./services/agenda-todo
+      dockerfile: Dockerfile
+    container_name: unilifehub-agenda-todo
+    ports:
+      - "5254:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=agenda_todo_db;User Id=sa;Password=UniLife@2024!Strong;TrustServerCertificate=True;Encrypt=False;
+      - Jwt__Key=SuperSecretKeyForJWTAuthentication2024VeryLongAndComplexKey!@#$%^&*()
+      - Jwt__Issuer=UniLifeHub
+      - Jwt__Audience=UniLifeHubUsers
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
 networks:
   unilifehub-network:
     driver: bridge
