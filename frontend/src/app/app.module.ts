@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 
@@ -52,14 +53,47 @@ import { HelpModalComponent } from './components/student/help-modal/help-modal.c
 import { StudentCoursComponent } from './components/student/cours/student-cours.component';
 
 // ========== COMPONENTS - INTERFACE ADMIN ==========
-import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.component';
-import { SettingsComponent } from './components/admin/settings/settings.component';
-import { HelpComponent } from './components/admin/help/help.component';
-import { PromoteAdminComponent } from './components/setup/promote-admin/promote-admin.component';
 import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
 import { AdminSidebarComponent } from './components/admin/layout/sidebar/sidebar.component';
 import { AdminTopbarComponent } from './components/admin/layout/topbar/topbar.component';
+import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { UsersManagementComponent } from './components/admin/users-management/users-management.component';
+import { SettingsComponent } from './components/admin/settings/settings.component';
+import { HelpComponent } from './components/admin/help/help.component';
+import { ProfileComponent } from './components/admin/pages/profile/profile.component';
 import { AdminCoursFormationsComponent } from './components/admin/cours-formations/cours-formations.component';
+import { AdminMarketplaceComponent } from './components/admin/marketplace/admin-marketplace/admin-marketplace.component';
+import { AdminReportsComponent } from './components/admin/marketplace/admin-reports/admin-reports.component';
+import { PromoteAdminComponent } from './components/setup/promote-admin/promote-admin.component';
+
+// ========== COMPONENTS - MARKETPLACE ==========
+import { MarketplaceListComponent } from './components/student/marketplace/marketplace-list/marketplace-list.component';
+import { MarketplaceDetailComponent } from './components/student/marketplace/marketplace-detail/marketplace-detail.component';
+import { MarketplacePublishComponent } from './components/student/marketplace/marketplace-publish/marketplace-publish.component';
+import { MyListingsComponent } from './components/student/marketplace/my-listings/my-listings.component';
+import { MyFavoritesComponent } from './components/student/marketplace/my-favorites/my-favorites.component';
+
+// ========== COMPONENTS - E-COMMERCE STUDENT ==========
+import { CatalogComponent } from './components/student/ecommerce/catalog/catalog.component';
+import { ProductDetailComponent } from './components/student/ecommerce/product-detail/product-detail.component';
+import { CartComponent } from './components/student/ecommerce/cart/cart.component';
+import { CheckoutComponent } from './components/student/ecommerce/checkout/checkout.component';
+import { MyOrdersComponent } from './components/student/ecommerce/my-orders/my-orders.component';
+import { OrderDetailComponent } from './components/student/ecommerce/order-detail/order-detail.component';
+import { MyReviewsComponent } from './components/student/ecommerce/my-reviews/my-reviews.component';
+import { AiAssistantComponent } from './components/student/ecommerce/ai-assistant/ai-assistant.component';
+import { MyFavoritesComponent as EcommerceMyFavoritesComponent } from './components/student/ecommerce/my-favorites/my-favorites.component';
+import { AssistantComponent } from './components/student/assistant/assistant.component';
+
+// ========== COMPONENTS - E-COMMERCE ADMIN ==========
+import { AdminProductsComponent } from './components/admin/ecommerce/admin-products/admin-products.component';
+import { AdminOrdersComponent } from './components/admin/ecommerce/admin-orders/admin-orders.component';
+import { AdminPromotionsComponent } from './components/admin/ecommerce/admin-promotions/admin-promotions.component';
+import { AdminReviewsComponent } from './components/admin/ecommerce/admin-reviews/admin-reviews.component';
+import { AdminInventoryComponent } from './components/admin/ecommerce/admin-inventory/admin-inventory.component';
+
+// ========== SHARED ==========
+import { ToastComponent } from './components/shared/toast/toast.component';
 
 registerLocaleData(localeFr);
 
@@ -101,18 +135,52 @@ registerLocaleData(localeFr);
     StudentCoursComponent,
 
     // Interface Admin
-    AdminDashboardComponent,
-    SettingsComponent,
-    HelpComponent,
-    PromoteAdminComponent,
     AdminLayoutComponent,
     AdminSidebarComponent,
     AdminTopbarComponent,
+    AdminDashboardComponent,
+    UsersManagementComponent,
+    SettingsComponent,
+    HelpComponent,
+    ProfileComponent,
     AdminCoursFormationsComponent,
+    AdminMarketplaceComponent,
+    AdminReportsComponent,
+    PromoteAdminComponent,
+
+    // Marketplace
+    MarketplaceListComponent,
+    MarketplaceDetailComponent,
+    MarketplacePublishComponent,
+    MyListingsComponent,
+    MyFavoritesComponent,
+
+    // E-commerce Student
+    CatalogComponent,
+    ProductDetailComponent,
+    CartComponent,
+    CheckoutComponent,
+    MyOrdersComponent,
+    OrderDetailComponent,
+    MyReviewsComponent,
+    AiAssistantComponent,
+    EcommerceMyFavoritesComponent,
+    AssistantComponent,
+
+    // E-commerce Admin
+    AdminProductsComponent,
+    AdminOrdersComponent,
+    AdminPromotionsComponent,
+    AdminReviewsComponent,
+    AdminInventoryComponent,
+
+    // Shared
+    ToastComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
@@ -123,12 +191,12 @@ registerLocaleData(localeFr);
     UserService,
     ThemeService,
     AuthGuard,
+    { provide: LOCALE_ID, useValue: 'fr' },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    },
-    { provide: LOCALE_ID, useValue: 'fr-FR' }
+    }
   ],
   bootstrap: [AppComponent]
 })
