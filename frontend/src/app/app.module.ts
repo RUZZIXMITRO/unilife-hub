@@ -1,8 +1,10 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 
@@ -51,23 +53,23 @@ import { SettingsModalComponent } from './components/student/settings-modal/sett
 import { HelpModalComponent } from './components/student/help-modal/help-modal.component';
 
 // ========== COMPONENTS - INTERFACE ADMIN ==========
-import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.component';
-import { SettingsComponent } from './components/admin/settings/settings.component';
-import { HelpComponent } from './components/admin/help/help.component';
-import { PromoteAdminComponent } from './components/setup/promote-admin/promote-admin.component';
 import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
 import { AdminSidebarComponent } from './components/admin/layout/sidebar/sidebar.component';
 import { AdminTopbarComponent } from './components/admin/layout/topbar/topbar.component';
+import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { UsersManagementComponent } from './components/admin/users-management/users-management.component';
+import { SettingsComponent } from './components/admin/settings/settings.component';
+import { HelpComponent } from './components/admin/help/help.component';
 import { ProfileComponent } from './components/admin/pages/profile/profile.component';
 import { ReportsComponent } from './components/admin/pages/reports/reports.component';
-// Enregistrer la locale française pour le DatePipe
+import { PromoteAdminComponent } from './components/setup/promote-admin/promote-admin.component';
+
 registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [
     AppComponent,
-    
+
     // Site Public
     HomeComponent,
     PreloaderComponent,
@@ -85,12 +87,12 @@ registerLocaleData(localeFr);
     FaqComponent,
     ContactComponent,
     FooterComponent,
-    
+
     // Auth
     AuthComponent,
     ResetPasswordComponent,
     CompleteProfileComponent,
-    
+
     // Interface Étudiante
     StudentLayoutComponent,
     SidebarComponent,
@@ -99,22 +101,23 @@ registerLocaleData(localeFr);
     ProfileModalComponent,
     SettingsModalComponent,
     HelpModalComponent,
-    
-    // Interface Admin 
-          AdminDashboardComponent,
-          SettingsComponent,
-          HelpComponent,
-          PromoteAdminComponent,
-          AdminLayoutComponent,
-          AdminSidebarComponent,
-          AdminTopbarComponent,
-          UsersManagementComponent,
-          ProfileComponent,
-          ReportsComponent
+
+    // Interface Admin
+    AdminLayoutComponent,
+    AdminSidebarComponent,
+    AdminTopbarComponent,
+    AdminDashboardComponent,
+    UsersManagementComponent,
+    SettingsComponent,
+    HelpComponent,
+    ProfileComponent,
+    ReportsComponent,
+    PromoteAdminComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
@@ -125,12 +128,12 @@ registerLocaleData(localeFr);
     UserService,
     ThemeService,
     AuthGuard,
+    { provide: LOCALE_ID, useValue: 'fr' },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    },
-    { provide: LOCALE_ID, useValue: 'fr-FR' }
+    }
   ],
   bootstrap: [AppComponent]
 })

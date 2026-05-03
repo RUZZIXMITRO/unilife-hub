@@ -16,61 +16,58 @@ import { AdminLayoutComponent } from './components/admin/layout/admin-layout/adm
 import { UsersManagementComponent } from './components/admin/users-management/users-management.component';
 import { ProfileComponent } from './components/admin/pages/profile/profile.component';
 import { ReportsComponent } from './components/admin/pages/reports/reports.component';
+
 // Guards
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
-  // ========== ROUTES PUBLIQUES (Site vitrine) ==========
+  // ========== ROUTES PUBLIQUES ==========
   { path: '', component: HomeComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'setup/promote', component: PromoteAdminComponent },
 
-  // ========== COMPLETE PROFILE (Transition) ==========
+  // ========== COMPLETE PROFILE ==========
   { 
     path: 'complete-profile', 
     component: CompleteProfileComponent,
     canActivate: [AuthGuard]
   },
 
-  // ========== INTERFACE ÉTUDIANTE (Protégée) ==========
+  // ========== INTERFACE ÉTUDIANTE ==========
   {
     path: 'student',
     component: StudentLayoutComponent,
     canActivate: [AuthGuard],
     children: [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: StudentDashboardComponent },
-  {
-    path: 'social',
-    loadChildren: () => import('./components/student/social/social.module')
-      .then(m => m.SocialModule)
-  },
-      // 🔜 Autres routes à ajouter plus tard :
-      // { path: 'agenda', component: AgendaComponent },
-      // { path: 'courses', component: CoursesComponent },
-      // { path: 'commerce', component: CommerceComponent },
-      // { path: 'chatbot', component: ChatbotComponent },
-      // { path: 'social', component: SocialComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: StudentDashboardComponent },
+
+      // ✅ SOCIAL SERVICE
+      {
+        path: 'social',
+        loadChildren: () => import('./components/student/social/social.module')
+          .then(m => m.SocialModule)
+      },
     ]
   },
 
-  // ========== INTERFACE ADMIN (Protégée) ✅ NOUVEAU
- {
-  path: 'admin',
-  component: AdminLayoutComponent,
-  canActivate: [AuthGuard, AdminGuard],
-  children: [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: AdminDashboardComponent },
-    { path: 'settings', component: SettingsComponent },
-    { path: 'help', component: HelpComponent },
-    { path: 'users', component: UsersManagementComponent } ,
-    { path: 'profile', component: ProfileComponent },
-    { path: 'reports', component: ReportsComponent }
-  ]
-},
+  // ========== INTERFACE ADMIN ==========
+  {
+    path: 'admin',
+    component: AdminLayoutComponent,
+    canActivate: [AuthGuard, AdminGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'settings', component: SettingsComponent },
+      { path: 'help', component: HelpComponent },
+      { path: 'users', component: UsersManagementComponent },
+      { path: 'profile', component: ProfileComponent },
+      { path: 'reports', component: ReportsComponent },
+    ]
+  },
 
   // ========== REDIRECTIONS ==========
   { path: 'dashboard', redirectTo: '/student/dashboard', pathMatch: 'full' },
