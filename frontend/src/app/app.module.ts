@@ -87,6 +87,13 @@ import { AdminPromotionsComponent } from './components/admin/ecommerce/admin-pro
 import { AdminReviewsComponent } from './components/admin/ecommerce/admin-reviews/admin-reviews.component';
 import { AdminInventoryComponent } from './components/admin/ecommerce/admin-inventory/admin-inventory.component';
 import { AssistantComponent } from './components/student/assistant/assistant.component';
+import { AgendaLayoutComponent } from './components/student/agenda/agenda-layout/agenda-layout.component';
+import { AgendaPageComponent } from './components/student/agenda/agenda-page/agenda-page.component';
+import { TodosPageComponent } from './components/student/agenda/todos-page/todos-page.component';
+import { NotificationsPageComponent } from './components/student/agenda/notifications-page/notifications-page.component';
+import { EventService } from './services/agenda/event.service';
+import { TodoService } from './services/agenda/todo.service';
+import { AgendaNotificationService } from './services/agenda/agenda-notification.service';
 
 registerLocaleData(localeFr);
 
@@ -159,7 +166,12 @@ registerLocaleData(localeFr);
     AdminReviewsComponent,
     AdminInventoryComponent,
     EcommerceMyFavoritesComponent,
-    AssistantComponent
+    AssistantComponent,
+    AssistantComponent,
+    AgendaLayoutComponent,
+    AgendaPageComponent,
+    TodosPageComponent,
+    NotificationsPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -180,7 +192,11 @@ registerLocaleData(localeFr);
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    
+    EventService,
+    TodoService,
+    AgendaNotificationService
   ],
   bootstrap: [AppComponent]
 })
