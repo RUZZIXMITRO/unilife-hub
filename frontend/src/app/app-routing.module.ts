@@ -11,6 +11,8 @@ import { StudentDashboardComponent } from './components/student/dashboard/studen
 import { AdminDashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { SettingsComponent } from './components/admin/settings/settings.component';
 import { HelpComponent } from './components/admin/help/help.component';
+import { AdminCoursFormationsComponent } from './components/admin/cours-formations/cours-formations.component';
+import { StudentCoursComponent } from './components/student/cours/student-cours.component';
 import { PromoteAdminComponent } from './components/setup/promote-admin/promote-admin.component';
 import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
 import { UsersManagementComponent } from './components/admin/users-management/users-management.component';
@@ -72,6 +74,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: StudentDashboardComponent },
+      { path: 'courses', component: StudentCoursComponent },
       {
   path: 'social',
   loadChildren: () => import('./components/student/social/social.module')
@@ -115,6 +118,7 @@ const routes: Routes = [
     { path: 'reports', component: AdminReportsComponent },
     { path: 'users', component: UsersManagementComponent } ,
     { path: 'profile', component: ProfileComponent },
+    { path: 'cours-formations', component: AdminCoursFormationsComponent },
 
     // ✅ E-commerce Admin
       { path: 'ecommerce/products', component: AdminProductsComponent },

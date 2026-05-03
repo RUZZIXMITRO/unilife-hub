@@ -1,0 +1,383 @@
+<div class="cf-admin">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Cours & Formations</h1>
+      <p class="subtitle">Gérer les cours, formations et catégories</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-secondary" (click)="showAddCategorieModal = true">
+        <i class="fa-solid fa-folder-plus"></i>
+        <span>Catégorie</span>
+      </button>
+      <button class="btn-primary" (click)="showAddFormationModal = true">
+        <i class="fa-solid fa-plus"></i>
+        <span>Formation externe</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-header">
+        <div class="stat-icon-wrapper blue"><i class="fa-solid fa-book-open"></i></div>
+      </div>
+      <div class="stat-body">
+        <p class="stat-label">Total Cours</p>
+        <h2 class="stat-value">{{ stats.totalCours }}</h2>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header">
+        <div class="stat-icon-wrapper purple"><i class="fa-solid fa-graduation-cap"></i></div>
+      </div>
+      <div class="stat-body">
+        <p class="stat-label">Formations</p>
+        <h2 class="stat-value">{{ stats.totalFormations }}</h2>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header">
+        <div class="stat-icon-wrapper red"><i class="fa-solid fa-clock"></i></div>
+      </div>
+      <div class="stat-body">
+        <p class="stat-label">En attente</p>
+        <h2 class="stat-value">{{ stats.coursEnAttente }}</h2>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header">
+        <div class="stat-icon-wrapper green"><i class="fa-solid fa-tags"></i></div>
+      </div>
+      <div class="stat-body">
+        <p class="stat-label">Catégories</p>
+        <h2 class="stat-value">{{ stats.totalCategories }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-bar">
+    <button class="tab-btn" [class.active]="activeTab === 'cours'" (click)="activeTab = 'cours'">
+      <i class="fa-solid fa-book"></i> Cours ({{ cours.length }})
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'formations'" (click)="activeTab = 'formations'">
+      <i class="fa-solid fa-graduation-cap"></i> Formations ({{ formations.length }})
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'categories'" (click)="activeTab = 'categories'">
+      <i class="fa-solid fa-tags"></i> Catégories ({{ categories.length }})
+    </button>
+  </div>
+
+  <!-- COURS TAB -->
+  <div *ngIf="activeTab === 'cours'" class="tab-content">
+
+    <!-- En attente d'approbation -->
+    <div class="card" *ngIf="coursEnAttente.length > 0">
+      <div class="card-header">
+        <div>
+          <h3><i class="fa-solid fa-clock" style="color:#9e2e2e"></i> En attente d'approbation</h3>
+          <p class="card-subtitle">{{ coursEnAttente.length }} cours à valider</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="courses-table">
+          <div *ngFor="let c of coursEnAttente" class="course-row pending">
+            <div class="course-icon">
+              <i class="fa-solid {{ getFileIcon(c.fileType) }}"></i>
+            </div>
+            <div class="course-info">
+              <h4>{{ c.title }}</h4>
+              <p class="course-meta">
+                <i class="fa-solid fa-user"></i> Utilisateur #{{ c.userId }} ·
+                <i class="fa-solid fa-folder"></i> {{ c.categoryName }}
+              </p>
+            </div>
+            <div class="course-size">{{ formatSize(c.fileSize) }}</div>
+            <div class="course-actions">
+              <button class="btn-approve" (click)="approuverCours(c.id)">
+                <i class="fa-solid fa-check"></i> Approuver
+              </button>
+              <button class="btn-delete" (click)="supprimerCours(c.id)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tous les cours -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3>Tous les cours approuvés</h3>
+          <p class="card-subtitle">{{ cours.length }} cours disponibles</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div *ngIf="isLoading" class="loading-state">
+          <i class="fa-solid fa-spinner fa-spin"></i> Chargement...
+        </div>
+        <div *ngIf="!isLoading && cours.length === 0" class="empty-state">
+          <i class="fa-solid fa-book-open"></i>
+          <p>Aucun cours disponible</p>
+        </div>
+        <div class="courses-table" *ngIf="!isLoading && cours.length > 0">
+          <div *ngFor="let c of cours" class="course-row">
+            <div class="course-icon">
+              <i class="fa-solid {{ getFileIcon(c.fileType) }}"></i>
+            </div>
+            <div class="course-info">
+              <h4>{{ c.title }}</h4>
+              <p class="course-meta">
+                <i class="fa-solid fa-folder"></i> {{ c.categoryName }} ·
+                <i class="fa-solid fa-download"></i> {{ c.downloadsCount }} ·
+                <i class="fa-solid fa-eye"></i> {{ c.viewsCount }}
+              </p>
+            </div>
+            <div class="course-size">{{ formatSize(c.fileSize) }}</div>
+            <span class="badge-approved">Approuvé</span>
+            <button class="btn-delete" (click)="supprimerCours(c.id)">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMATIONS TAB -->
+  <div *ngIf="activeTab === 'formations'" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3>Formations externes</h3>
+          <p class="card-subtitle">{{ formations.length }} formations disponibles</p>
+        </div>
+        <button class="btn-primary" (click)="showAddFormationModal = true">
+          <i class="fa-solid fa-plus"></i> Ajouter
+        </button>
+      </div>
+      <div class="card-body">
+        <div *ngIf="formations.length === 0" class="empty-state">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <p>Aucune formation ajoutée</p>
+        </div>
+        <div class="formations-grid" *ngIf="formations.length > 0">
+          <div *ngFor="let f of formations" class="formation-card">
+            <div class="formation-header">
+              <span class="provider-badge">{{ f.provider }}</span>
+              <button class="btn-delete-sm" (click)="supprimerFormation(f.id)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+            <h4>{{ f.title }}</h4>
+            <p class="formation-desc">{{ f.description }}</p>
+            <div class="formation-tags">
+              <span class="tag" *ngIf="f.level">{{ f.level }}</span>
+              <span class="tag" *ngIf="f.language">{{ f.language }}</span>
+              <span class="tag" *ngIf="f.duration">{{ f.duration }}</span>
+            </div>
+            <a [href]="f.linkUrl" target="_blank" class="btn-link">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Accéder
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES TAB -->
+  <div *ngIf="activeTab === 'categories'" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3>Catégories</h3>
+          <p class="card-subtitle">{{ categories.length }} catégories</p>
+        </div>
+        <button class="btn-primary" (click)="showAddCategorieModal = true">
+          <i class="fa-solid fa-plus"></i> Ajouter
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="categories-grid">
+          <div *ngFor="let cat of categories" class="category-card">
+            <div class="cat-icon" [style.background]="cat.color + '20'" [style.color]="cat.color">
+              <i class="fa-solid {{ cat.icon || 'fa-folder' }}"></i>
+            </div>
+            <div class="cat-info">
+              <h4>{{ cat.name }}</h4>
+              <p>{{ cat.coursesCount }} cours · {{ cat.formationsCount }} formations</p>
+            </div>
+            <button class="btn-delete-sm" (click)="supprimerCategorie(cat.id)">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAWER AJOUTER FORMATION -->
+  <div class="drawer-overlay" *ngIf="showAddFormationModal" (click)="showAddFormationModal = false"></div>
+  <div class="drawer" [class.open]="showAddFormationModal">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <div class="drawer-title-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div>
+          <h3>Ajouter une formation</h3>
+          <p>Formation externe (Coursera, Udemy...)</p>
+        </div>
+      </div>
+      <button class="drawer-close" (click)="showAddFormationModal = false">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <p class="drawer-section-label">Informations générales</p>
+        <div class="drawer-field">
+          <label>Titre <span class="required">*</span></label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-heading"></i>
+            <input type="text" [(ngModel)]="nouvelleFormation.title" placeholder="Ex: Machine Learning avec Python" class="drawer-input"/>
+          </div>
+        </div>
+        <div class="drawer-field">
+          <label>Description</label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-align-left"></i>
+            <input type="text" [(ngModel)]="nouvelleFormation.description" placeholder="Description de la formation" class="drawer-input"/>
+          </div>
+        </div>
+        <div class="drawer-field">
+          <label>Catégorie <span class="required">*</span></label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-folder"></i>
+            <select [(ngModel)]="nouvelleFormation.categoryId" class="drawer-input">
+              <option [value]="null">-- Sélectionner --</option>
+              <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="drawer-section">
+        <p class="drawer-section-label">Détails</p>
+        <div class="drawer-field">
+          <label>Provider</label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-building"></i>
+            <input type="text" [(ngModel)]="nouvelleFormation.provider" placeholder="Ex: Coursera" class="drawer-input"/>
+          </div>
+        </div>
+        <div class="drawer-field">
+          <label>Lien <span class="required">*</span></label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-link"></i>
+            <input type="url" [(ngModel)]="nouvelleFormation.linkUrl" placeholder="https://coursera.org/..." class="drawer-input"/>
+          </div>
+        </div>
+        <div class="drawer-row">
+          <div class="drawer-field">
+            <label>Durée</label>
+            <div class="field-input-wrap">
+              <i class="fa-solid fa-clock"></i>
+              <input type="text" [(ngModel)]="nouvelleFormation.duration" placeholder="Ex: 3 mois" class="drawer-input"/>
+            </div>
+          </div>
+          <div class="drawer-field">
+            <label>Niveau</label>
+            <div class="field-input-wrap">
+              <i class="fa-solid fa-signal"></i>
+              <select [(ngModel)]="nouvelleFormation.level" class="drawer-input">
+                <option value="">-- Niveau --</option>
+                <option value="Débutant">Débutant</option>
+                <option value="Intermédiaire">Intermédiaire</option>
+                <option value="Avancé">Avancé</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="drawer-field">
+          <label>Langue</label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-language"></i>
+            <select [(ngModel)]="nouvelleFormation.language" class="drawer-input">
+              <option value="">-- Langue --</option>
+              <option value="Français">Français</option>
+              <option value="Anglais">Anglais</option>
+              <option value="Arabe">Arabe</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="drawer-btn-cancel" (click)="showAddFormationModal = false">Annuler</button>
+      <button class="drawer-btn-confirm" (click)="ajouterFormation()">
+        <i class="fa-solid fa-plus"></i> Ajouter la formation
+      </button>
+    </div>
+  </div>
+
+  <!-- DRAWER AJOUTER CATEGORIE -->
+  <div class="drawer-overlay" *ngIf="showAddCategorieModal" (click)="showAddCategorieModal = false"></div>
+  <div class="drawer" [class.open]="showAddCategorieModal">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <div class="drawer-title-icon"><i class="fa-solid fa-folder-plus"></i></div>
+        <div>
+          <h3>Ajouter une catégorie</h3>
+          <p>Créer une nouvelle catégorie</p>
+        </div>
+      </div>
+      <button class="drawer-close" (click)="showAddCategorieModal = false">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <div class="drawer-field">
+          <label>Nom <span class="required">*</span></label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-tag"></i>
+            <input type="text" [(ngModel)]="nouvelleCategorie.name" placeholder="Ex: Programmation" class="drawer-input"/>
+          </div>
+        </div>
+        <div class="drawer-field">
+          <label>Description</label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-align-left"></i>
+            <input type="text" [(ngModel)]="nouvelleCategorie.description" class="drawer-input"/>
+          </div>
+        </div>
+        <div class="drawer-row">
+          <div class="drawer-field">
+            <label>Icône (FontAwesome)</label>
+            <div class="field-input-wrap">
+              <i class="fa-solid fa-icons"></i>
+              <input type="text" [(ngModel)]="nouvelleCategorie.icon" placeholder="fa-code" class="drawer-input"/>
+            </div>
+          </div>
+          <div class="drawer-field">
+            <label>Couleur</label>
+            <div class="field-input-wrap">
+              <i class="fa-solid fa-palette"></i>
+              <input type="color" [(ngModel)]="nouvelleCategorie.color" class="drawer-input"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="drawer-btn-cancel" (click)="showAddCategorieModal = false">Annuler</button>
+      <button class="drawer-btn-confirm" (click)="ajouterCategorie()">
+        <i class="fa-solid fa-plus"></i> Créer la catégorie
+      </button>
+    </div>
+  </div>
+
+</div>
