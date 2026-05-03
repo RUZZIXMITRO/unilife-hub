@@ -308,6 +308,113 @@
   background: var(--border-color);
 }
 
+/* ===== STYLES POUR SOUS-MENU E-COMMERCE (collapsible) ===== */
+.nav-sub {
+  padding-left: 2.2rem !important;
+  font-size: 0.82rem !important;
+  opacity: 0.85;
+}
+.nav-sub .nav-svg-wrap {
+  width: 28px !important;
+  height: 28px !important;
+}
+.nav-sub .nav-svg-wrap svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+.nav-sub:hover { opacity: 1; }
+.nav-sub.active { opacity: 1; }
+
+.nav-toggle {
+  cursor: pointer;
+  user-select: none;
+}
+
+.arrow-icon {
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  flex-shrink: 0;
+  color: currentColor;
+  opacity: 0.6;
+  transition: transform 0.3s ease;
+}
+.arrow-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.submenu.expanded {
+  max-height: 500px;
+}
+
+/* ===== STYLES POUR SOUS-MENU SOCIAL ===== */
+.nav-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  margin-left: 1rem;
+  border-left: 2px solid #e2e8f0;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.submenu-item i {
+  font-size: 0.78rem;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.submenu-item:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.submenu-item.active {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.sub-badge {
+  margin-left: auto;
+  background: #ef4444;
+  color: #fff;
+  border-radius: 20px;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
 /* ===== DARK MODE ===== */
 :host-context(body.dark-theme) {
   --sidebar-bg:     #0f172a;
@@ -332,6 +439,20 @@
   background: rgba(37, 99, 235, 0.25);
 }
 
+:host-context(body.dark-theme) .nav-submenu {
+  border-color: #334155;
+}
+
+:host-context(body.dark-theme) .submenu-item {
+  color: #94a3b8;
+}
+
+:host-context(body.dark-theme) .submenu-item:hover,
+:host-context(body.dark-theme) .submenu-item.active {
+  background: #1e3a5f;
+  color: #7cb9f8;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .sidebar {
@@ -345,9 +466,11 @@
     box-shadow: 4px 0 20px rgba(15, 23, 42, 0.12);
   }
 }
+
 .sf-illo { width: 100%; margin-bottom: 0.5rem; }
 .sf-illo svg { width: 100%; height: auto; display: block; border-radius: 14px; }
 .sf-copy { margin: 0; font-size: 0.67rem; color: var(--text-tertiary); font-weight: 600; text-align: center; }
+
 .sidebar.collapsed .logo-svg-wrap {
   margin: 0 auto;
 }
@@ -361,65 +484,3 @@
 .sidebar.collapsed .toggle-btn {
   display: none;
 }
-
-.nav-sub {
-  padding-left: 2.2rem !important;
-  font-size: 0.82rem !important;
-  opacity: 0.85;
-}
-
-.nav-sub .nav-svg-wrap {
-  width: 28px !important;
-  height: 28px !important;
-}
-
-.nav-sub .nav-svg-wrap svg {
-  width: 14px !important;
-  height: 14px !important;
-}
-
-.nav-sub:hover { opacity: 1; }
-.nav-sub.active { opacity: 1; }
-.nav-toggle {
-  cursor: pointer;
-  user-select: none;
-}
-
-.arrow-icon {
-  width: 14px;
-  height: 14px;
-  margin-left: auto;
-  flex-shrink: 0;
-  color: currentColor;
-  opacity: 0.6;
-  transition: transform 0.3s ease;
-}
-
-.arrow-icon.rotated {
-  transform: rotate(180deg);
-}
-
-.submenu {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.submenu.expanded {
-  max-height: 500px;
-}
-
-.nav-sub {
-  padding-left: 1.8rem !important;
-  font-size: 0.82rem;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-}
-
-.nav-sub .nav-svg-wrap {
-  width: 26px !important;
-  height: 26px !important;
-}
-
-.nav-sub:hover { opacity: 1; }
-.nav-sub.active { opacity: 1; }
