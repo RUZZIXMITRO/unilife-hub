@@ -1,0 +1,89 @@
+<div class="mf-wrapper">
+
+  <!-- HEADER -->
+  <div class="mf-header">
+    <div class="mf-header-top">
+      <button class="btn-back" (click)="goBack()">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <div class="mf-header-info">
+        <h1 class="mf-title">
+          <i class="fas fa-heart"></i>
+          Mes favoris
+        </h1>
+        <p class="mf-subtitle">Les articles que tu as sauvegardés</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="mf-loading" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Chargement...</p>
+  </div>
+
+  <!-- EMPTY -->
+  <div class="mf-empty" *ngIf="!loading && favorites.length === 0">
+    <div class="empty-icon">
+      <i class="fas fa-heart-broken"></i>
+    </div>
+    <h3>Aucun favori</h3>
+    <p>Tu n'as pas encore ajouté d'articles à tes favoris.</p>
+    <button class="btn-browse" (click)="goBack()">
+      <i class="fas fa-store"></i>
+      Parcourir le marketplace
+    </button>
+  </div>
+
+  <!-- LIST -->
+  <div class="mf-list" *ngIf="!loading && favorites.length > 0">
+    <div class="mf-card" *ngFor="let fav of favorites">
+
+      <!-- Image -->
+      <div class="mf-card-img" (click)="goToDetail(fav.listingId)">
+        <img *ngIf="fav.listing?.imageUrls && fav.listing?.imageUrls.length > 0"
+             [src]="fav.listing.imageUrls[0]" alt="{{ fav.listing?.title }}" />
+        <div *ngIf="!fav.listing?.imageUrls || fav.listing?.imageUrls.length === 0" class="mf-no-img">
+          <i class="fas fa-image"></i>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="mf-card-info" (click)="goToDetail(fav.listingId)">
+        <div class="mf-card-title">{{ fav.listing?.title || 'Article #' + fav.listingId }}</div>
+        <div class="mf-card-meta">
+          <span *ngIf="fav.listing?.category">
+            <i class="fas fa-tag"></i>
+            {{ fav.listing.category }}
+          </span>
+          <span class="sep" *ngIf="fav.listing?.price">·</span>
+          <span class="price" *ngIf="fav.listing?.price">
+            {{ fav.listing.price }} DH
+          </span>
+        </div>
+        <div class="mf-card-condition" *ngIf="fav.listing?.condition">
+          <span class="cond-badge" [class]="getConditionClass(fav.listing.condition)">
+            {{ fav.listing.condition }}
+          </span>
+        </div>
+        <div class="mf-date">
+          <i class="fas fa-clock"></i>
+          Ajouté le {{ fav.createdAt | slice:0:10 }}
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="mf-card-actions">
+        <button class="btn-view" (click)="goToDetail(fav.listingId)">
+          <i class="fas fa-eye"></i>
+          Voir
+        </button>
+        <button class="btn-remove" (click)="remove(fav.listingId)" title="Retirer des favoris">
+          <i class="fas fa-heart-broken"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,238 @@
+# ============================================================
+# UniLife Hub — GitLab CI/CD Pipeline
+# 9 Microservices E-commerce
+# ============================================================
+
+variables:
+  DOCKER_USERNAME: yousra00
+  BASE: backend/Commerce/E-commerce
+
+stages:
+  - build
+  - docker
+  - deploy
+
+# ── Templates ────────────────────────────────────────────────
+
+.maven_build: &maven_build
+  image: maven:3.9.6-eclipse-temurin-17
+  stage: build
+  script:
+    - cd $BASE/$SERVICE_DIR
+    - mvn clean package -DskipTests -q
+  artifacts:
+    paths:
+      - $BASE/$SERVICE_DIR/target/*.jar
+    expire_in: 1 hour
+  only:
+    - develop
+    - main
+
+.dotnet_build: &dotnet_build
+  image: mcr.microsoft.com/dotnet/sdk:9.0
+  stage: build
+  script:
+    - cd $BASE/$SERVICE_DIR
+    - dotnet restore
+    - dotnet build -c Release
+    - dotnet publish -c Release -o out
+  artifacts:
+    paths:
+      - $BASE/$SERVICE_DIR/out/
+    expire_in: 1 hour
+  only:
+    - develop
+    - main
+
+.docker_build: &docker_build
+  image: docker:24.0
+  stage: docker
+  services:
+    - docker:24.0-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  script:
+    - cd $BASE/$SERVICE_DIR
+    - docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
+    - docker tag $DOCKER_USERNAME/$IMAGE_NAME:$CI_COMMIT_SHORT_SHA $DOCKER_USERNAME/$IMAGE_NAME:latest
+    - docker push $DOCKER_USERNAME/$IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+    - docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
+  only:
+    - develop
+    - main
+
+# ── 1. InventoryService ──────────────────────────────────────
+
+build:inventory:
+  <<: *maven_build
+  variables:
+    SERVICE_DIR: InventoryService/inventory-service
+
+docker:inventory:
+  <<: *docker_build
+  needs: [build:inventory]
+  variables:
+    SERVICE_DIR: InventoryService/inventory-service
+    IMAGE_NAME: inventory-service
+
+# ── 2. CatalogService ────────────────────────────────────────
+
+build:catalog:
+  <<: *maven_build
+  variables:
+    SERVICE_DIR: CatalogService/catalog-service
+
+docker:catalog:
+  <<: *docker_build
+  needs: [build:catalog]
+  variables:
+    SERVICE_DIR: CatalogService/catalog-service
+    IMAGE_NAME: catalog-service
+
+# ── 3. CartService ───────────────────────────────────────────
+
+build:cart:
+  <<: *dotnet_build
+  variables:
+    SERVICE_DIR: CartService
+
+docker:cart:
+  <<: *docker_build
+  needs: [build:cart]
+  variables:
+    SERVICE_DIR: CartService
+    IMAGE_NAME: cart-service
+
+# ── 4. PaymentService ────────────────────────────────────────
+
+build:payment:
+  <<: *dotnet_build
+  variables:
+    SERVICE_DIR: PaymentService
+
+docker:payment:
+  <<: *docker_build
+  needs: [build:payment]
+  variables:
+    SERVICE_DIR: PaymentService
+    IMAGE_NAME: payment-service
+
+# ── 5. OrderService ──────────────────────────────────────────
+
+build:order:
+  <<: *dotnet_build
+  variables:
+    SERVICE_DIR: OrderService
+
+docker:order:
+  <<: *docker_build
+  needs: [build:order]
+  variables:
+    SERVICE_DIR: OrderService
+    IMAGE_NAME: order-service
+
+# ── 6. FavoriteService ───────────────────────────────────────
+
+build:favorite:
+  <<: *maven_build
+  variables:
+    SERVICE_DIR: FavoriteService
+
+docker:favorite:
+  <<: *docker_build
+  needs: [build:favorite]
+  variables:
+    SERVICE_DIR: FavoriteService
+    IMAGE_NAME: favorite-service
+
+# ── 7. PromotionService ──────────────────────────────────────
+
+build:promotion:
+  <<: *dotnet_build
+  variables:
+    SERVICE_DIR: PromotionService
+
+docker:promotion:
+  <<: *docker_build
+  needs: [build:promotion]
+  variables:
+    SERVICE_DIR: PromotionService
+    IMAGE_NAME: promotion-service
+
+# ── 8. ReviewService ─────────────────────────────────────────
+
+build:review:
+  <<: *maven_build
+  variables:
+    SERVICE_DIR: review-service
+docker:review:
+  <<: *docker_build
+  needs: [build:review]
+  variables:
+    SERVICE_DIR: review-service
+    IMAGE_NAME: review-service
+
+# ── 9. AI Assistant ──────────────────────────────────────────
+
+build:ai:
+  image: python:3.12-slim
+  stage: build
+  script:
+    - cd $BASE/ai-assistant
+    - pip install -r requirements.txt -q
+    - python -c "import fastapi, groq, motor; print('OK')"
+  only:
+    - develop
+    - main
+
+docker:ai:
+  <<: *docker_build
+  needs: [build:ai]
+  variables:
+    SERVICE_DIR: ai-assistant
+    IMAGE_NAME: ai-assistant
+
+# ── Deploy ───────────────────────────────────────────────────
+
+deploy:staging:
+  image: alpine:3.19
+  stage: deploy
+  script:
+    - echo "Deploy staging - tag $CI_COMMIT_SHORT_SHA"
+  environment:
+    name: staging
+  needs:
+    - docker:inventory
+    - docker:catalog
+    - docker:cart
+    - docker:payment
+    - docker:order
+    - docker:favorite
+    - docker:promotion
+    - docker:review
+    - docker:ai
+  only:
+    - develop
+
+deploy:production:
+  image: alpine:3.19
+  stage: deploy
+  script:
+    - echo "Deploy production AWS EKS - tag $CI_COMMIT_SHORT_SHA"
+  environment:
+    name: production
+  needs:
+    - docker:inventory
+    - docker:catalog
+    - docker:cart
+    - docker:payment
+    - docker:order
+    - docker:favorite
+    - docker:promotion
+    - docker:review
+    - docker:ai
+  only:
+    - main
+  when: manual

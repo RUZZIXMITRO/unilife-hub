@@ -1,0 +1,12 @@
+com\unilife\favorite\config\CorsConfig.class
+com\unilife\favorite\dto\request\AddFavoriteRequest.class
+com\unilife\favorite\service\impl\FavoriteServiceImpl.class
+com\unilife\favorite\dto\response\ApiResponse.class
+com\unilife\favorite\FavoriteServiceApplication.class
+com\unilife\favorite\service\IFavoriteService.class
+com\unilife\favorite\controller\FavoriteController.class
+com\unilife\favorite\repository\FavoriteRepository.class
+com\unilife\favorite\model\Favorite.class
+com\unilife\favorite\dto\response\FavoriteResponse.class
+com\unilife\favorite\config\WebClientConfig.class
+com\unilife\favorite\exception\GlobalExceptionHandler.class

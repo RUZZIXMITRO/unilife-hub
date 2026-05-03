@@ -1,0 +1,251 @@
+<div class="page">
+
+  <!-- Toast -->
+  <div class="toast-success" *ngIf="successMessage">
+    <i class="fa-solid fa-circle-check"></i> {{ successMessage }}
+  </div>
+
+  <!-- Error Toast -->
+  <div class="toast-error" *ngIf="errorMessage">
+    <i class="fa-solid fa-circle-exclamation"></i> {{ errorMessage }}
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-wrap" *ngIf="loading">
+    <div class="skeleton-detail"></div>
+  </div>
+
+  <!-- Product Detail -->
+  <div class="detail-wrap" *ngIf="!loading && product">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <span (click)="goBack()"><i class="fa-solid fa-arrow-left"></i> Boutique</span>
+      <span class="sep">/</span>
+      <span class="current">{{ product.title }}</span>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-grid">
+
+      <!-- Images -->
+      <div class="images-col">
+        <div class="main-img-wrap">
+          <img [src]="selectedImage" [alt]="product.title" class="main-img" />
+          <button class="btn-fav-big" [class.active]="isFavorite" (click)="toggleFavorite()">
+            <i class="fa-solid fa-heart" *ngIf="isFavorite"></i>
+            <i class="fa-regular fa-heart" *ngIf="!isFavorite"></i>
+          </button>
+        </div>
+<div class="thumbnails" *ngIf="(product.images?.length || 0) > 1">
+              <img
+            *ngFor="let img of product.images"
+            [src]="img.imageUrl"
+            [class.active]="selectedImage === img.imageUrl"
+            (click)="selectedImage = img.imageUrl"
+            class="thumb"
+          />
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="info-col">
+        <span class="badge-cat">{{ product.categoryName || 'Général' }}</span>
+        <h1 class="product-title">{{ product.title }}</h1>
+
+        <!-- Rating -->
+        <div class="rating-row" *ngIf="rating">
+          <div class="stars">
+            <span *ngFor="let s of getStars(rating.averageRating)" class="star" [class.filled]="s===1">★</span>
+          </div>
+          <span class="rating-val">{{ rating.averageRating | number:'1.1-1' }}</span>
+          <span class="rating-count">({{ rating.totalReviews }} avis)</span>
+        </div>
+
+        <!-- Price -->
+        <div class="price-block">
+          <span class="price">{{ product.price | number:'1.2-2' }} EUR</span>
+          <span class="stock-badge in-stock">
+            <i class="fa-solid fa-circle"></i> En stock
+          </span>
+        </div>
+
+        <!-- Description -->
+        <p class="description">{{ product.description }}</p>
+
+        <!-- Attributs (sans couleurs et tailles) -->
+        <div class="attributes" *ngIf="product.attributes">
+          <ng-container *ngFor="let attr of product.attributes | keyvalue">
+            <div class="attr-item"
+              *ngIf="attr.key !== 'couleurs' && attr.key !== 'tailles'">
+              <span class="attr-key">{{ attr.key }}</span>
+              <span class="attr-val">{{ attr.value }}</span>
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- Couleurs -->
+<div class="variant-section" *ngIf="getProductColors().length > 0">
+  <label class="variant-label">
+    Couleur : <strong>{{ getColorName(selectedColor) }}</strong>
+  </label>
+  <div class="color-options">
+    <button
+      *ngFor="let color of getProductColors()"
+      class="color-btn"
+      [class.selected]="isColorSelected(color)"
+      [style.background]="getColorHex(color)"
+      [title]="getColorName(color)"
+      (click)="onColorSelect(color)"
+    ></button>
+  </div>
+</div>
+        <!-- Tailles -->
+        <div class="variant-section" *ngIf="getProductSizes().length > 0">
+          <label class="variant-label">
+            Taille : <strong>{{ selectedSize }}</strong>
+          </label>
+          <div class="size-options">
+            <button
+              *ngFor="let size of getProductSizes()"
+              class="size-btn"
+              [class.selected]="selectedSize === size"
+              (click)="selectedSize = size"
+            >
+              {{ size }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Condition -->
+        <div class="condition-row">
+          <span class="cond-label">État :</span>
+          <span class="cond-badge">{{ product.condition }}</span>
+        </div>
+
+        <!-- Quantity + Add to cart -->
+        <div class="actions-row">
+          <div class="quantity-wrap">
+            <button (click)="quantity > 1 ? quantity = quantity - 1 : null">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+            <span>{{ quantity }}</span>
+            <button (click)="quantity = quantity + 1">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+
+          <button
+            class="btn-add-cart"
+            (click)="addToCart()"
+            [disabled]="addingToCart"
+          >
+            <i class="fa-solid fa-spinner fa-spin" *ngIf="addingToCart"></i>
+            <i class="fa-solid fa-cart-plus" *ngIf="!addingToCart"></i>
+            {{ addingToCart ? 'Ajout...' : 'Ajouter au panier' }}
+          </button>
+
+          <button class="btn-buy-now" (click)="addToCart(); goToCart()">
+            Acheter maintenant
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+      <div class="reviews-header">
+        <h3>Avis clients</h3>
+        <button class="btn-review" (click)="showReviewForm = !showReviewForm">
+          <i class="fa-solid fa-pen"></i>
+          Laisser un avis
+        </button>
+      </div>
+
+      <!-- Rating Summary -->
+      <div class="rating-summary" *ngIf="rating && rating.totalReviews > 0">
+        <div class="rating-big">
+          <span class="big-num">{{ rating.averageRating | number:'1.1-1' }}</span>
+          <div class="big-stars">
+            <span *ngFor="let s of getStars(rating.averageRating)" class="star" [class.filled]="s===1">★</span>
+          </div>
+          <span class="total-reviews">{{ rating.totalReviews }} avis</span>
+        </div>
+        <div class="rating-bars">
+          <div class="rating-bar-row" *ngFor="let star of [5,4,3,2,1]">
+            <span class="star-label">{{ star }}★</span>
+            <div class="bar-wrap">
+              <div class="bar-fill" [style.width.%]="getRatingPercent(star)"></div>
+            </div>
+            <span class="bar-pct">{{ getRatingPercent(star) }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Review Form -->
+      <div class="review-form" *ngIf="showReviewForm">
+        <h4>Votre avis</h4>
+        <div class="star-select">
+          <span
+            *ngFor="let i of [1,2,3,4,5]"
+            class="star-btn"
+            [class.active]="i <= (hoverStar || newReview.rating)"
+            (mouseenter)="hoverStar = i"
+            (mouseleave)="hoverStar = 0"
+            (click)="newReview.rating = i"
+          >★</span>
+        </div>
+        <textarea
+          placeholder="Partagez votre expérience avec ce produit..."
+          [(ngModel)]="newReview.comment"
+          rows="4"
+        ></textarea>
+        <div class="form-actions">
+          <button class="btn-cancel" (click)="showReviewForm = false">Annuler</button>
+          <button class="btn-submit" (click)="submitReview()" [disabled]="submittingReview">
+            <i class="fa-solid fa-spinner fa-spin" *ngIf="submittingReview"></i>
+            {{ submittingReview ? 'Envoi...' : 'Publier l\'avis' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Reviews List -->
+      <div class="reviews-list">
+        <div class="review-card" *ngFor="let review of reviews">
+          <div class="review-top">
+            <div class="reviewer-avatar">{{ review.userId[0] | uppercase }}</div>
+            <div class="reviewer-info">
+              <div class="reviewer-name">Étudiant #{{ review.userId }}</div>
+              <div class="review-date">{{ review.createdAt | date:'dd/MM/yyyy' }}</div>
+            </div>
+            <div class="review-stars">
+              <span *ngFor="let s of getStars(review.rating)" class="star" [class.filled]="s===1">★</span>
+            </div>
+            <span class="verified-badge" *ngIf="review.verifiedPurchase">
+              <i class="fa-solid fa-circle-check"></i> Achat vérifié
+            </span>
+          </div>
+          <p class="review-comment">{{ review.comment }}</p>
+          <div class="review-admin" *ngIf="review.adminResponse">
+            <i class="fa-solid fa-store"></i>
+            <div>
+              <strong>Réponse de l'équipe :</strong>
+              <p>{{ review.adminResponse.response }}</p>
+            </div>
+          </div>
+          <button class="btn-helpful" (click)="markHelpful(review.id)">
+            <i class="fa-regular fa-thumbs-up"></i>
+            Utile ({{ review.helpfulCount }})
+          </button>
+        </div>
+
+        <div class="no-reviews" *ngIf="reviews.length === 0">
+          <i class="fa-regular fa-comment"></i>
+          <p>Aucun avis pour ce produit. Soyez le premier !</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

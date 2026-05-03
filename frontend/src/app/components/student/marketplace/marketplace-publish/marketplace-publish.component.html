@@ -1,0 +1,164 @@
+<div class="mp-wrapper">
+
+  <div class="mp-header">
+    <button class="btn-back" (click)="goBack()">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <div class="mp-header-info">
+      <h1 class="mp-title">Publier une annonce</h1>
+      <p class="mp-subtitle">Remplis les informations de ton article</p>
+    </div>
+  </div>
+
+  <div class="mp-body">
+
+    <div class="alert-success" *ngIf="success">
+      <i class="fas fa-check-circle"></i>
+      Annonce publiée ! En attente de validation...
+    </div>
+    <div class="alert-error" *ngIf="error">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ error }}
+    </div>
+
+    <div class="mp-grid">
+
+      <!-- Colonne gauche : Photo -->
+      <div class="mp-col-left">
+        <div class="mp-block">
+          <div class="block-label">
+            <i class="fas fa-camera"></i>
+            Photo du produit <span class="req">*</span>
+          </div>
+
+          <div class="upload-zone" *ngIf="!imagePreview" (click)="fileInput.click()">
+            <div class="upload-icon">
+              <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <p class="upload-text">Clique pour ajouter une photo</p>
+            <p class="upload-hint">JPG, PNG · Max 5MB</p>
+            <input #fileInput type="file" accept="image/*"
+                   (change)="onImageSelected($event)" style="display:none" />
+          </div>
+
+          <div class="img-preview" *ngIf="imagePreview">
+            <img [src]="imagePreview" alt="preview" />
+            <div class="img-status">
+              <span class="status-uploading" *ngIf="uploadingImage">
+                <div class="mini-spin"></div>
+                Upload...
+              </span>
+              <span class="status-done" *ngIf="!uploadingImage && imageUrl">
+                <i class="fas fa-check"></i>
+                Prête
+              </span>
+            </div>
+            <button type="button" class="btn-rm-img" (click)="removeImage()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="mp-block">
+          <div class="block-label">
+            <i class="fas fa-shield-alt"></i>
+            Information
+          </div>
+          <p class="info-txt">
+            Ton annonce sera examinée avant publication. Assure-toi que les informations sont correctes.
+          </p>
+        </div>
+      </div>
+
+      <!-- Colonne droite : Formulaire -->
+      <div class="mp-col-right">
+
+        <div class="mp-block">
+          <div class="block-label">
+            <i class="fas fa-tag"></i>
+            Détails de l'article
+          </div>
+
+          <div class="field">
+            <label>Titre <span class="req">*</span></label>
+            <input type="text" [(ngModel)]="form.title" name="title"
+                   placeholder="Ex: Livre de mathématiques" />
+          </div>
+
+          <div class="field">
+            <label>Description</label>
+            <textarea [(ngModel)]="form.description" name="description"
+                      rows="4" placeholder="Décris ton article..."></textarea>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Prix (DH) <span class="req">*</span></label>
+              <div class="input-icon">
+                <i class="fas fa-coins"></i>
+                <input type="number" [(ngModel)]="form.price" name="price"
+                       placeholder="0" min="0" />
+              </div>
+            </div>
+            <div class="field">
+              <label>Catégorie</label>
+              <div class="cat-pills">
+                <button type="button"
+                  class="cat-pill-btn"
+                  *ngFor="let cat of categories"
+                  [class.active]="form.category === cat"
+                  (click)="form.category = cat">
+                  <i class="fas {{ getCatIcon(cat) }}"></i>
+                  {{ cat }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+                <div class="field">
+        <label>État de l'article</label>
+        <div class="cond-grid">
+            <label class="cond-card" *ngFor="let cond of conditions">
+            <input type="radio" [(ngModel)]="form.condition" [value]="cond" name="condition" />
+            <span class="cond-name">{{ cond }}</span>
+            </label>
+        </div>
+        </div>
+        </div>
+
+        <div class="mp-block">
+          <div class="block-label">
+            <i class="fas fa-address-card"></i>
+            Coordonnées
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Téléphone</label>
+              <div class="input-icon">
+                <i class="fas fa-phone"></i>
+                <input type="text" [(ngModel)]="form.phone" name="phone"
+                       placeholder="06XXXXXXXX" />
+              </div>
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <div class="input-icon">
+                <i class="fas fa-envelope"></i>
+                <input type="email" [(ngModel)]="form.email" name="email"
+                       placeholder="email@example.com" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-publish" (click)="submit()" [disabled]="loading || uploadingImage">
+          <i class="fas fa-paper-plane" *ngIf="!loading && !uploadingImage"></i>
+          <div class="mini-spin" *ngIf="loading || uploadingImage"></div>
+          {{ loading ? 'Publication...' : uploadingImage ? 'Upload en cours...' : 'Publier l\'annonce' }}
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>

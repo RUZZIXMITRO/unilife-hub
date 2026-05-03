@@ -1,0 +1,257 @@
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h2><i class="fa-solid fa-lock"></i> Paiement sécurisé</h2>
+    <div class="stripe-badge">
+      <i class="fa-brands fa-stripe"></i> Propulsé par Stripe
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps-row">
+    <div class="step-item" [class.active]="step >= 1" [class.done]="step > 1">
+      <div class="step-circle">
+        <i class="fa-solid fa-check" *ngIf="step > 1"></i>
+        <span *ngIf="step <= 1">1</span>
+      </div>
+      <span>Livraison</span>
+    </div>
+    <div class="step-line" [class.done]="step > 1"></div>
+    <div class="step-item" [class.active]="step >= 2" [class.done]="step > 2">
+      <div class="step-circle">
+        <i class="fa-solid fa-check" *ngIf="step > 2"></i>
+        <span *ngIf="step <= 2">2</span>
+      </div>
+      <span>Paiement</span>
+    </div>
+    <div class="step-line" [class.done]="step > 2"></div>
+    <div class="step-item" [class.active]="step >= 3">
+      <div class="step-circle">3</div>
+      <span>Confirmation</span>
+    </div>
+  </div>
+
+  <div class="checkout-grid">
+
+    <!-- Left: Steps content -->
+    <div class="content-col">
+
+      <!-- Error -->
+      <div class="error-box" *ngIf="errorMessage">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ errorMessage }}
+      </div>
+
+      <!-- Step 1: Shipping -->
+      <div class="step-card" *ngIf="step === 1">
+        <h3><i class="fa-solid fa-truck"></i> Adresse de livraison</h3>
+
+        <div class="form-group">
+          <label>Adresse complète *</label>
+          <input
+            type="text"
+            placeholder="Ex: 12 Rue Mohammed V, Apt 3"
+            [(ngModel)]="shippingForm.shippingAddress"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ville</label>
+            <input
+              type="text"
+              placeholder="Ex: Oujda"
+              [(ngModel)]="shippingForm.shippingCity"
+            />
+          </div>
+          <div class="form-group">
+            <label>Téléphone *</label>
+            <input
+              type="tel"
+              placeholder="Ex: 0612345678"
+              [(ngModel)]="shippingForm.shippingPhone"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Notes (optionnel)</label>
+          <textarea
+            placeholder="Instructions de livraison..."
+            [(ngModel)]="shippingForm.notes"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="step-actions">
+          <button class="btn-back" (click)="router.navigate(['/student/ecommerce/cart'])">
+            <i class="fa-solid fa-arrow-left"></i> Retour au panier
+          </button>
+          <button class="btn-next" (click)="nextStep()">
+            Continuer vers le paiement <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Payment -->
+      <div class="step-card" *ngIf="step === 2">
+        <h3><i class="fa-regular fa-credit-card"></i> Informations de paiement</h3>
+
+        <div class="loading-payment" *ngIf="loading">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          <span>Initialisation du paiement...</span>
+        </div>
+
+        <div class="payment-form" *ngIf="!loading && paymentIntent">
+          <!-- Card preview -->
+          <div class="card-preview">
+            <div class="card-top">
+              <span class="card-chip">
+                <i class="fa-solid fa-microchip"></i>
+              </span>
+              <i class="fa-brands fa-cc-visa card-brand"></i>
+            </div>
+            <div class="card-number-display">
+              {{ cardNumber || '•••• •••• •••• ••••' }}
+            </div>
+            <div class="card-bottom">
+              <div>
+                <span class="card-label">Titulaire</span>
+                <span class="card-val">ÉTUDIANT UNILIFE</span>
+              </div>
+              <div>
+                <span class="card-label">Expire</span>
+                <span class="card-val">{{ cardExpiry || 'MM/AA' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test cards notice -->
+          <div class="test-notice">
+            <i class="fa-solid fa-circle-info"></i>
+            <div>
+              <strong>Mode test Stripe</strong>
+              <p>Utilisez : <code>4242 4242 4242 4242</code> — Date: <code>12/29</code> — CVC: <code>123</code></p>
+            </div>
+          </div>
+
+          <!-- Card fields -->
+          <div class="form-group">
+            <label>Numéro de carte</label>
+            <div class="card-input-wrap">
+              <i class="fa-regular fa-credit-card"></i>
+              <input
+                type="text"
+                placeholder="1234 5678 9012 3456"
+                [value]="cardNumber"
+                (input)="formatCard($event)"
+                maxlength="19"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date d'expiration</label>
+              <input
+                type="text"
+                placeholder="MM/AA"
+                [value]="cardExpiry"
+                (input)="formatExpiry($event)"
+                maxlength="5"
+              />
+            </div>
+            <div class="form-group">
+              <label>CVC</label>
+              <div class="card-input-wrap">
+                <i class="fa-solid fa-lock"></i>
+                <input
+                  type="text"
+                  placeholder="123"
+                  [(ngModel)]="cardCvc"
+                  maxlength="3"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn-back" (click)="prevStep()">
+              <i class="fa-solid fa-arrow-left"></i> Retour
+            </button>
+            <button
+              class="btn-pay"
+              (click)="processPayment()"
+              [disabled]="processingPayment"
+            >
+              <i class="fa-solid fa-spinner fa-spin" *ngIf="processingPayment"></i>
+              <i class="fa-solid fa-lock" *ngIf="!processingPayment"></i>
+              {{ processingPayment ? 'Traitement...' : 'Payer ' + (finalAmount || totalAmount | number:'1.2-2') + ' EUR' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Confirmation -->
+      <div class="step-card confirmation" *ngIf="step === 3">
+        <div class="success-icon">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h3>Commande confirmée !</h3>
+        <p>Votre commande <strong>#{{ createdOrderId }}</strong> a été passée avec succès.</p>
+        <p class="sub">Vous recevrez une notification dès que votre colis sera expédié.</p>
+
+        <div class="confirm-actions">
+          <button class="btn-orders" (click)="goToOrders()">
+            <i class="fa-solid fa-box"></i> Voir mes commandes
+          </button>
+          <button class="btn-shop-again" (click)="goToShop()">
+            <i class="fa-solid fa-store"></i> Continuer mes achats
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right: Order summary -->
+    <div class="summary-col" *ngIf="step < 3">
+      <div class="summary-card">
+        <h3>Récapitulatif</h3>
+
+        <div class="summary-row">
+          <span>Sous-total</span>
+          <span>{{ totalAmount | number:'1.2-2' }} EUR</span>
+        </div>
+        <div class="summary-row discount" *ngIf="discountAmount > 0">
+          <span>Remise ({{ promoCode }})</span>
+          <span>- {{ discountAmount | number:'1.2-2' }} EUR</span>
+        </div>
+        <div class="summary-row">
+          <span>Livraison</span>
+          <span class="free">Gratuite</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span>{{ (finalAmount || totalAmount) | number:'1.2-2' }} EUR</span>
+        </div>
+
+        <div class="security-list">
+          <div class="sec-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Paiement 100% sécurisé</span>
+          </div>
+          <div class="sec-item">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Retour sous 14 jours</span>
+          </div>
+          <div class="sec-item">
+            <i class="fa-solid fa-truck"></i>
+            <span>Livraison gratuite</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
