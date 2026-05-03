@@ -47,6 +47,8 @@ export interface Group {
   type: string;
   membersCount: number;
   isMember: boolean;
+  isPending: boolean;  // ✅ AJOUTER
+
   createdAt: string;
 }
 
@@ -346,4 +348,18 @@ export class SocialService {
   markAllNotificationsAsRead(): Observable<ApiResponse<void>> {
     return this.http.put<ApiResponse<void>>(`${this.apiUrl}/notifications/read-all`, {});
   }
+  getPostById(postId: number): Observable<ApiResponse<Post>> {
+  return this.http.get<ApiResponse<Post>>(`${this.apiUrl}/posts/${postId}`);
+}
+removePostFromGroup(groupPostId: number): Observable<ApiResponse<void>> {
+  return this.http.delete<ApiResponse<void>>(
+    `${this.apiUrl}/groups/posts/${groupPostId}`
+  );
+}
+
+deleteGroup(groupId: number): Observable<ApiResponse<void>> {
+  return this.http.delete<ApiResponse<void>>(
+    `${this.apiUrl}/groups/${groupId}`
+  );
+}
 }

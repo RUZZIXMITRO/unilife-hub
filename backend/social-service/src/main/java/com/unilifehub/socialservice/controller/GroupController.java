@@ -126,4 +126,13 @@ public class GroupController {
         groupService.removeMember(id, userId, adminId);
         return ResponseEntity.ok(ApiResponse.success("Membre retiré"));
     }
+
+    @DeleteMapping("/{id}")
+public ResponseEntity<ApiResponse<Void>> deleteGroup(
+        @PathVariable Long id,
+        Authentication auth) {
+    String userId = AuthUtils.getRequiredUserId(auth);
+    groupService.deleteGroup(id, userId);
+    return ResponseEntity.ok(ApiResponse.success("Groupe supprimé"));
+}
 }

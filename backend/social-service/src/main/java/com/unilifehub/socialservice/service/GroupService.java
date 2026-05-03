@@ -60,9 +60,17 @@ public class GroupService {
         }
 
         // ✅ PENDING si groupe PRIVATE, ACCEPTED si PUBLIC
-        GroupMember.MemberStatus status = group.getType() == StudyGroup.GroupType.PRIVATE
+        // ✅ Après — le créateur toujours ACCEPTED
+        GroupMember.MemberStatus status;
+        if (group.getCreatorId().equals(userId)) {
+        // Le créateur rejoint toujours directement
+        status = GroupMember.MemberStatus.ACCEPTED;
+        } else {
+        // Les autres : PENDING si privé, ACCEPTED si public
+        status = group.getType() == StudyGroup.GroupType.PRIVATE
                 ? GroupMember.MemberStatus.PENDING
                 : GroupMember.MemberStatus.ACCEPTED;
+        }
 
         GroupMember member = GroupMember.builder()
                 .userId(userId)
@@ -105,12 +113,13 @@ public class GroupService {
     }
 
     // Récupérer tous les groupes publics
-    public List<GroupResponse> getPublicGroups(String userId) {
-        return groupRepository.findByType(StudyGroup.GroupType.PUBLIC)
-                .stream()
-                .map(group -> mapToResponse(group, userId))
-                .collect(Collectors.toList());
-    }
+    // Retourner tous les groupes (publics ET privés)
+public List<GroupResponse> getPublicGroups(String userId) {
+    return groupRepository.findAll()
+            .stream()
+            .map(group -> mapToResponse(group, userId))
+            .collect(Collectors.toList());
+}
 
     private GroupResponse mapToResponse(StudyGroup group, String currentUserId) {
         boolean isMember = memberRepository
@@ -217,4 +226,16 @@ public class GroupService {
                 .joinedAt(m.getJoinedAt())
                 .build();
     }
+
+    @Transactional
+public void deleteGroup(Long groupId, String userId) {
+    StudyGroup group = groupRepository.findById(groupId)
+            .orElseThrow(() -> new RuntimeException("Groupe introuvable"));
+
+    if (!group.getCreatorId().equals(userId)) {
+        throw new RuntimeException("Vous n'êtes pas le créateur de ce groupe");
+    }
+
+    groupRepository.delete(group);
+}
 }

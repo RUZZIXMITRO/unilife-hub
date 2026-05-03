@@ -25,8 +25,8 @@
     <textarea [(ngModel)]="newGroup.description" placeholder="Description..." class="form-input" rows="3"></textarea>
     <div class="form-footer">
       <select [(ngModel)]="newGroup.type" class="filter-btn type-select">
-        <option value="PUBLIC">🌍 Public</option>
-        <option value="PRIVATE">🔒 Privé</option>
+        <option value="PUBLIC"> Public</option>
+        <option value="PRIVATE"> Privé</option>
       </select>
       <button (click)="createGroup()" class="btn-create" [disabled]="!newGroup.name.trim()">
         <i class="fa-solid fa-check"></i> Créer
@@ -59,8 +59,11 @@
            [style.background]="group.type === 'PUBLIC' ? 'linear-gradient(135deg,#8b5cf6,#6d28d9)' : 'linear-gradient(135deg,#1e293b,#334155)'">
         <i class="fa-solid fa-people-group"></i>
       </div>
-      <div class="group-info" (click)="openGroup(group)" style="cursor:pointer">
-        <div class="group-title-row">
+<div class="group-info"
+     (click)="openGroup(group)"
+     [style.cursor]="(group.type === 'PRIVATE' && !group.isMember) || group.isPending ? 'default' : 'pointer'"
+     [style.opacity]="(group.type === 'PRIVATE' && !group.isMember) || group.isPending ? '0.7' : '1'">    
+         <div class="group-title-row">
           <h4>{{ group.name }}</h4>
           <span class="group-type-badge" [class.public]="group.type === 'PUBLIC'" [class.private]="group.type === 'PRIVATE'">
             <i class="fa-solid fa-earth-africa" *ngIf="group.type === 'PUBLIC'"></i>
@@ -75,16 +78,27 @@
         </div>
       </div>
       <div class="group-action">
-        <button *ngIf="!group.isMember"
-                (click)="joinGroup(group.id)"
-                class="btn-join"
-                [disabled]="joiningGroupIds.has(group.id)">
-          <i class="fa-solid fa-right-to-bracket"></i>
-          {{ joiningGroupIds.has(group.id) ? 'En cours...' : 'Rejoindre' }}
-        </button>
-        <button *ngIf="group.isMember" (click)="leaveGroup(group.id)" class="btn-leave">
-          <i class="fa-solid fa-right-from-bracket"></i> Quitter
-        </button>
+        <!-- ✅ Après — 3 états : Rejoindre / En attente / Quitter -->
+<button *ngIf="!group.isMember && !group.isPending"
+        (click)="joinGroup(group.id)"
+        class="btn-join"
+        [disabled]="joiningGroupIds.has(group.id)">
+  <i class="fa-solid fa-right-to-bracket"></i>
+  {{ joiningGroupIds.has(group.id) ? 'En cours...' : 'Rejoindre' }}
+</button>
+
+<button *ngIf="group.isPending"
+        (click)="cancelJoinRequest(group.id)"
+        class="btn-pending"
+        title="Demande en attente — cliquer pour annuler">
+  <i class="fa-solid fa-clock"></i> En attente...
+</button>
+
+<button *ngIf="group.isMember && !group.isPending"
+        (click)="leaveGroup(group.id)"
+        class="btn-leave">
+  <i class="fa-solid fa-right-from-bracket"></i> Quitter
+</button>
       </div>
     </div>
 
@@ -94,29 +108,39 @@
   <div *ngIf="selectedGroup" class="group-detail">
 
     <!-- Header détails -->
-    <div class="perf-card detail-header">
-      <button (click)="closeGroup()" class="btn-back">
-        <i class="fa-solid fa-arrow-left"></i> Retour
-      </button>
-      <div class="detail-title">
-        <div class="group-icon-sm"
-             [style.background]="selectedGroup.type === 'PUBLIC' ? 'linear-gradient(135deg,#8b5cf6,#6d28d9)' : 'linear-gradient(135deg,#1e293b,#334155)'">
-          <i class="fa-solid fa-people-group"></i>
-        </div>
-        <div>
-          <h3>{{ selectedGroup.name }}</h3>
-          <span class="group-meta">
-            <i class="fa-solid fa-users"></i> {{ selectedGroup.membersCount }} membres
-            <span *ngIf="selectedGroup.subject"> · <i class="fa-solid fa-book"></i> {{ selectedGroup.subject }}</span>
-          </span>
-        </div>
-      </div>
+    <!-- Remplace le detail-header par ceci -->
+<div class="perf-card detail-header">
+  <button (click)="closeGroup()" class="btn-back">
+    <i class="fa-solid fa-arrow-left"></i> Retour
+  </button>
+
+  <div class="detail-title">
+    <div class="group-icon-sm" ...>
+      <i class="fa-solid fa-people-group"></i>
     </div>
+    <div>
+      <h3>{{ selectedGroup.name }}</h3>
+      <span class="group-meta">
+<i class="fa-solid fa-users"></i> {{ groupMembers.length }} membres
+        <span *ngIf="selectedGroup.subject"> · <i class="fa-solid fa-book"></i> {{ selectedGroup.subject }}</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ✅ Bouton à droite -->
+  <button *ngIf="isGroupAdmin()"
+          (click)="deleteGroup()"
+          class="btn-delete-group"
+          title="Supprimer le groupe">
+    <i class="fa-solid fa-trash"></i>
+  </button>
+</div>
+    
 
     <!-- Onglets -->
     <div class="tabs-row">
       <button class="filter-btn" [class.active]="activeTab === 'posts'" (click)="setTab('posts')">
-        <i class="fa-solid fa-newspaper"></i> Posts
+        <i class="fa-solid fa-comments"></i> Discussion
       </button>
       <button class="filter-btn" [class.active]="activeTab === 'members'" (click)="setTab('members')">
         <i class="fa-solid fa-users"></i> Membres ({{ groupMembers.length }})
@@ -127,23 +151,90 @@
       </button>
     </div>
 
-    <!-- ===== ONGLET POSTS ===== -->
+    <!-- ===== ONGLET DISCUSSION / CHAT ===== -->
     <div *ngIf="activeTab === 'posts'">
-      <div *ngIf="groupPosts.length === 0" class="perf-card empty-card">
-        <i class="fa-solid fa-newspaper" style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
-        <p>Aucun post dans ce groupe pour le moment.</p>
-      </div>
-      <div *ngFor="let post of groupPosts" class="perf-card post-item">
-        <div class="post-item-header">
-          <div class="post-avatar-sm">
-            <i class="fa-solid fa-user"></i>
+
+      <!-- Messages -->
+      <div class="chat-container perf-card">
+
+        <!-- Liste des messages -->
+        <div class="chat-messages">
+          <div *ngIf="groupPosts.length === 0" class="empty-chat">
+            <i class="fa-solid fa-comments" style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+            <p>Aucun message pour l'instant. Soyez le premier à écrire !</p>
           </div>
-          <div>
-            <span class="post-author">Étudiant #{{ post.postedBy }}</span>
-            <span class="post-time">{{ getTimeAgo(post.postedAt) }}</span>
+
+          <div *ngFor="let post of groupPosts"
+               class="chat-message"
+               [class.my-message]="post.postedBy === currentUserId">
+
+            <!-- Avatar -->
+            <div class="chat-avatar" *ngIf="post.postedBy !== currentUserId">
+              {{ getInitial(post.postedBy) }}
+            </div>
+
+            <div class="chat-bubble-wrapper">
+              <!-- Nom affiché uniquement pour les autres -->
+              <span class="chat-author" *ngIf="post.postedBy !== currentUserId">
+                {{ getUserName(post.postedBy) }}
+              </span>
+              <div class="chat-bubble">
+                {{ postContentCache[post.postId] || '...' }}
+              </div>
+               <!-- ✅ Bouton supprimer uniquement pour mes messages -->
+    <button *ngIf="post.postedBy === currentUserId"
+            (click)="deleteGroupMessage(post)"
+            class="btn-delete-msg"
+            title="Supprimer">
+      <i class="fa-solid fa-trash"></i>
+    </button>
+              <span class="chat-time">{{ getTimeAgo(post.postedAt) }}</span>
+            </div>
+
+            <!-- Avatar côté droit pour mes messages -->
+            <div class="chat-avatar my-avatar" *ngIf="post.postedBy === currentUserId">
+              {{ getInitial(currentUserId) }}
+            </div>
+
           </div>
+          <!-- ✅ Modal confirmation suppression -->
+<div class="delete-modal-overlay" *ngIf="pendingDeletePost" (click)="cancelDeleteMessage()">
+  <div class="delete-modal" (click)="$event.stopPropagation()">
+    <i class="fa-solid fa-trash" style="color:#ef4444;font-size:1.5rem"></i>
+    <p>Supprimer ce message ?</p>
+    <div class="delete-modal-actions">
+      <button (click)="cancelDeleteMessage()" class="filter-btn">Annuler</button>
+      <button (click)="confirmDeleteMessage()" class="btn-reject">
+        <i class="fa-solid fa-trash"></i> Supprimer
+      </button>
+    </div>
+  </div>
+</div>
         </div>
-        <p class="post-id-info">Post #{{ post.postId }}</p>
+
+        <!-- ✅ Zone de saisie du message -->
+        <div class="chat-input-row" *ngIf="selectedGroup.isMember">
+          <input
+            [(ngModel)]="newPostContent"
+            (keyup.enter)="sendGroupMessage()"
+            placeholder="Écrire un message..."
+            class="chat-input"
+            [disabled]="isPostingMessage">
+          <button
+            (click)="sendGroupMessage()"
+            class="btn-send"
+            [disabled]="!newPostContent.trim() || isPostingMessage">
+            <i class="fa-solid fa-paper-plane" *ngIf="!isPostingMessage"></i>
+            <i class="fa-solid fa-spinner fa-spin" *ngIf="isPostingMessage"></i>
+          </button>
+        </div>
+
+        <!-- Message si pas membre -->
+        <div class="chat-join-hint" *ngIf="!selectedGroup.isMember">
+          <i class="fa-solid fa-lock"></i>
+          Rejoignez ce groupe pour participer à la discussion.
+        </div>
+
       </div>
     </div>
 
@@ -154,10 +245,12 @@
       </div>
       <div *ngFor="let member of groupMembers" class="perf-card member-card">
         <div class="member-avatar">
-          <i class="fa-solid fa-user"></i>
+          <!-- ✅ Initiale du vrai nom -->
+          {{ getInitial(member.userId) }}
         </div>
         <div class="member-info">
-          <h4>Étudiant #{{ member.userId }}</h4>
+          <!-- ✅ Vrai nom -->
+          <h4>{{ getUserName(member.userId) }}</h4>
           <span class="member-role" [class.admin-role]="member.role === 'ADMIN'">
             <i class="fa-solid fa-crown" *ngIf="member.role === 'ADMIN'"></i>
             <i class="fa-solid fa-user" *ngIf="member.role !== 'ADMIN'"></i>
@@ -182,10 +275,12 @@
       </div>
       <div *ngFor="let member of pendingMembers" class="perf-card member-card">
         <div class="member-avatar pending-avatar">
-          <i class="fa-solid fa-user"></i>
+          <!-- ✅ Initiale du vrai nom -->
+          {{ getInitial(member.userId) }}
         </div>
         <div class="member-info">
-          <h4>Étudiant #{{ member.userId }}</h4>
+          <!-- ✅ Vrai nom -->
+          <h4>{{ getUserName(member.userId) }}</h4>
           <span style="color:#f59e0b;font-size:0.78rem">
             <i class="fa-regular fa-clock"></i> Demande en attente
           </span>
@@ -200,6 +295,39 @@
         </div>
       </div>
     </div>
+    <!-- Toast -->
+<div class="toast-notif" *ngIf="toastVisible">
+  <i class="fa-solid fa-circle-info"></i> {{ toastMessage }}
+</div>
+
+<!-- Modal suppression message -->
+<div class="delete-modal-overlay" *ngIf="pendingDeletePost" (click)="cancelDeleteMessage()">
+  <div class="delete-modal" (click)="$event.stopPropagation()">
+    <i class="fa-solid fa-trash" style="color:#ef4444;font-size:1.5rem"></i>
+    <p>Supprimer ce message ?</p>
+    <div class="delete-modal-actions">
+      <button (click)="cancelDeleteMessage()" class="filter-btn">Annuler</button>
+      <button (click)="confirmDeleteMessage()" class="btn-reject">
+        <i class="fa-solid fa-trash"></i> Supprimer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal suppression groupe -->
+<div class="delete-modal-overlay" *ngIf="pendingDeleteGroup" (click)="cancelDeleteGroup()">
+  <div class="delete-modal" (click)="$event.stopPropagation()">
+    <i class="fa-solid fa-trash" style="color:#ef4444;font-size:1.5rem"></i>
+<p>Supprimer le groupe <strong>{{ selectedGroup!.name }}</strong> ?</p>
+    <span style="font-size:0.8rem;color:#94a3b8">Cette action est irréversible.</span>
+    <div class="delete-modal-actions">
+      <button (click)="cancelDeleteGroup()" class="filter-btn">Annuler</button>
+      <button (click)="confirmDeleteGroup()" class="btn-reject">
+        <i class="fa-solid fa-trash"></i> Supprimer
+      </button>
+    </div>
+  </div>
+</div>
 
   </div>
 

@@ -62,7 +62,7 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:5000/api/Users';
+  private apiUrl = 'https://localhost:5000/api/Users';
 
   constructor(
     private http: HttpClient,
@@ -163,5 +163,13 @@ getAllUsers(): Observable<any> {
   });
   
   return this.http.get(`${this.apiUrl}`, { headers });
+}
+searchUsers(query: string): Observable<any> {
+  const token = localStorage.getItem('access_token');
+  const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+  return this.http.get(
+    `${this.apiUrl}/search?query=${encodeURIComponent(query)}`,
+    { headers }
+  );
 }
 }
