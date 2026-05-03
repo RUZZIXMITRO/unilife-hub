@@ -27,7 +27,7 @@ export class FriendsComponent implements OnInit {
   private userNameCache: { [credentialId: string]: string } = {};
 
   // ✅ URL directe UserService (pas via Gateway car 401)
-  private userApiUrl = 'http://localhost:7212/api/Users';
+  private userApiUrl = 'https://localhost:7212/api/Users';
 
   constructor(
     private socialService: SocialService,
@@ -102,9 +102,9 @@ export class FriendsComponent implements OnInit {
     });
 
     this.http.get<any>(
-      `${this.userApiUrl}?keyword=${encodeURIComponent(this.searchKeyword)}`,
-      { headers }
-    ).subscribe({
+  `${this.userApiUrl}/search?query=${encodeURIComponent(this.searchKeyword)}`,
+  { headers }
+  ).subscribe({
       next: (res) => {
         if (res.success) {
           // ✅ Exclure l'utilisateur connecté des résultats

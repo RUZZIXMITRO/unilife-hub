@@ -3,10 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-
-
-import { registerLocaleData } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,6 +14,9 @@ import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { ThemeService } from './services/theme.service';
 import { AuthInterceptor } from './services/http-interceptor.service';
+import { EventService } from './services/agenda/event.service';
+import { TodoService } from './services/agenda/todo.service';
+import { AgendaNotificationService } from './services/agenda/agenda-notification.service';
 
 // ========== GUARDS ==========
 import { AuthGuard } from './guards/auth.guard';
@@ -53,7 +53,13 @@ import { ProfileModalComponent } from './components/student/profile-modal/profil
 import { SettingsModalComponent } from './components/student/settings-modal/settings-modal.component';
 import { HelpModalComponent } from './components/student/help-modal/help-modal.component';
 import { MyFavoritesComponent as EcommerceMyFavoritesComponent } from './components/student/ecommerce/my-favorites/my-favorites.component';
+import { AssistantComponent } from './components/student/assistant/assistant.component';
 
+// ========== COMPONENTS - AGENDA ==========
+import { AgendaLayoutComponent } from './components/student/agenda/agenda-layout/agenda-layout.component';
+import { AgendaPageComponent } from './components/student/agenda/agenda-page/agenda-page.component';
+import { TodosPageComponent } from './components/student/agenda/todos-page/todos-page.component';
+import { NotificationsPageComponent } from './components/student/agenda/notifications-page/notifications-page.component';
 
 // ========== COMPONENTS - INTERFACE ADMIN ==========
 import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
@@ -86,22 +92,15 @@ import { AdminOrdersComponent } from './components/admin/ecommerce/admin-orders/
 import { AdminPromotionsComponent } from './components/admin/ecommerce/admin-promotions/admin-promotions.component';
 import { AdminReviewsComponent } from './components/admin/ecommerce/admin-reviews/admin-reviews.component';
 import { AdminInventoryComponent } from './components/admin/ecommerce/admin-inventory/admin-inventory.component';
-import { AssistantComponent } from './components/student/assistant/assistant.component';
-import { AgendaLayoutComponent } from './components/student/agenda/agenda-layout/agenda-layout.component';
-import { AgendaPageComponent } from './components/student/agenda/agenda-page/agenda-page.component';
-import { TodosPageComponent } from './components/student/agenda/todos-page/todos-page.component';
-import { NotificationsPageComponent } from './components/student/agenda/notifications-page/notifications-page.component';
-import { EventService } from './services/agenda/event.service';
-import { TodoService } from './services/agenda/todo.service';
-import { AgendaNotificationService } from './services/agenda/agenda-notification.service';
+import { AdminCoursFormationsComponent } from './components/admin/cours-formations/cours-formations.component';
+import { StudentCoursComponent } from './components/student/cours/student-cours.component';
 
 registerLocaleData(localeFr);
-
 
 @NgModule({
   declarations: [
     AppComponent,
-    
+
     // Site Public
     HomeComponent,
     PreloaderComponent,
@@ -119,12 +118,12 @@ registerLocaleData(localeFr);
     FaqComponent,
     ContactComponent,
     FooterComponent,
-    
+
     // Auth
     AuthComponent,
     ResetPasswordComponent,
     CompleteProfileComponent,
-    
+
     // Interface Étudiante
     StudentLayoutComponent,
     SidebarComponent,
@@ -133,8 +132,16 @@ registerLocaleData(localeFr);
     ProfileModalComponent,
     SettingsModalComponent,
     HelpModalComponent,
-    
-    // Interface Admin ✅ MODIFIER
+    EcommerceMyFavoritesComponent,
+    AssistantComponent,
+
+    // Agenda
+    AgendaLayoutComponent,
+    AgendaPageComponent,
+    TodosPageComponent,
+    NotificationsPageComponent,
+
+    // Interface Admin
     AdminLayoutComponent,
     AdminSidebarComponent,
     AdminTopbarComponent,
@@ -165,13 +172,8 @@ registerLocaleData(localeFr);
     AdminPromotionsComponent,
     AdminReviewsComponent,
     AdminInventoryComponent,
-    EcommerceMyFavoritesComponent,
-    AssistantComponent,
-    AssistantComponent,
-    AgendaLayoutComponent,
-    AgendaPageComponent,
-    TodosPageComponent,
-    NotificationsPageComponent,
+    AdminCoursFormationsComponent,
+    StudentCoursComponent,
   ],
   imports: [
     BrowserModule,
@@ -180,23 +182,22 @@ registerLocaleData(localeFr);
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     AuthService,
     UserService,
     ThemeService,
     AuthGuard,
+    EventService,
+    TodoService,
+    AgendaNotificationService,
     { provide: LOCALE_ID, useValue: 'fr' },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    },
-    
-    EventService,
-    TodoService,
-    AgendaNotificationService
+    }
   ],
   bootstrap: [AppComponent]
 })
