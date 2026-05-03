@@ -46,6 +46,7 @@
   <!-- ===== NAVIGATION ===== -->
   <nav class="sidebar-nav">
 
+    <!-- Dashboard -->
     <a [routerLink]="'/student/dashboard'" class="nav-item"
        [class.active]="isActive('/student/dashboard')"
        [title]="collapsed ? 'Dashboard' : ''">
@@ -60,6 +61,7 @@
       <span class="nav-label" *ngIf="!collapsed">Dashboard</span>
     </a>
 
+    <!-- Agenda & To-Do -->
     <a [routerLink]="'/student/agenda'" class="nav-item"
        [class.active]="isActive('/student/agenda')"
        [title]="collapsed ? 'Agenda & To-Do' : ''">
@@ -77,6 +79,7 @@
       <span class="nav-badge" *ngIf="!collapsed && todoBadge > 0">{{ todoBadge }}</span>
     </a>
 
+    <!-- Cours & Formations -->
     <a [routerLink]="'/student/courses'" class="nav-item"
        [class.active]="isActive('/student/courses')"
        [title]="collapsed ? 'Cours & Formations' : ''">
@@ -96,112 +99,108 @@
       <span class="nav-label" *ngIf="!collapsed">Cours & Formations</span>
     </a>
 
-   <!-- E-Commerce toggle -->
-<div class="nav-item nav-toggle"
-     [class.active]="router.url.includes('/student/ecommerce')"
-     (click)="toggleEcommerce()"
-     [title]="collapsed ? 'E-Commerce' : ''">
-  <div class="nav-svg-wrap">
-    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 3.5 L4.5 3.5 L6.5 13 L15.5 13 L18 6 L5.5 6"
-            stroke="currentColor" stroke-width="1.6" fill="none"
-            stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-      <circle cx="8"  cy="16.5" r="1.6" fill="currentColor" opacity="0.85"/>
-      <circle cx="14" cy="16.5" r="1.6" fill="currentColor" opacity="0.85"/>
-      <rect x="8.5" y="8" width="1.8" height="3" rx="0.6" fill="currentColor" opacity="0.5"/>
-      <rect x="12"  y="8" width="1.8" height="3" rx="0.6" fill="currentColor" opacity="0.5"/>
-    </svg>
-  </div>
-  <span class="nav-label" *ngIf="!collapsed">E-Commerce</span>
-  <svg *ngIf="!collapsed" class="arrow-icon" [class.rotated]="ecommerceExpanded"
-       viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.8" fill="none"
-          stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-</div>
+    <!-- ========== E-COMMERCE (avec sous‑menu) ========== -->
+    <div class="nav-group">
+      <div class="nav-item nav-toggle"
+           [class.active]="router.url.includes('/student/ecommerce')"
+           (click)="toggleEcommerce()"
+           [title]="collapsed ? 'E-Commerce' : ''">
+        <div class="nav-svg-wrap">
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 3.5 L4.5 3.5 L6.5 13 L15.5 13 L18 6 L5.5 6"
+                  stroke="currentColor" stroke-width="1.6" fill="none"
+                  stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+            <circle cx="8"  cy="16.5" r="1.6" fill="currentColor" opacity="0.85"/>
+            <circle cx="14" cy="16.5" r="1.6" fill="currentColor" opacity="0.85"/>
+            <rect x="8.5" y="8" width="1.8" height="3" rx="0.6" fill="currentColor" opacity="0.5"/>
+            <rect x="12"  y="8" width="1.8" height="3" rx="0.6" fill="currentColor" opacity="0.5"/>
+          </svg>
+        </div>
+        <span class="nav-label" *ngIf="!collapsed">E-Commerce</span>
+        <svg *ngIf="!collapsed" class="arrow-icon" [class.rotated]="ecommerceExpanded"
+             viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.8" fill="none"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
 
-<!-- Sous-menu E-Commerce -->
-<div class="submenu" [class.expanded]="ecommerceExpanded && !collapsed">
-
-  <a [routerLink]="'/student/ecommerce'" class="nav-item nav-sub"
-     [class.active]="router.url === '/student/ecommerce'">
-    <div class="nav-svg-wrap">
-      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="2" width="7" height="7" rx="2" fill="currentColor" opacity="0.8"/>
-        <rect x="11" y="2" width="7" height="7" rx="2" fill="currentColor" opacity="0.5"/>
-        <rect x="2" y="11" width="7" height="7" rx="2" fill="currentColor" opacity="0.5"/>
-        <rect x="11" y="11" width="7" height="7" rx="2" fill="currentColor" opacity="0.3"/>
-      </svg>
+      <!-- Sous‑menu E-Commerce -->
+      <div class="submenu" [class.expanded]="ecommerceExpanded && !collapsed">
+        <a [routerLink]="'/student/ecommerce'" class="nav-item nav-sub"
+           [class.active]="isActive('/student/ecommerce')">
+          <div class="nav-svg-wrap">
+            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="7" height="7" rx="2" fill="currentColor" opacity="0.8"/>
+              <rect x="11" y="2" width="7" height="7" rx="2" fill="currentColor" opacity="0.5"/>
+              <rect x="2" y="11" width="7" height="7" rx="2" fill="currentColor" opacity="0.5"/>
+              <rect x="11" y="11" width="7" height="7" rx="2" fill="currentColor" opacity="0.3"/>
+            </svg>
+          </div>
+          <span class="nav-label">Catalogue</span>
+        </a>
+        <a [routerLink]="'/student/ecommerce/cart'" class="nav-item nav-sub"
+           [class.active]="isActive('/student/ecommerce/cart')">
+          <div class="nav-svg-wrap">
+            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 3.5 L4.5 3.5 L6.5 13 L15.5 13 L18 6 L5.5 6"
+                    stroke="currentColor" stroke-width="1.6" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+              <circle cx="8"  cy="16.5" r="1.6" fill="currentColor" opacity="0.85"/>
+              <circle cx="14" cy="16.5" r="1.6" fill="currentColor" opacity="0.85"/>
+            </svg>
+          </div>
+          <span class="nav-label">Mon Panier</span>
+        </a>
+        <a [routerLink]="'/student/ecommerce/orders'" class="nav-item nav-sub"
+           [class.active]="isActive('/student/ecommerce/orders')">
+          <div class="nav-svg-wrap">
+            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="2" width="14" height="16" rx="3" fill="currentColor" opacity="0.15"/>
+              <rect x="3" y="2" width="14" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>
+              <rect x="6" y="6"  width="8" height="1.5" rx="0.75" fill="currentColor" opacity="0.7"/>
+              <rect x="6" y="9"  width="6" height="1.5" rx="0.75" fill="currentColor" opacity="0.5"/>
+              <rect x="6" y="12" width="7" height="1.5" rx="0.75" fill="currentColor" opacity="0.4"/>
+            </svg>
+          </div>
+          <span class="nav-label">Mes Commandes</span>
+        </a>
+        <a [routerLink]="'/student/ecommerce/favorites'" class="nav-item nav-sub"
+           [class.active]="isActive('/student/ecommerce/favorites')">
+          <div class="nav-svg-wrap">
+            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 16 C10 16 2 11 2 6.5 C2 4 4 2.5 6 2.5 C8 2.5 9.5 4 10 5 C10.5 4 12 2.5 14 2.5 C16 2.5 18 4 18 6.5 C18 11 10 16 10 16Z"
+                    fill="currentColor" opacity="0.85"/>
+            </svg>
+          </div>
+          <span class="nav-label">Mes Favoris</span>
+        </a>
+        <a [routerLink]="'/student/ecommerce/reviews'" class="nav-item nav-sub"
+           [class.active]="isActive('/student/ecommerce/reviews')">
+          <div class="nav-svg-wrap">
+            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="10,2 12.5,7 18,7.5 14,11.5 15,17 10,14 5,17 6,11.5 2,7.5 7.5,7"
+                       fill="currentColor" opacity="0.85"/>
+            </svg>
+          </div>
+          <span class="nav-label">Mes Avis</span>
+        </a>
+        <a [routerLink]="'/student/ecommerce/ai'" class="nav-item nav-sub"
+           [class.active]="isActive('/student/ecommerce/ai')">
+          <div class="nav-svg-wrap">
+            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="5" width="16" height="11" rx="4" fill="currentColor" opacity="0.15"/>
+              <rect x="2" y="5" width="16" height="11" rx="4" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>
+              <circle cx="7.5"  cy="10" r="1.5" fill="currentColor" opacity="0.9"/>
+              <circle cx="12.5" cy="10" r="1.5" fill="currentColor" opacity="0.9"/>
+              <path d="M7 13 Q10 14.5 13 13" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.7" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="nav-label">Assistant Shop IA</span>
+        </a>
+      </div>
     </div>
-    <span class="nav-label">Catalogue</span>
-  </a>
 
-  <a [routerLink]="'/student/ecommerce/cart'" class="nav-item nav-sub"
-     [class.active]="isActive('/student/ecommerce/cart')">
-    <div class="nav-svg-wrap">
-      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 3.5 L4.5 3.5 L6.5 13 L15.5 13 L18 6 L5.5 6"
-              stroke="currentColor" stroke-width="1.6" fill="none"
-              stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-        <circle cx="8"  cy="16.5" r="1.6" fill="currentColor" opacity="0.85"/>
-        <circle cx="14" cy="16.5" r="1.6" fill="currentColor" opacity="0.85"/>
-      </svg>
-    </div>
-    <span class="nav-label">Mon Panier</span>
-  </a>
-
-  <a [routerLink]="'/student/ecommerce/orders'" class="nav-item nav-sub"
-     [class.active]="isActive('/student/ecommerce/orders')">
-    <div class="nav-svg-wrap">
-      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <rect x="3" y="2" width="14" height="16" rx="3" fill="currentColor" opacity="0.15"/>
-        <rect x="3" y="2" width="14" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>
-        <rect x="6" y="6"  width="8" height="1.5" rx="0.75" fill="currentColor" opacity="0.7"/>
-        <rect x="6" y="9"  width="6" height="1.5" rx="0.75" fill="currentColor" opacity="0.5"/>
-        <rect x="6" y="12" width="7" height="1.5" rx="0.75" fill="currentColor" opacity="0.4"/>
-      </svg>
-    </div>
-    <span class="nav-label">Mes Commandes</span>
-  </a>
-
-  <a [routerLink]="'/student/ecommerce/favorites'" class="nav-item nav-sub"
-     [class.active]="isActive('/student/ecommerce/favorites')">
-    <div class="nav-svg-wrap">
-      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 16 C10 16 2 11 2 6.5 C2 4 4 2.5 6 2.5 C8 2.5 9.5 4 10 5 C10.5 4 12 2.5 14 2.5 C16 2.5 18 4 18 6.5 C18 11 10 16 10 16Z"
-              fill="currentColor" opacity="0.85"/>
-      </svg>
-    </div>
-    <span class="nav-label">Mes Favoris</span>
-  </a>
-
-  <a [routerLink]="'/student/ecommerce/reviews'" class="nav-item nav-sub"
-     [class.active]="isActive('/student/ecommerce/reviews')">
-    <div class="nav-svg-wrap">
-      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="10,2 12.5,7 18,7.5 14,11.5 15,17 10,14 5,17 6,11.5 2,7.5 7.5,7"
-                 fill="currentColor" opacity="0.85"/>
-      </svg>
-    </div>
-    <span class="nav-label">Mes Avis</span>
-  </a>
-
-  <a [routerLink]="'/student/ecommerce/ai'" class="nav-item nav-sub"
-     [class.active]="isActive('/student/ecommerce/ai')">
-    <div class="nav-svg-wrap">
-      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="5" width="16" height="11" rx="4" fill="currentColor" opacity="0.15"/>
-        <rect x="2" y="5" width="16" height="11" rx="4" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>
-        <circle cx="7.5"  cy="10" r="1.5" fill="currentColor" opacity="0.9"/>
-        <circle cx="12.5" cy="10" r="1.5" fill="currentColor" opacity="0.9"/>
-        <path d="M7 13 Q10 14.5 13 13" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.7" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <span class="nav-label">Assistant Shop IA</span>
-  </a>
-
-</div>
-
+    <!-- Marketplace -->
     <a [routerLink]="'/student/marketplace'" class="nav-item"
        [class.active]="isActive('/student/marketplace')"
        [title]="collapsed ? 'Marketplace' : ''">
@@ -219,50 +218,67 @@
       <span class="nav-label" *ngIf="!collapsed">Marketplace</span>
     </a>
 
-<!-- RÉSEAU SOCIAL avec sous-menu -->
-<div class="nav-group">
+    <!-- ========== RÉSEAU SOCIAL (avec sous‑menu) ========== -->
+    <div class="nav-group">
+      <a class="nav-item"
+         [class.active]="isActive('/student/social')"
+         (click)="!collapsed ? toggleSocial() : router.navigate(['/student/social'])"
+         [title]="collapsed ? 'Réseau Social' : ''">
+        <div class="nav-svg-wrap">
+          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="6.5" r="3.5" fill="currentColor" opacity="0.9"/>
+            <path d="M3.5 17.5 C3.5 13.5 16.5 13.5 16.5 17.5" fill="currentColor" opacity="0.45"/>
+            <circle cx="4"  cy="9" r="2.5" fill="currentColor" opacity="0.6"/>
+            <path d="M1 17 C1 14 7 14 7 17"    fill="currentColor" opacity="0.3"/>
+            <circle cx="16" cy="9" r="2.5" fill="currentColor" opacity="0.6"/>
+            <path d="M13 17 C13 14 19 14 19 17" fill="currentColor" opacity="0.3"/>
+          </svg>
+        </div>
+        <span class="nav-label" *ngIf="!collapsed">Réseau Social</span>
+        <span class="nav-badge" *ngIf="!collapsed && socialBadge > 0">{{ socialBadge }}</span>
+        <!-- Flèche indicateur -->
+        <i *ngIf="!collapsed" class="fa-solid"
+           [class.fa-chevron-down]="!socialExpanded"
+           [class.fa-chevron-up]="socialExpanded"
+           style="font-size:0.65rem;margin-left:auto;color:#94a3b8"></i>
+      </a>
 
-  <!-- Item principal cliquable -->
-  <a class="nav-item"
-     [class.active]="isActive('/student/social')"
-     (click)="!collapsed ? toggleSocial() : router.navigate(['/student/social'])"
-     [title]="collapsed ? 'Réseau Social' : ''">
-    <div class="nav-svg-wrap">
-      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="10" cy="6.5" r="3.5" fill="currentColor" opacity="0.9"/>
-        <path d="M3.5 17.5 C3.5 13.5 16.5 13.5 16.5 17.5" fill="currentColor" opacity="0.45"/>
-        <circle cx="4"  cy="9" r="2.5" fill="currentColor" opacity="0.6"/>
-        <path d="M1 17 C1 14 7 14 7 17"    fill="currentColor" opacity="0.3"/>
-        <circle cx="16" cy="9" r="2.5" fill="currentColor" opacity="0.6"/>
-        <path d="M13 17 C13 14 19 14 19 17" fill="currentColor" opacity="0.3"/>
-      </svg>
+      <!-- Sous‑menu du Réseau Social -->
+      <div class="nav-submenu" *ngIf="!collapsed && socialExpanded">
+        <a [routerLink]="'/student/social/feed'" class="submenu-item"
+           [class.active]="isActive('/student/social/feed')">
+          <i class="fa-solid fa-rss"></i>
+          <span>Fil d'actualité</span>
+        </a>
+        <a [routerLink]="'/student/social/friends'" class="submenu-item"
+           [class.active]="isActive('/student/social/friends')">
+          <i class="fa-solid fa-user-group"></i>
+          <span>Amis</span>
+          <span class="sub-badge" *ngIf="friendRequestsBadge > 0">{{ friendRequestsBadge }}</span>
+        </a>
+        <a [routerLink]="'/student/social/groups'" class="submenu-item"
+           [class.active]="isActive('/student/social/groups')">
+          <i class="fa-solid fa-users"></i>
+          <span>Groupes</span>
+        </a>
+        <a [routerLink]="'/student/social/messages'" class="submenu-item"
+           [class.active]="isActive('/student/social/messages')">
+          <i class="fa-solid fa-comment-dots"></i>
+          <span>Messages</span>
+        </a>
+        <a [routerLink]="'/student/social/notifications'" class="submenu-item"
+           [class.active]="isActive('/student/social/notifications')">
+          <i class="fa-solid fa-bell"></i>
+          <span>Notifications</span>
+          <span class="sub-badge" *ngIf="socialBadge > 0">{{ socialBadge }}</span>
+        </a>
+      </div>
     </div>
-    <span class="nav-label" *ngIf="!collapsed">Réseau Social</span>
-    <span class="nav-badge" *ngIf="!collapsed && socialBadge > 0">
-      {{ socialBadge }}
-    </span>
-    <!-- Flèche indicateur -->
-    <i *ngIf="!collapsed"
-       class="fa-solid"
-       [class.fa-chevron-down]="!socialExpanded"
-       [class.fa-chevron-up]="socialExpanded"
-       style="font-size:0.65rem;margin-left:auto;color:#94a3b8">
-    </i>
-  </a>
 
-  <!-- Sous-menu -->
-  <div class="nav-submenu" *ngIf="!collapsed && socialExpanded">
-
-    <a [routerLink]="'/student/social/feed'"
-       class="submenu-item"
-       [class.active]="isActive('/student/social/feed')">
-      <i class="fa-solid fa-rss"></i>
-      <span>Fil d'actualité</span>
-    </a>
-
-    <a [routerLink]="'/student/assistant'" class="nav-item"
-   [class.active]="isActive('/student/assistant')"
-   [title]="collapsed ? 'Assistant IA' : ''">
+    <!-- Assistant IA (indépendant) -->
+    <a [routerLink]="'/student/chatbot'" class="nav-item"
+       [class.active]="isActive('/student/chatbot')"
+       [title]="collapsed ? 'Assistant IA' : ''">
       <div class="nav-svg-wrap">
         <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <rect x="2" y="5" width="16" height="11" rx="4" fill="currentColor" opacity="0.15"/>
@@ -279,7 +295,7 @@
 
     <div class="nav-divider"></div>
 
-    <!-- MON PROFIL -->
+    <!-- Mon Profil -->
     <a class="nav-item"
        (click)="openProfile.emit()"
        [class.active]="isActive('/student/profile-modal')"
@@ -294,7 +310,7 @@
       <span class="nav-label" *ngIf="!collapsed">Mon Profil</span>
     </a>
 
-    <!-- PARAMÈTRES -->
+    <!-- Paramètres -->
     <a class="nav-item"
        (click)="openSettings.emit()"
        [class.active]="isActive('/student/settings-modal')"
@@ -315,7 +331,6 @@
   <!-- ===== FOOTER ===== -->
   <div class="sidebar-footer" [class.footer-collapsed]="collapsed">
     <ng-container *ngIf="!collapsed">
-
       <div class="sf-illo">
         <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -341,6 +356,7 @@
           <rect x="118" y="56" width="34" height="20" rx="3" fill="#1e293b"/>
           <rect x="120" y="58" width="30" height="16" rx="2" fill="#334155"/>
           <rect x="122" y="60" width="26" height="12" rx="1" fill="#0f172a"/>
+          <rect x="120" y="60" width="28" height="12" rx="1" fill="#0f172a"/>
           <rect x="123" y="61" width="24" height="10" rx="1" fill="#1e40af" opacity="0.8"/>
           <rect x="125" y="63" width="14" height="2"  rx="1" fill="#93c5fd" opacity="0.8"/>
           <rect x="125" y="67" width="10" height="2"  rx="1" fill="#93c5fd" opacity="0.5"/>
@@ -362,9 +378,7 @@
           <text x="164" y="48" font-size="8"  fill="#2563eb" opacity="0.6" font-family="sans-serif" font-weight="bold">A+</text>
         </svg>
       </div>
-
       <p class="sf-copy">© 2026 UniLife Hub</p>
-
     </ng-container>
     <div class="sf-dot" *ngIf="collapsed"></div>
   </div>
