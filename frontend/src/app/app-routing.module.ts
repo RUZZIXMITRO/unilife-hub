@@ -79,6 +79,7 @@ const routes: Routes = [
 },
      
       // Marketplace Symfony
+      { path: 'agenda', loadChildren: () => import('./modules/agenda/agenda.module').then(m => m.AgendaModule)},
       { path: 'marketplace', component: MarketplaceListComponent },
       { path: 'marketplace/publish', component: MarketplacePublishComponent },
       { path: 'marketplace/my-listings', component: MyListingsComponent },

@@ -15,9 +15,14 @@ export interface ChangePasswordRequest {
   providedIn: 'root'
 })
 export class AuthService {
+<<<<<<< Updated upstream
 
   private apiUrl = 'http://localhost:5000/api/Auth';
 
+=======
+  private apiUrl = 'http://localhost:5000/api/Auth';
+  
+>>>>>>> Stashed changes
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
