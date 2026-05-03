@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AgendaNotificationService } from '../../services/agenda-notification.service';
-import { NotificationDto } from '../../models/notification.model';
+import { AgendaNotificationService } from '../../../../services/agenda/agenda-notification.service';
+import { NotificationDto } from '../../../../models/agenda/notification.model';
 
 @Component({
   selector: 'app-notifications-page',
