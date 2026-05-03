@@ -1,0 +1,7 @@
+replicaCount: 2
+image:
+  repository: yousra00/promotion-service
+  tag: "latest"
+service:
+  type: ClusterIP
+  port: 8085

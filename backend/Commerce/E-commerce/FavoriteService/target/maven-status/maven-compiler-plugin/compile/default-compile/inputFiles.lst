@@ -1,0 +1,12 @@
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\config\CorsConfig.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\config\WebClientConfig.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\controller\FavoriteController.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\dto\request\AddFavoriteRequest.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\dto\response\ApiResponse.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\dto\response\FavoriteResponse.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\exception\GlobalExceptionHandler.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\FavoriteServiceApplication.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\model\Favorite.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\repository\FavoriteRepository.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\service\IFavoriteService.java
+C:\Users\Yousra\Desktop\unilifehub\backend\Commerce\E-commerce\FavoriteService\src\main\java\com\unilife\favorite\service\impl\FavoriteServiceImpl.java

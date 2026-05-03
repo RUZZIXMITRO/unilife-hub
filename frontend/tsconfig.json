@@ -13,6 +13,7 @@
     "declaration": false,
     "experimentalDecorators": true,
     "moduleResolution": "node",
+   // "ignoreDeprecations": "6.0",
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "target": "ES2022",

@@ -1,0 +1,134 @@
+<div class="mp-wrapper">
+
+  <!-- HEADER -->
+  <div class="mp-header">
+    <div class="mp-header-top">
+      <div>
+        <h1 class="mp-title">
+        <i class="fas fa-store"></i>
+        Marketplace
+        </h1>
+        <p class="mp-subtitle">Trouve les meilleures affaires près de chez toi</p>
+      </div>
+      <button class="btn-sell" (click)="goToPublish()">
+        <i class="fas fa-plus"></i>
+        Publier une annonce
+      </button>
+    </div>
+
+    <div class="mp-nav-links">
+      <a routerLink="/student/marketplace/my-listings" class="mp-nav-link">
+        <i class="fas fa-list"></i>
+        Mes annonces
+      </a>
+      <a routerLink="/student/marketplace/my-favorites" class="mp-nav-link">
+        <i class="fas fa-heart"></i>
+        Mes favoris
+      </a>
+    </div>
+  </div>
+
+  <!-- SEARCH + FILTERS -->
+  <div class="mp-search-section">
+    <div class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (input)="search()"
+        placeholder="Rechercher un article..."
+      />
+      <button class="clear-btn" *ngIf="searchQuery" (click)="searchQuery=''; search()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="cats-row">
+      <button class="cat-pill" [class.active]="selectedCategory === ''" (click)="filterByCategory('')">
+        <i class="fas fa-th-large"></i>
+        Tout
+      </button>
+      <button class="cat-pill" *ngFor="let cat of categories"
+        [class.active]="selectedCategory === cat"
+        (click)="filterByCategory(cat)">
+        <i class="fas {{ getCatIcon(cat) }}"></i>
+        {{ cat }}
+      </button>
+    </div>
+  </div>
+
+  <!-- RESULTS INFO -->
+  <div class="mp-results-bar" *ngIf="!loading">
+    <span>
+      <strong>{{ filteredListings.length }}</strong>
+      article{{ filteredListings.length > 1 ? 's' : '' }} disponible{{ filteredListings.length > 1 ? 's' : '' }}
+      <span *ngIf="selectedCategory"> — <strong>{{ selectedCategory }}</strong></span>
+    </span>
+  </div>
+
+  <!-- SKELETON LOADING -->
+  <div class="mp-grid" *ngIf="loading">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6,7,8]">
+      <div class="skel-img"></div>
+      <div class="skel-body">
+        <div class="skel-line" style="width:70%"></div>
+        <div class="skel-line" style="width:50%"></div>
+        <div class="skel-line" style="width:40%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div class="mp-empty" *ngIf="!loading && filteredListings.length === 0">
+    <div class="empty-icon-wrap">
+      <i class="fas fa-box-open"></i>
+    </div>
+    <h3>Aucune annonce disponible</h3>
+    <p>Sois le premier à publier dans cette catégorie</p>
+    <button class="btn-sell" (click)="goToPublish()">
+      <i class="fas fa-plus"></i>
+      Publier maintenant
+    </button>
+  </div>
+
+  <!-- GRID -->
+  <div class="mp-grid" *ngIf="!loading && filteredListings.length > 0">
+    <div class="mp-card" *ngFor="let listing of filteredListings" (click)="goToDetail(listing.id)">
+
+      <div class="mp-card-img">
+        <img
+          *ngIf="listing.imageUrls && listing.imageUrls.length > 0"
+          [src]="listing.imageUrls[0]"
+          alt="{{ listing.title }}"
+        />
+        <div *ngIf="!listing.imageUrls || listing.imageUrls.length === 0" class="mp-no-img">
+          <i class="fas fa-image"></i>
+        </div>
+
+        <button class="fav-btn"
+          [class.active]="isFavorite(listing.id)"
+          (click)="toggleFavorite($event, listing.id)">
+          <i class="fas fa-heart"></i>
+        </button>
+
+        <span class="cat-badge">
+          <i class="fas {{ getCatIcon(listing.category) }}"></i>
+          {{ listing.category }}
+        </span>
+      </div>
+
+      <div class="mp-card-body">
+        <h3>{{ listing.title }}</h3>
+        <p class="mp-desc">{{ listing.description }}</p>
+        <div class="mp-card-bottom">
+          <span class="mp-price">{{ listing.price }} <small>DH</small></span>
+          <span class="mp-cond" [class]="getConditionClass(listing.condition)">
+            {{ listing.condition }}
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

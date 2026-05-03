@@ -1,0 +1,12 @@
+replicaCount: 2
+image:
+  repository: yousra00/cart-service
+  tag: "latest"
+service:
+  type: ClusterIP
+  port: 8082
+env:
+  DB_CONNECTION: "Server=sqlserver-service;Database=cart_db;User Id=unilife_user;Password=UniLife123!;TrustServerCertificate=True;"
+  REDIS_CONNECTION: "redis-service:6379"
+  CATALOG_URL: "http://catalogservice:8081"
+  INVENTORY_URL: "http://inventoryservice:8080"

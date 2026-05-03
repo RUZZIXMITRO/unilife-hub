@@ -1,0 +1,140 @@
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2><i class="fa-solid fa-box"></i> Mes Commandes</h2>
+      <p>{{ orders.length }} commande(s) au total</p>
+    </div>
+    <button class="btn-shop" (click)="goToShop()">
+      <i class="fa-solid fa-store"></i> Boutique
+    </button>
+  </div>
+
+  <!-- Status filters -->
+<div class="filters-row">
+  <button
+    *ngFor="let f of statusFilters"
+    class="filter-btn"
+    [class.active]="selectedStatus === f.key"
+    (click)="filterByStatus(f.key)"
+  >
+    {{ f.label }}
+    <span class="filter-count" *ngIf="f.key !== 'all' && getCountByStatus(f.key) > 0">
+      {{ getCountByStatus(f.key) }}
+    </span>
+  </button>
+</div>
+
+  <!-- Loading -->
+  <div class="loading-col" *ngIf="loading">
+    <div class="skeleton" *ngFor="let i of [1,2,3]"></div>
+  </div>
+
+  <!-- Empty -->
+  <div class="empty-state" *ngIf="!loading && filteredOrders.length === 0">
+    <div class="empty-icon">
+      <i class="fa-solid fa-box-open"></i>
+    </div>
+    <h3>Aucune commande trouvée</h3>
+    <p>Vous n'avez pas encore de commandes dans cette catégorie</p>
+    <button class="btn-shop-empty" (click)="goToShop()">
+      <i class="fa-solid fa-store"></i> Découvrir la boutique
+    </button>
+  </div>
+
+  <!-- Orders list -->
+  <div class="orders-list" *ngIf="!loading && filteredOrders.length > 0">
+
+    <div class="order-card" *ngFor="let order of filteredOrders" (click)="goToDetail(order.id)">
+
+      <!-- Order header -->
+      <div class="order-header">
+        <div class="order-id">
+          <span class="label">Commande</span>
+          <span class="value">#{{ order.id }}</span>
+        </div>
+        <div class="order-date">
+          <i class="fa-regular fa-calendar"></i>
+          {{ order.createdAt | date:'dd/MM/yyyy' }}
+        </div>
+        <div class="status-badge" [ngClass]="getStatusClass(order.status)">
+          <i class="fa-solid" [ngClass]="getStatusIcon(order.status)"></i>
+          {{ getStatusLabel(order.status) }}
+        </div>
+        <div class="payment-badge" [class.paid]="order.paymentStatus === 'Paid'">
+          <i class="fa-solid fa-credit-card"></i>
+          {{ order.paymentStatus === 'Paid' ? 'Payée' : 'En attente' }}
+        </div>
+      </div>
+
+      <!-- Order items preview -->
+      <div class="order-items">
+        <div class="item-preview" *ngFor="let item of order.items | slice:0:3">
+         <div class="item-img">
+  <img
+    [src]="productImages[item.productId] || 'https://placehold.co/400x400?text=no+image'"
+    [alt]="item.productTitle"
+  />
+</div>
+          <div class="item-info">
+            <p class="item-name">{{ item.productTitle }}</p>
+            <span class="item-qty">x{{ item.quantity }}</span>
+          </div>
+          <span class="item-price">{{ item.subtotal | number:'1.2-2' }} EUR</span>
+        </div>
+        <div class="more-items" *ngIf="order.items.length > 3">
+          + {{ order.items.length - 3 }} autre(s) article(s)
+        </div>
+      </div>
+
+      <!-- Order footer -->
+      <div class="order-footer">
+        <div class="order-address">
+          <i class="fa-solid fa-location-dot"></i>
+          {{ order.shippingCity || order.shippingAddress }}
+        </div>
+        <div class="tracking" *ngIf="order.trackingNumber">
+          <i class="fa-solid fa-truck"></i>
+          Suivi : {{ order.trackingNumber }}
+        </div>
+        <div class="order-total">
+          Total : <strong>{{ order.finalAmount | number:'1.2-2' }} EUR</strong>
+        </div>
+        <div class="order-actions" (click)="$event.stopPropagation()">
+          <button
+            class="btn-cancel-order"
+            *ngIf="canCancel(order.status)"
+            (click)="cancelOrder(order.id)"
+            [disabled]="cancellingId === order.id"
+          >
+            <i class="fa-solid fa-spinner fa-spin" *ngIf="cancellingId === order.id"></i>
+            <i class="fa-solid fa-xmark" *ngIf="cancellingId !== order.id"></i>
+            Annuler
+          </button>
+         <button class="btn-detail" (click)="goToDetail(order.id)">
+  Détails <i class="fa-solid fa-chevron-right"></i>
+</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="orderToCancel" (click)="orderToCancel = null">
+  <div class="confirm-modal" (click)="$event.stopPropagation()">
+    <div class="confirm-icon">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <h3>Annuler la commande #{{ orderToCancel }} ?</h3>
+    <p>Cette action est irréversible.</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel-modal" (click)="orderToCancel = null">Retour</button>
+      <button class="btn-confirm-cancel" (click)="confirmCancel()">
+        <i class="fa-solid fa-xmark"></i> Confirmer
+      </button>
+    </div>
+  </div>
+</div>
+
+</div>

@@ -1,0 +1,130 @@
+<div class="page">
+
+  <div class="toast-success" *ngIf="successMessage">
+    <i class="fa-solid fa-circle-check"></i> {{ successMessage }}
+  </div>
+
+  <div class="page-header">
+    <div>
+      <h2><i class="fa-solid fa-clipboard-list"></i> Gestion des Commandes</h2>
+      <p>{{ orders.length }} commande(s) au total</p>
+    </div>
+  </div>
+
+  <div class="filters-row">
+    <button
+      *ngFor="let f of statusFilters"
+      class="filter-btn"
+      [class.active]="selectedStatus === f.key"
+      (click)="filterByStatus(f.key)"
+    >{{ f.label }}</button>
+  </div>
+
+  <div class="loading-col" *ngIf="loading">
+    <div class="skeleton" *ngFor="let i of [1,2,3,4]"></div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && filteredOrders.length === 0">
+    <i class="fa-solid fa-clipboard-list"></i>
+    <p>Aucune commande trouvée</p>
+  </div>
+
+  <div class="orders-table" *ngIf="!loading && filteredOrders.length > 0">
+    <div class="table-header">
+      <span>Commande</span>
+      <span>Client</span>
+      <span>Articles</span>
+      <span>Total</span>
+      <span>Statut</span>
+      <span>Date</span>
+      <span>Actions</span>
+    </div>
+
+    <div class="table-row" *ngFor="let order of filteredOrders">
+      <span class="order-id">#{{ order.id }}</span>
+      <span class="customer">
+  <div class="customer-avatar">
+    {{ (userNames[order.userId] || order.userId)[0] | uppercase }}
+  </div>
+  <span>{{ userNames[order.userId] || (order.userId | slice:0:8) + '...' }}</span>
+</span>
+      <span class="items-count">{{ order.items.length }} article(s)</span>
+      <span class="total">{{ order.finalAmount | number:'1.2-2' }} EUR</span>
+      <span>
+        <div class="status-badge" [ngClass]="getStatusClass(order.status)">
+          {{ getStatusLabel(order.status) }}
+        </div>
+      </span>
+      <span class="date">{{ order.createdAt | date:'dd/MM/yy' }}</span>
+     <span class="actions">
+  <button
+    class="btn-update"
+    (click)="openStatusModal(order)"
+    [disabled]="updatingId === order.id"
+  >
+    <i class="fa-solid fa-pen"></i>
+  </button>
+  <button
+    class="btn-delete-order"
+    (click)="cancelOrder(order.id)"
+    [disabled]="updatingId === order.id || order.status === 'Cancelled'"
+  >
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+</span>
+
+<!-- Confirm Cancel Modal -->
+<div class="modal-overlay" *ngIf="orderToCancel" (click)="orderToCancel = null">
+  <div class="confirm-modal" (click)="$event.stopPropagation()">
+    <div class="confirm-icon">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <h3>Annuler la commande #{{ orderToCancel }} ?</h3>
+    <p>Cette action est irréversible.</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel" (click)="orderToCancel = null">Retour</button>
+      <button class="btn-confirm-delete" (click)="confirmCancel()">
+        <i class="fa-solid fa-xmark"></i> Confirmer
+      </button>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+
+  <!-- Status Modal -->
+  <div class="modal-overlay" *ngIf="showStatusModal" (click)="showStatusModal = false">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-pen"></i> Mettre à jour — Commande #{{ selectedOrder?.id }}</h3>
+        <button class="btn-close" (click)="showStatusModal = false">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nouveau statut</label>
+          <select [(ngModel)]="newStatus">
+            <option value="0">-- Choisir --</option>
+            <option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Numéro de suivi (optionnel)</label>
+          <input type="text" placeholder="Ex: TRK123456789" [(ngModel)]="trackingNumber" />
+        </div>
+        <div class="form-group">
+          <label>Commentaire (optionnel)</label>
+          <textarea placeholder="Note interne..." [(ngModel)]="statusComment" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="showStatusModal = false">Annuler</button>
+        <button class="btn-save" (click)="updateStatus()" [disabled]="!newStatus || updatingId !== null">
+          <i class="fa-solid fa-check"></i> Confirmer
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

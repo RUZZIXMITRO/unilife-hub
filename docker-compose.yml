@@ -32,7 +32,46 @@ services:
       retries: 10
       start_period: 40s
 
-  # ========== API GATEWAY ==========
+# ========== MYSQL ==========
+  mysql:
+    image: mysql:8.0
+    container_name: unilifehub-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=marketplace_db
+      - MYSQL_USER=yousra
+      - MYSQL_PASSWORD=Youssy@123!
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - unilifehub-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  # ========== MARKETPLACE ==========
+  marketplace:
+    build:
+      context: ./backend/Commerce/Marketplace/MarketplaceService
+      dockerfile: Dockerfile
+    container_name: unilifehub-marketplace
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=prod
+      - DATABASE_URL=mysql://yousra:Youssy@123!@mysql:3306/marketplace_db?serverVersion=8.0&charset=utf8mb4
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+
+      # ========== API GATEWAY ==========
   apigateway:
     build:
       context: ./backend/ApiGateway
@@ -124,3 +163,4 @@ networks:
 
 volumes:
   sqldata:
+  mysqldata:

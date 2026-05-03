@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: favoriteservice
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: favorite-service
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 8083

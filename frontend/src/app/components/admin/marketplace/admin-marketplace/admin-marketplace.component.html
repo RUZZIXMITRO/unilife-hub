@@ -1,0 +1,143 @@
+<div class="page">
+
+  <div class="page-topbar">
+    <div class="topbar-left">
+      <div class="page-eyebrow">Administration</div>
+      <h1 class="page-heading">
+        <i class="fas fa-store"></i>
+        Marketplace
+      </h1>
+    </div>
+    <div class="topbar-right">
+      <div class="status-pills">
+        <button class="status-pill" [class.active]="activeTab === 'pending'" (click)="activeTab = 'pending'">
+          <span class="pill-dot amber"></span>
+          En attente
+          <span class="pill-num">{{ getCount('pending') }}</span>
+        </button>
+        <button class="status-pill" [class.active]="activeTab === 'approved'" (click)="activeTab = 'approved'">
+          <span class="pill-dot blue"></span>
+          Approuvées
+          <span class="pill-num">{{ getCount('approved') }}</span>
+        </button>
+        <button class="status-pill" [class.active]="activeTab === 'rejected'" (click)="activeTab = 'rejected'">
+          <span class="pill-dot slate"></span>
+          Rejetées
+          <span class="pill-num">{{ getCount('rejected') }}</span>
+        </button>
+      </div>
+      <button class="btn-refresh" (click)="loadListings()">
+        <i class="fas fa-arrows-rotate"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="metrics-row">
+    <div class="metric-card" [class.is-active]="activeTab === 'pending'" (click)="activeTab = 'pending'">
+      <div class="metric-ico amber"><i class="fas fa-hourglass-half"></i></div>
+      <div class="metric-info">
+        <span class="metric-num">{{ getCount('pending') }}</span>
+        <span class="metric-label">En attente</span>
+      </div>
+    </div>
+    <div class="metric-card" [class.is-active]="activeTab === 'approved'" (click)="activeTab = 'approved'">
+      <div class="metric-ico blue"><i class="fas fa-check"></i></div>
+      <div class="metric-info">
+        <span class="metric-num">{{ getCount('approved') }}</span>
+        <span class="metric-label">Approuvées</span>
+      </div>
+    </div>
+    <div class="metric-card" [class.is-active]="activeTab === 'rejected'" (click)="activeTab = 'rejected'">
+      <div class="metric-ico slate"><i class="fas fa-ban"></i></div>
+      <div class="metric-info">
+        <span class="metric-num">{{ getCount('rejected') }}</span>
+        <span class="metric-label">Rejetées</span>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-ico total"><i class="fas fa-list"></i></div>
+      <div class="metric-info">
+        <span class="metric-num">{{ listings.length }}</span>
+        <span class="metric-label">Total annonces</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="page-loading" *ngIf="loading">
+    <div class="loading-track"><div class="loading-bar"></div></div>
+  </div>
+
+  <!-- EMPTY -->
+  <div class="page-empty" *ngIf="!loading && getFiltered().length === 0">
+    <div class="empty-ico"><i class="fas fa-inbox"></i></div>
+    <h3>Aucune annonce</h3>
+    <p>Pas d'annonce dans cette catégorie.</p>
+  </div>
+
+  <!-- TABLE -->
+  <div class="listing-table" *ngIf="!loading && getFiltered().length > 0">
+    <div class="table-head">
+      <div></div>
+      <div>Annonce</div>
+      <div>Vendeur</div>
+      <div>Prix</div>
+      <div>Date</div>
+      <div></div>
+    </div>
+    <div class="table-row" *ngFor="let listing of getFiltered()">
+      <div>
+        <div class="row-img">
+          <img *ngIf="getImage(listing.imageUrls)" [src]="getImage(listing.imageUrls)" alt="" />
+          <div *ngIf="!getImage(listing.imageUrls)" class="row-no-img"><i class="fas fa-image"></i></div>
+        </div>
+      </div>
+      <div>
+        <div class="row-title">{{ listing.title }}</div>
+        <div class="row-cat">{{ listing.category }}</div>
+        <div class="row-rejection" *ngIf="listing.rejectionReason">{{ listing.rejectionReason }}</div>
+      </div>
+      <div class="col-seller">
+        <div class="seller-avatar">{{ listing.sellerId.toString().charAt(0) }}</div>
+        <span class="seller-id">#{{ listing.sellerId }}</span>
+      </div>
+      <div class="col-price">
+        <span class="row-price">{{ listing.price }}</span>
+        <span class="row-currency">DH</span>
+      </div>
+      <div><span class="row-date">{{ listing.createdAt | slice:0:10 }}</span></div>
+      <div class="col-actions">
+        <ng-container *ngIf="activeTab === 'pending'">
+          <button class="act-btn primary" (click)="approve(listing.id)"><i class="fas fa-check"></i> Approuver</button>
+          <button class="act-btn ghost" (click)="openRejectModal(listing.id)"><i class="fas fa-ban"></i> Rejeter</button>
+        </ng-container>
+        <ng-container *ngIf="activeTab === 'approved'">
+          <button class="act-btn ghost" (click)="openRejectModal(listing.id)"><i class="fas fa-ban"></i> Rejeter</button>
+          <button class="act-btn icon" (click)="deleteListing(listing.id)"><i class="fas fa-trash"></i></button>
+        </ng-container>
+        <ng-container *ngIf="activeTab === 'rejected'">
+          <button class="act-btn primary" (click)="approve(listing.id)"><i class="fas fa-check"></i> Approuver</button>
+          <button class="act-btn icon" (click)="deleteListing(listing.id)"><i class="fas fa-trash"></i></button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-veil" *ngIf="rejectModalId !== null" (click)="rejectModalId = null">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Rejeter l'annonce</h2>
+        <button class="modal-close" (click)="rejectModalId = null"><i class="fas fa-times"></i></button>
+      </div>
+      <p class="modal-desc">La raison sera communiquée à l'étudiant.</p>
+      <textarea class="modal-textarea" [(ngModel)]="rejectReason" rows="4" placeholder="Raison du rejet..."></textarea>
+      <div class="modal-footer">
+        <button class="modal-btn cancel" (click)="rejectModalId = null">Annuler</button>
+        <button class="modal-btn confirm" (click)="confirmReject()">Confirmer le rejet</button>
+      </div>
+    </div>
+  </div>
+
+</div>
