@@ -101,7 +101,7 @@
             <span class="bubble-time">{{ msg.timestamp | date:'HH:mm' }}</span>
 
             <!-- Suggestions -->
-            <div class="suggestions" *ngIf="msg.role === 'assistant' && msg.suggestions?.length > 0">
+        <div class="suggestions" *ngIf="msg.role === 'assistant' && (msg.suggestions?.length || 0) > 0">
               <button
                 class="suggestion-chip"
                 *ngFor="let s of msg.suggestions"
