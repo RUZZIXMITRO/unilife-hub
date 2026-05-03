@@ -1,0 +1,11 @@
+# Build outputs
+bin/
+obj/
+
+# Logs
+logs/
+*.log
+
+# User-specific files
+*.user
+.vs/

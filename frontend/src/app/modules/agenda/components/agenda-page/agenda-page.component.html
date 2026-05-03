@@ -1,0 +1,124 @@
+<div class="agenda-page">
+
+  <div class="page-header">
+    <div>
+      <h1><i class="fa-regular fa-calendar-days"></i> Mon Agenda</h1>
+      <p class="subtitle">Calendrier et evenements unifies</p>
+    </div>
+    <button class="btn-primary" (click)="openCreateForm()" *ngIf="!showForm">
+      + Nouvel evenement
+    </button>
+  </div>
+
+  <div *ngIf="showForm" class="form-card">
+    <h3>{{ editingEventId ? 'Modifier' : 'Creer' }} un evenement</h3>
+    <div class="form-grid">
+      <div class="form-group full-width">
+        <label>Titre *</label>
+        <input type="text" [(ngModel)]="newEvent.title" placeholder="Ex: Examen Math" />
+      </div>
+      <div class="form-group full-width">
+        <label>Description</label>
+        <textarea [(ngModel)]="newEvent.description" rows="2"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select [(ngModel)]="newEvent.eventType">
+          <option *ngFor="let t of eventTypes" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Lieu</label>
+        <input type="text" [(ngModel)]="newEvent.location" />
+      </div>
+      <div class="form-group">
+        <label>Debut *</label>
+        <input type="datetime-local" [(ngModel)]="newEvent.startDateTime" />
+      </div>
+      <div class="form-group">
+        <label>Fin *</label>
+        <input type="datetime-local" [(ngModel)]="newEvent.endDateTime" />
+      </div>
+      <div class="form-group full-width">
+        <label class="check-label">
+          <input type="checkbox" [(ngModel)]="newEvent.hasReminder" />
+          Activer un rappel
+        </label>
+        <select *ngIf="newEvent.hasReminder" [(ngModel)]="newEvent.reminderMinutesBefore">
+          <option [ngValue]="15">15 min avant</option>
+          <option [ngValue]="60">1 heure avant</option>
+          <option [ngValue]="1440">24 heures avant</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-secondary" (click)="cancelForm()">Annuler</button>
+      <button class="btn-primary" (click)="saveEvent()">{{ editingEventId ? 'Modifier' : 'Creer' }}</button>
+    </div>
+  </div>
+
+  <div class="agenda-grid">
+
+    <div class="card calendar-card">
+      <div class="cal-header">
+        <button (click)="prevMonth()">‹</button>
+        <h3>{{ monthName | titlecase }}</h3>
+        <button (click)="nextMonth()">›</button>
+        <button (click)="goToday()" class="today-btn">Aujourd hui</button>
+      </div>
+      <div class="cal-grid">
+        <div *ngFor="let day of weekDays" class="weekday">{{ day }}</div>
+        <div *ngFor="let day of monthDays"
+             class="cal-day"
+             [class.other-month]="!day.isCurrentMonth"
+             [class.today]="day.isToday"
+             [class.selected]="day.isSelected"
+             (click)="selectDay(day)">
+          <span class="day-num">{{ day.date.getDate() }}</span>
+          <div class="day-events">
+            <div *ngFor="let event of day.events.slice(0, 2)" class="event-pill"
+                 [style.background]="getEventColor(event.eventType)">
+              {{ event.title | slice:0:8 }}
+            </div>
+            <span *ngIf="day.events.length > 2" class="more-pill">+{{ day.events.length - 2 }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card events-card">
+      <div class="ev-header">
+        <h3>{{ selectedDate | date:'EEEE dd MMMM' }}</h3>
+        <span class="count">{{ selectedDayEvents.length }}</span>
+      </div>
+      <div *ngIf="loading" class="empty">Chargement...</div>
+      <div *ngIf="!loading && selectedDayEvents.length === 0" class="empty">
+        Aucun evenement
+        <button class="link-btn" (click)="openCreateForm()">+ En ajouter un</button>
+      </div>
+      <div *ngFor="let event of selectedDayEvents" class="event-row"
+           [style.borderLeftColor]="getEventColor(event.eventType)">
+        <div class="ev-time">
+          <strong>{{ event.startDateTime | date:'HH:mm' }}</strong>
+          <small>{{ event.endDateTime | date:'HH:mm' }}</small>
+        </div>
+        <div class="ev-content">
+          <span class="ev-type" [style.background]="getEventColor(event.eventType) + '20'"
+                                [style.color]="getEventColor(event.eventType)">
+            {{ event.eventType }}
+          </span>
+          <h4>{{ event.title }}</h4>
+          <p *ngIf="event.description">{{ event.description }}</p>
+          <div class="ev-meta">
+            <span *ngIf="event.location">📍 {{ event.location }}</span>
+            <span *ngIf="event.hasReminder" class="reminder">🔔 Rappel</span>
+          </div>
+        </div>
+        <div class="ev-actions">
+          <button (click)="openEditForm(event)" title="Modifier">✏️</button>
+          <button class="del" (click)="deleteEvent(event)" title="Supprimer">🗑️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
