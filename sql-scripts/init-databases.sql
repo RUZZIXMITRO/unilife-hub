@@ -160,3 +160,8 @@ BEGIN
     );
 END
 GO
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'social_db')
+BEGIN
+    CREATE DATABASE social_db;
+END
+GO

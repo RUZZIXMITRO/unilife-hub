@@ -219,21 +219,45 @@
       <span class="nav-label" *ngIf="!collapsed">Marketplace</span>
     </a>
 
-    <a [routerLink]="'/student/social'" class="nav-item"
-       [class.active]="isActive('/student/social')"
-       [title]="collapsed ? 'Réseau Social' : ''">
-      <div class="nav-svg-wrap">
-        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="10" cy="6.5" r="3.5" fill="currentColor" opacity="0.9"/>
-          <path d="M3.5 17.5 C3.5 13.5 16.5 13.5 16.5 17.5" fill="currentColor" opacity="0.45"/>
-          <circle cx="4"  cy="9" r="2.5" fill="currentColor" opacity="0.6"/>
-          <path d="M1 17 C1 14 7 14 7 17"    fill="currentColor" opacity="0.3"/>
-          <circle cx="16" cy="9" r="2.5" fill="currentColor" opacity="0.6"/>
-          <path d="M13 17 C13 14 19 14 19 17" fill="currentColor" opacity="0.3"/>
-        </svg>
-      </div>
-      <span class="nav-label" *ngIf="!collapsed">Réseau Social</span>
-      <span class="nav-badge" *ngIf="!collapsed && socialBadge > 0">{{ socialBadge }}</span>
+<!-- RÉSEAU SOCIAL avec sous-menu -->
+<div class="nav-group">
+
+  <!-- Item principal cliquable -->
+  <a class="nav-item"
+     [class.active]="isActive('/student/social')"
+     (click)="!collapsed ? toggleSocial() : router.navigate(['/student/social'])"
+     [title]="collapsed ? 'Réseau Social' : ''">
+    <div class="nav-svg-wrap">
+      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="10" cy="6.5" r="3.5" fill="currentColor" opacity="0.9"/>
+        <path d="M3.5 17.5 C3.5 13.5 16.5 13.5 16.5 17.5" fill="currentColor" opacity="0.45"/>
+        <circle cx="4"  cy="9" r="2.5" fill="currentColor" opacity="0.6"/>
+        <path d="M1 17 C1 14 7 14 7 17"    fill="currentColor" opacity="0.3"/>
+        <circle cx="16" cy="9" r="2.5" fill="currentColor" opacity="0.6"/>
+        <path d="M13 17 C13 14 19 14 19 17" fill="currentColor" opacity="0.3"/>
+      </svg>
+    </div>
+    <span class="nav-label" *ngIf="!collapsed">Réseau Social</span>
+    <span class="nav-badge" *ngIf="!collapsed && socialBadge > 0">
+      {{ socialBadge }}
+    </span>
+    <!-- Flèche indicateur -->
+    <i *ngIf="!collapsed"
+       class="fa-solid"
+       [class.fa-chevron-down]="!socialExpanded"
+       [class.fa-chevron-up]="socialExpanded"
+       style="font-size:0.65rem;margin-left:auto;color:#94a3b8">
+    </i>
+  </a>
+
+  <!-- Sous-menu -->
+  <div class="nav-submenu" *ngIf="!collapsed && socialExpanded">
+
+    <a [routerLink]="'/student/social/feed'"
+       class="submenu-item"
+       [class.active]="isActive('/student/social/feed')">
+      <i class="fa-solid fa-rss"></i>
+      <span>Fil d'actualité</span>
     </a>
 
     <a [routerLink]="'/student/assistant'" class="nav-item"

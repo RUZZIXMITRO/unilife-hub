@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { LoginRequest, RegisterRequest, AuthResponse, User } from '../models/auth.models';
 
 export interface ChangePasswordRequest {
@@ -14,11 +15,12 @@ export interface ChangePasswordRequest {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:5000/api/Auth';
-  
+
+  private apiUrl = 'http://localhost:5000/api/Auth';
+
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-  
+
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
@@ -32,7 +34,6 @@ export class AuthService {
   private checkAuthStatus(): void {
     const token = this.getToken();
     const user = this.getUser();
-    
     if (token && user) {
       this.isAuthenticatedSubject.next(true);
       this.currentUserSubject.next(user);
@@ -68,37 +69,37 @@ export class AuthService {
   }
 
   // ==================== CHANGE PASSWORD ====================
+  // ✅ Suppression du header manuel (interceptor s'en charge)
   changePassword(passwordData: ChangePasswordRequest): Observable<any> {
-    console.log('🔑 Changement de mot de passe...');
-    
-    const token = this.getToken();
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-    
-    return this.http.post(
-      `${this.apiUrl}/change-password`,
-      passwordData,
-      { headers: headers }
-    );
+    return this.http.post(`${this.apiUrl}/change-password`, passwordData);
   }
 
   // ==================== LOGOUT ====================
+  // ✅ Phase 3 : clearAuthData APRÈS la réponse (BUG #31)
   logout(): void {
     const token = this.getToken();
-    
     if (token) {
       this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
-        next: () => console.log('✅ Déconnexion réussie'),
-        error: (error) => console.error('❌ Erreur lors de la déconnexion:', error)
+        next: () => {
+          this.clearAuthData();
+          this.isAuthenticatedSubject.next(false);
+          this.currentUserSubject.next(null);
+          this.router.navigate(['/']);
+        },
+        error: () => {
+          // Déconnexion locale même si le serveur échoue
+          this.clearAuthData();
+          this.isAuthenticatedSubject.next(false);
+          this.currentUserSubject.next(null);
+          this.router.navigate(['/']);
+        }
       });
+    } else {
+      this.clearAuthData();
+      this.isAuthenticatedSubject.next(false);
+      this.currentUserSubject.next(null);
+      this.router.navigate(['/']);
     }
-    
-    this.clearAuthData();
-    this.isAuthenticatedSubject.next(false);
-    this.currentUserSubject.next(null);
-    this.router.navigate(['/']);
   }
 
   // ==================== PASSWORD RESET ====================
@@ -108,10 +109,14 @@ export class AuthService {
 
   resetPassword(token: string, newPassword: string, confirmPassword: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/reset-password`, {
-      token,
-      newPassword,
-      confirmPassword
+      token, newPassword, confirmPassword
     });
+  }
+
+  // ==================== DELETE ACCOUNT ====================
+  // ✅ Suppression du header manuel (interceptor s'en charge)
+  deleteAccount(): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete-account`);
   }
 
   // ==================== HELPER METHODS ====================
@@ -154,27 +159,58 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  // ✅ MÉTHODE CORRIGÉE
-  getCurrentUser(): any {
+  // ==================== Phase 1.2 : Méthodes centralisées ====================
+
+  /**
+   * Décode safely le JWT (gère base64url-safe).
+   */
+  private decodeToken(): any | null {
     const token = this.getToken();
     if (!token) return null;
-
     try {
-      // Décoder le JWT
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      
-      console.log('🔍 JWT Payload complet:', payload);
-      
-      // Extraire les informations avec le chemin Microsoft du rôle
-      return {
-        id: payload.sub || payload.nameid,
-        email: payload.email,
-        role: payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payload.role || 'STUDENT'
-      };
-    } catch (error) {
-      console.error('❌ Erreur décodage token:', error);
+      const parts = token.split('.');
+      if (parts.length !== 3) return null;
+      const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(payload));
+    } catch {
       return null;
     }
+  }
+
+  /**
+   * ✅ Récupère l'UUID de l'utilisateur connecté depuis le JWT.
+   */
+  getCurrentUserId(): string | null {
+    const payload = this.decodeToken();
+    if (!payload) return null;
+    return payload.sub
+        || payload.nameid
+        || payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
+        || null;
+  }
+
+  /**
+   * ✅ Récupère le rôle depuis le JWT.
+   */
+  getCurrentUserRole(): string {
+    const payload = this.decodeToken();
+    if (!payload) return 'STUDENT';
+    return payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+        || payload.role
+        || 'STUDENT';
+  }
+
+  /**
+   * ✅ getCurrentUser() simplifié utilisant les helpers.
+   */
+  getCurrentUser(): { id: string | null; email: string | null; role: string } | null {
+    const payload = this.decodeToken();
+    if (!payload) return null;
+    return {
+      id: this.getCurrentUserId(),
+      email: payload.email || null,
+      role: this.getCurrentUserRole()
+    };
   }
 
   isProfileCompleted(): boolean {
@@ -183,21 +219,5 @@ export class AuthService {
 
   markProfileAsCompleted(): void {
     localStorage.setItem('profile_completed', 'true');
-  }
-
-  // ==================== DELETE ACCOUNT ====================
-  deleteAccount(): Observable<any> {
-    console.log('🗑️ Suppression du compte...');
-    
-    const token = this.getToken();
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-    
-    return this.http.delete(
-      `${this.apiUrl}/delete-account`,
-      { headers: headers }
-    );
   }
 }

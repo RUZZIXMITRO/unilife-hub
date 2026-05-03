@@ -137,12 +137,12 @@ export class StudentDashboardComponent implements OnInit {
     const userId = this.authService.getUserId();
     if (!userId) {
       const u = this.authService.getCurrentUser();
-      if (u) this.userName = u.email.split('@')[0];
+      if (u) this.userName = u.email?.split('@')[0] || '';
       return;
     }
     this.userService.getUserByCredentialId(userId).subscribe({
       next: (r) => { if (r.success && r.data) this.userName = r.data.name || 'Étudiant'; },
-      error: () => { const u = this.authService.getCurrentUser(); if (u) this.userName = u.email.split('@')[0]; }
+      error: () => { const u = this.authService.getCurrentUser(); if (u) this.userName = u.email?.split('@')[0] || ''; }
     });
   }
 

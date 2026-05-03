@@ -48,12 +48,12 @@ export class TopbarComponent implements OnInit {
     if (authUser?.email) this.userEmail = authUser.email;
     const userId = this.authService.getUserId();
     if (!userId) {
-      if (authUser) this.userName = authUser.email.split('@')[0];
+      if (authUser) this.userName = authUser.email?.split('@')[0] || '';
       return;
     }
     this.userService.getUserByCredentialId(userId).subscribe({
       next:  (r) => { if (r.success && r.data) this.userName = r.data.name || authUser?.email?.split('@')[0] || ''; },
-      error: ()  => { if (authUser) this.userName = authUser.email.split('@')[0]; }
+      error: ()  => { if (authUser) this.userName = authUser.email?.split('@')[0] || ''; }
     });
   }
 

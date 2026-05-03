@@ -3,24 +3,34 @@ services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: unilifehub-sqlserver
-    user: "0:0"  
+    user: "0:0"
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=UniLife@2024!Strong
+      - SA_PASSWORD=${SA_PASSWORD}
       - MSSQL_PID=Developer
     ports:
       - "1433:1433"
     volumes:
       - sqldata:/var/opt/mssql/data
-      - ./sql-scripts/init-databases.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./sql-scripts/init-databases.sql:/init.sql
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        /opt/mssql/bin/sqlservr &
+        echo "Waiting for SQL Server to start..."
+        sleep 20
+        /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD}" -C -i /init.sql
+        echo "Init script executed!"
+        wait
     networks:
       - unilifehub-network
     healthcheck:
-      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P UniLife@2024!Strong -Q "SELECT 1" -C || exit 1
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD}" -Q "SELECT 1" -C || exit 1
       interval: 10s
       timeout: 3s
       retries: 10
-      start_period: 30s
+      start_period: 40s
 
 # ========== MYSQL ==========
   mysql:
@@ -72,9 +82,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=UniLifeHub
+      - Jwt__Audience=UniLifeHubUsers
     depends_on:
       - authservice
       - userservice
+      - socialservice
     networks:
       - unilifehub-network
     restart: unless-stopped
@@ -90,7 +104,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=authentication1_db;User Id=sa;Password=UniLife@2024!Strong;TrustServerCertificate=True;Encrypt=False;
+      - ConnectionStrings__DefaultConnection=${AUTH_DB}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=UniLifeHub
+      - Jwt__Audience=UniLifeHubUsers
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -109,7 +126,30 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=user_service_db;User Id=sa;Password=UniLife@2024!Strong;TrustServerCertificate=True;Encrypt=False;
+      - ConnectionStrings__DefaultConnection=${USER_DB}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=UniLifeHub
+      - Jwt__Audience=UniLifeHubUsers
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+
+  # ========== SOCIAL SERVICE ==========
+  socialservice:
+    build:
+      context: ./backend/social-service
+      dockerfile: Dockerfile
+    container_name: unilifehub-social
+    ports:
+      - "7084:8084"
+    environment:
+      - SPRING_DATASOURCE_URL=${SOCIAL_DB}
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=${SA_PASSWORD}
+      - JWT_SECRET=${JWT_KEY}
     depends_on:
       sqlserver:
         condition: service_healthy

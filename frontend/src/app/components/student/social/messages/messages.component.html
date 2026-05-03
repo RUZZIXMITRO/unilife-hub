@@ -1,0 +1,141 @@
+<div class="messages-page">
+  <div class="messages-layout">
+
+    <!-- ===== SIDEBAR CONVERSATIONS ✅ DYNAMIQUE ===== -->
+    <div class="conv-sidebar">
+
+      <div class="sidebar-header">
+        <h3><i class="fa-solid fa-comments"></i> Messages</h3>
+        <button (click)="loadConversations()" class="btn-refresh" title="Actualiser">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="isLoadingConversations" class="empty-conv">
+        <i class="fa-solid fa-spinner fa-spin"
+           style="font-size:1.5rem;color:#2563eb;display:block;margin-bottom:0.5rem"></i>
+        <p>Chargement...</p>
+      </div>
+
+      <!-- Aucune conversation -->
+      <div *ngIf="!isLoadingConversations && conversations.length === 0"
+           class="empty-conv">
+        <i class="fa-solid fa-comment-slash"
+           style="font-size:1.5rem;color:#94a3b8;display:block;margin-bottom:0.5rem"></i>
+        <p>Aucune conversation.<br>Démarrez depuis vos amis !</p>
+      </div>
+
+      <!-- Liste des conversations ✅ DYNAMIQUE -->
+      <div *ngFor="let conv of conversations"
+           class="conv-item"
+           [class.active]="selectedConversation?.id === conv.id"
+           (click)="selectConversation(conv)">
+
+        <div class="conv-avatar">
+          <span>{{ getConvInitial(conv) }}</span>
+          <span class="online-dot"></span>
+        </div>
+
+        <div class="conv-info">
+          <div class="conv-top">
+            <span class="conv-name">
+  {{ getConvName(conv) }}
+</span>
+            <span class="conv-time" *ngIf="conv.lastMessageAt">
+              {{ getTimeAgo(conv.lastMessageAt) }}
+            </span>
+          </div>
+          <p class="conv-last">
+            {{ conv.lastMessage || 'Démarrer la conversation...' }}
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ===== ZONE CHAT ===== -->
+    <div class="chat-area">
+
+      <!-- État vide -->
+      <div *ngIf="!selectedUserId" class="no-chat">
+        <div class="no-chat-icon">
+          <i class="fa-solid fa-comments"></i>
+        </div>
+        <h3>Vos messages</h3>
+        <p>Sélectionnez une conversation<br>pour commencer à discuter</p>
+      </div>
+
+      <!-- Fenêtre de chat -->
+      <div *ngIf="selectedUserId" class="chat-window">
+
+        <!-- En-tête -->
+        <div class="chat-header">
+          <div class="chat-avatar">
+            <i class="fa-solid fa-user"></i>
+            <span class="online-dot-header"></span>
+          </div>
+          <div class="chat-user-info">
+            <h4>{{ selectedConversation ? getConvName(selectedConversation) : '' }}</h4>
+            <span class="online-status">
+              <i class="fa-solid fa-circle"></i> En ligne
+            </span>
+          </div>
+          <div class="chat-actions">
+            <button class="filter-btn" title="Appel vocal">
+              <i class="fa-solid fa-phone"></i>
+            </button>
+            <button class="filter-btn" title="Appel vidéo">
+              <i class="fa-solid fa-video"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages-list" #messagesList>
+
+          <div *ngIf="isLoading" class="loading-msg">
+            <i class="fa-solid fa-spinner fa-spin"></i> Chargement...
+          </div>
+
+          <div *ngIf="!isLoading && messages.length === 0" class="no-messages">
+            <p>Aucun message. Dites bonjour ! 👋</p>
+          </div>
+
+          <div *ngFor="let message of messages"
+               class="message-bubble"
+               [class.my-message]="isMyMessage(message)"
+               [class.other-message]="!isMyMessage(message)">
+            <p>{{ message.content }}</p>
+            <span class="message-time">
+              {{ getTimeAgo(message.createdAt) }}
+              <i class="fa-solid fa-check-double"
+                 *ngIf="isMyMessage(message)"
+                 [style.color]="message.read ? '#2563eb' : '#94a3b8'">
+              </i>
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Input message -->
+        <div class="message-input-area">
+          <button class="attach-btn" title="Joindre un fichier">
+            <i class="fa-solid fa-paperclip"></i>
+          </button>
+          <input [(ngModel)]="newMessage"
+                 (keyup.enter)="sendMessage()"
+                 placeholder="Écrire un message..."
+                 class="message-input">
+          <button (click)="sendMessage()"
+                  [disabled]="!newMessage.trim()"
+                  class="btn-send">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
