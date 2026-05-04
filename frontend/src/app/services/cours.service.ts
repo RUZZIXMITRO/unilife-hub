@@ -7,8 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class CoursService {
 
-  private apiUrl = 'http://localhost:8081/api';
-
+private apiUrl = 'http://localhost:8081/api';
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {

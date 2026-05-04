@@ -28,7 +28,7 @@ export class AdminCoursFormationsComponent implements OnInit {
 
   // Nouvelle catégorie
   nouvelleCategorie: any = {
-    name: '', description: '', icon: '', color: '#1e3a5f', parentCategoryId: null
+    name: '', description: '', icon: '', color: '#2563eb', parentCategoryId: null
   };
 
   stats = { totalCours: 0, totalFormations: 0, coursEnAttente: 0, totalCategories: 0 };

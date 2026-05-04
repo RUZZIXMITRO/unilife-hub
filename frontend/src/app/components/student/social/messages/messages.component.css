@@ -426,7 +426,7 @@
 :host-context(body.dark-theme) .no-chat h3,
 :host-context(body.dark-theme) .conv-name { color: #f1f5f9; }
 :host-context(body.dark-theme) .conv-item:hover { background: #273549; }
-:host-context(body.dark-theme) .conv-item.active { background: #1e3a5f; border-color: #2563eb; }
+:host-context(body.dark-theme) .conv-item.active { background: #2563eb; border-color: #2563eb; }
 :host-context(body.dark-theme) .chat-header { border-color: #334155; }
 :host-context(body.dark-theme) .message-bubble.other-message p { background: #334155; color: #f1f5f9; }
 :host-context(body.dark-theme) .message-input { background: #0f172a; border-color: #334155; color: #f1f5f9; }

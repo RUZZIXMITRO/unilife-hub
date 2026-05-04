@@ -449,7 +449,7 @@
 
 :host-context(body.dark-theme) .submenu-item:hover,
 :host-context(body.dark-theme) .submenu-item.active {
-  background: #1e3a5f;
+  background: #2563eb;
   color: #7cb9f8;
 }
 

@@ -257,7 +257,7 @@ export class UsersManagementComponent implements OnInit {
 
   getAvatarColor(user: any): string {
     const colors = [
-      '#1e3a5f',
+      '#2563eb',
       '#2e5f9e',
       '#1a4a7a',
       '#0f2d5c',

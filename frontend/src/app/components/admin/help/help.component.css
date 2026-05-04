@@ -40,7 +40,7 @@
 }
 
 .search-box:focus-within {
-  border-color: #1e3a5f;
+  border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(30,58,95,0.08);
 }
 
@@ -112,9 +112,9 @@
 .cat-btn.active {
   background: #e8f0fc;
   border-color: #2e5f9e;
-  color: #1e3a5f;
+  color: #2563eb;
   font-weight: 600;
-  border-left: 3px solid #1e3a5f;
+  border-left: 3px solid #2563eb;
   padding-left: calc(1rem - 1.5px);
 }
 
@@ -156,7 +156,7 @@
 .contact-btn {
   display: block;
   padding: 0.6rem 1rem;
-  background: #1e3a5f;
+  background: #2563eb;
   color: white;
   border-radius: 8px;
   font-size: 0.8125rem;
@@ -211,7 +211,7 @@
 }
 
 .faq-question:hover { background: #f8fafd; }
-.faq-question i { color: #1e3a5f; flex-shrink: 0; }
+.faq-question i { color: #2563eb; flex-shrink: 0; }
 
 .faq-answer {
   padding: 0 1.5rem 1.25rem 1.5rem;

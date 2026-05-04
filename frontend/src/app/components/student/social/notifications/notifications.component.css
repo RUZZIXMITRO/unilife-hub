@@ -130,7 +130,7 @@
 /* Dark mode */
 :host-context(body.dark-theme) .page { background: #0d1525; }
 :host-context(body.dark-theme) .perf-card { background: #1e293b; border: 1px solid #334155; }
-:host-context(body.dark-theme) .notif-card.unread { background: #1e3a5f; border-color: #2563eb; }
+:host-context(body.dark-theme) .notif-card.unread { background: #2563eb; border-color: #2563eb; }
 :host-context(body.dark-theme) .section-header h3,
 :host-context(body.dark-theme) .notif-content p { color: #f1f5f9; }
 :host-context(body.dark-theme) .filter-btn { background: #1e293b; border-color: #334155; color: #94a3b8; }

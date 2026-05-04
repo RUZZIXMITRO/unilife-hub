@@ -16,11 +16,15 @@
     <button class="tab-btn" [class.active]="activeTab === 'formations'" (click)="activeTab = 'formations'; loadFormations()">
       <i class="fa-solid fa-graduation-cap"></i> Formations ({{ formations.length }})
     </button>
+    <button class="tab-btn" [class.active]="activeTab === 'mes-cours'" (click)="activeTab = 'mes-cours'; loadMesCours()">
+  <i class="fa-solid fa-user"></i> Mes cours
+</button>
   </div>
+  
 
   <!-- Bouton Upload pour les étudiants -->
-<div class="upload-bar">
-  <button class="btn-upload" (click)="showUploadModal = true">
+<div class="upload-bar" *ngIf="activeTab === 'cours'">
+    <button class="btn-upload" (click)="showUploadModal = true">
     <i class="fa-solid fa-upload"></i>
     <span>Partager un cours</span>
   </button>
@@ -109,8 +113,8 @@
       <i class="fa-solid fa-search"></i>
       <input type="text" [(ngModel)]="searchKeyword" placeholder="Rechercher..." class="search-input" (keyup.enter)="rechercher()"/>
     </div>
-    <select [(ngModel)]="selectedCategory" class="filter-select">
-      <option [value]="null">Toutes les catégories</option>
+<select [(ngModel)]="selectedCategory" class="filter-select" (change)="rechercher()">
+<option [ngValue]="null">Toutes les catégories</option>
       <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
     </select>
     <ng-container *ngIf="activeTab === 'formations'">
@@ -206,4 +210,37 @@
     </div>
   </div>
 
+  <div *ngIf="activeTab === 'mes-cours'">
+  <div *ngIf="mesCours.length === 0" class="empty-state">
+    <i class="fa-solid fa-book-open"></i>
+    <p>Vous n'avez pas encore partagé de cours</p>
+  </div>
+  <div class="cours-grid">
+    <div *ngFor="let c of mesCours" class="cours-card">
+      <div class="card-top">
+        <div class="file-icon" [class]="c.fileType?.includes('pdf') ? 'pdf' : 'doc'">
+          <i class="fa-solid {{ getFileIcon(c.fileType) }}"></i>
+        </div>
+        <span class="category-badge" style="font-size:0.7rem; padding:0.2rem 0.5rem;">
+          {{ c.isApproved ? 'Approuvé' : 'En attente' }}
+        </span>
+      </div>
+      <div class="card-body">
+        <span class="category-badge">{{ c.categoryName }}</span>
+        <h3>{{ c.title }}</h3>
+        <p class="card-desc">{{ c.description }}</p>
+      </div>
+      <div class="card-footer">
+        <div class="card-stats">
+          <span><i class="fa-solid fa-download"></i> {{ c.downloadsCount }}</span>
+          <span><i class="fa-solid fa-eye"></i> {{ c.viewsCount }}</span>
+          <span class="file-size">{{ formatSize(c.fileSize) }}</span>
+        </div>
+        <button class="btn-download" (click)="telecharger(c.id)">
+          <i class="fa-solid fa-download"></i> Télécharger
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 </div>

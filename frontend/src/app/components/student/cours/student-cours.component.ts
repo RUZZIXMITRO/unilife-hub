@@ -11,12 +11,14 @@ export class StudentCoursComponent implements OnInit {
   cours: any[] = [];
   formations: any[] = [];
   categories: any[] = [];
-  activeTab: 'cours' | 'formations' = 'cours';
+activeTab: 'cours' | 'formations' | 'mes-cours' = 'cours';
   isLoading = false;
   searchKeyword = '';
-  selectedCategory: number | null = null;
-  selectedLevel = '';
+selectedCategory: number | null = null;  
+selectedLevel = '';
   selectedLanguage = '';
+  mesCours: any[] = [];
+
 
   constructor(private coursService: CoursService) {}
 // Propriétés upload
@@ -75,6 +77,12 @@ uploadCours() {
     });
   }
 
+  loadMesCours() {
+  this.coursService.getMesCours().subscribe((res: any) => {
+    this.mesCours = res.data || [];
+  });
+}
+
   loadCours() {
     this.isLoading = true;
     this.coursService.getAllCours().subscribe((res: any) => {
@@ -90,9 +98,16 @@ uploadCours() {
   }
 
   rechercher() {
-    if (this.activeTab === 'cours') {
+  if (this.activeTab === 'cours') {
+    if (!this.searchKeyword && !this.selectedCategory)  {
+      this.loadCours();
+    } else {
       this.coursService.searchCours(this.searchKeyword, this.selectedCategory || undefined)
         .subscribe((res: any) => { this.cours = res.data || []; });
+    }
+  } else {
+    if (!this.searchKeyword && !this.selectedCategory && !this.selectedLevel && !this.selectedLanguage) {
+      this.loadFormations();
     } else {
       this.coursService.searchFormations(
         this.searchKeyword, this.selectedLevel,
@@ -100,12 +115,17 @@ uploadCours() {
       ).subscribe((res: any) => { this.formations = res.data || []; });
     }
   }
+}
 
   telecharger(id: number) {
-    this.coursService.downloadCours(id).subscribe((res: any) => {
-      if (res.data) window.open(res.data, '_blank');
-    });
-  }
+  this.coursService.downloadCours(id).subscribe((res: any) => {
+    if (res.data) {
+      const path = res.data.replace('uploads//', 'uploads/');
+      const url = `http://localhost:8081/${encodeURI(path)}`;
+      window.open(url, '_blank');
+    }
+  });
+}
 
   toggleFavori(item: any, type: string) {
     if (item.isFavorite) {

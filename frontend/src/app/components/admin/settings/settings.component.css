@@ -29,7 +29,7 @@
 
 .btn-primary {
   padding: 0.625rem 1.25rem;
-  background: #1e3a5f;
+  background: #2563eb;
   color: white;
   border: none;
   border-radius: 8px;
@@ -75,10 +75,10 @@
   transition: all 0.2s;
 }
 
-.tab-btn:hover { color: #1e3a5f; }
+.tab-btn:hover { color: #2563eb; }
 .tab-btn.active {
-  color: #1e3a5f;
-  border-bottom-color: #1e3a5f;
+  color: #2563eb;
+  border-bottom-color: #2563eb;
   font-weight: 600;
 }
 
@@ -117,7 +117,7 @@
 .form-group label {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #1e3a5f;
+  color: #2563eb;
 }
 
 .form-input {
@@ -133,7 +133,7 @@
 }
 
 .form-input:focus {
-  border-color: #1e3a5f;
+  border-color: #2563eb;
   background: white;
   box-shadow: 0 0 0 3px rgba(30,58,95,0.08);
 }
@@ -190,7 +190,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
-input:checked + .slider { background: #1e3a5f; }
+input:checked + .slider { background: #2563eb; }
 input:checked + .slider:before { transform: translateX(22px); }
 
 /* ===== THEME OPTIONS ===== */
@@ -207,8 +207,8 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 
 .theme-card:hover { border-color: #2e5f9e; }
-.theme-card.selected { border-color: #1e3a5f; }
-.theme-card p { margin: 0.5rem 0 0 0; font-size: 0.8125rem; font-weight: 600; color: #1e3a5f; }
+.theme-card.selected { border-color: #2563eb; }
+.theme-card p { margin: 0.5rem 0 0 0; font-size: 0.8125rem; font-weight: 600; color: #2563eb; }
 
 .theme-preview { width: 120px; height: 80px; border-radius: 6px; overflow: hidden; display: flex; }
 .light-preview { background: #f4f6fb; }
@@ -217,10 +217,10 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 .preview-sidebar { width: 30px; height: 100%; background: rgba(30,58,95,0.15); }
 .preview-content { flex: 1; padding: 6px; display: flex; flex-direction: column; gap: 4px; }
-.preview-bar { height: 10px; background: #1e3a5f; border-radius: 3px; opacity: 0.7; }
+.preview-bar { height: 10px; background: #2563eb; border-radius: 3px; opacity: 0.7; }
 .preview-block { height: 30px; background: rgba(30,58,95,0.08); border-radius: 3px; }
 
-.check-icon { position: absolute; top: 6px; right: 6px; color: #1e3a5f; font-size: 0.875rem; }
+.check-icon { position: absolute; top: 6px; right: 6px; color: #2563eb; font-size: 0.875rem; }
 
 /* ===== COLOR OPTIONS ===== */
 .color-options { display: flex; gap: 1rem; }
@@ -245,7 +245,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 .toast {
   position: fixed;
   bottom: 2rem; right: 2rem;
-  background: #1e3a5f;
+  background: #2563eb;
   color: white;
   padding: 1rem 1.5rem;
   border-radius: 10px;
@@ -266,7 +266,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 /* ===== BTN SAVE ===== */
 .btn-save {
   padding: 0.625rem 1.375rem;
-  background: #1e3a5f;
+  background: #2563eb;
   color: white;
   border: none;
   border-radius: 8px;
