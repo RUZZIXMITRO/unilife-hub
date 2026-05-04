@@ -1,6 +1,5 @@
 server:
   port: 8081
-
 spring:
   application:
     name: cours-formations-service
@@ -19,11 +18,12 @@ spring:
       enabled: true
       max-file-size: 50MB
       max-request-size: 50MB
-
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 app:
   upload:
     path: uploads/
-
 springdoc:
   api-docs:
     path: /v3/api-docs

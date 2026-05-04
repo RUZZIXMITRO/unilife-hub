@@ -18,23 +18,27 @@ public class FormationController {
 
     private final FormationService formationService;
 
+    private Integer parseUserId(String userId) {
+        if (userId == null) return null;
+        try { return Integer.parseInt(userId); }
+        catch (NumberFormatException e) { return Math.abs(userId.hashCode()); }
+    }
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<FormationResponse>>> getAllFormations(
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
         return ResponseEntity.ok(ApiResponse.success(
                 "Formations récupérées",
-                formationService.getAllFormations(uid)));
+                formationService.getAllFormations(parseUserId(userId))));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<FormationResponse>> getFormationById(
             @PathVariable Integer id,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
         return ResponseEntity.ok(ApiResponse.success(
                 "Formation récupérée",
-                formationService.getFormationById(id, uid)));
+                formationService.getFormationById(id, parseUserId(userId))));
     }
 
     @GetMapping("/search")
@@ -44,10 +48,9 @@ public class FormationController {
             @RequestParam(required = false) String language,
             @RequestParam(required = false) Integer categoryId,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
         return ResponseEntity.ok(ApiResponse.success(
                 "Résultats de recherche",
-                formationService.searchFormations(keyword, level, language, categoryId, uid)));
+                formationService.searchFormations(keyword, level, language, categoryId, parseUserId(userId))));
     }
 
     @PostMapping

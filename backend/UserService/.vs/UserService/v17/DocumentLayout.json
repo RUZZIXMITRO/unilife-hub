@@ -182,8 +182,7 @@
               "RelativeToolTip": "UserService\\Controllers\\UsersController.cs",
               "ViewState": "AgIAAHYAAAAAAAAAAAAAAHYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-04T16:54:33.623Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-04T16:54:33.623Z"
             },
             {
               "$type": "Document",
@@ -193,10 +192,14 @@
               "RelativeDocumentMoniker": "UserService\\appsettings.json",
               "ToolTip": "C:\\Users\\Yousra\\Desktop\\unilife-hub\\backend\\UserService\\UserService\\appsettings.json",
               "RelativeToolTip": "UserService\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2026-02-04T16:45:07.523Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
             },
             {
               "$type": "Document",
@@ -413,10 +416,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2026-02-04T16:31:24.321Z"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
             }
           ]
         }
