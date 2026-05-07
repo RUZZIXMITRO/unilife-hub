@@ -3,6 +3,8 @@ package com.unilifehub.cours_formations_service.repository;
 import com.unilifehub.cours_formations_service.entity.Download;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
@@ -11,4 +13,7 @@ public interface DownloadRepository extends JpaRepository<Download, Integer> {
     List<Download> findByCourseId(Integer courseId);
     boolean existsByUserIdAndCourseId(Integer userId, Integer courseId);
     long countByUserId(Integer userId);
+    @Modifying
+    @Transactional
+    void deleteByCourseId(Integer courseId);
 }

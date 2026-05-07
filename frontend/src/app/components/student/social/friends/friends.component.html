@@ -47,30 +47,28 @@
          Utilisez la recherche pour vous connecter !</p>
     </div>
 
-    <div *ngFor="let friend of friends" class="perf-card friend-card">
-      <div class="friend-avatar">
-        <!-- ✅ Initiale du vrai nom -->
-        {{ getInitial(getUserName(friend.requesterId)) }}
-      </div>
-      <div class="friend-info">
-        <!-- ✅ Vrai nom -->
-        <h4>{{ getUserName(friend.requesterId) }}</h4>
-        <span class="status online">
-          <i class="fa-solid fa-circle"></i> En ligne
-        </span>
-      </div>
-      <div class="friend-actions">
-        <button (click)="startConversation(friend.requesterId)"
-        class="filter-btn">
-  <i class="fa-solid fa-comment"></i> Message
-</button>
-        <button (click)="blockUser(friend.addresseeId)"
-                class="filter-btn block-btn"
-                title="Bloquer cet utilisateur">
-          <i class="fa-solid fa-ban"></i> Bloquer
-        </button>
-      </div>
-    </div>
+   <div *ngFor="let friend of friends" class="perf-card friend-card">
+  <div class="friend-avatar">
+    {{ getInitial(getUserName(getFriendId(friend))) }}
+  </div>
+  <div class="friend-info">
+    <h4>{{ getUserName(getFriendId(friend)) }}</h4>
+    <span class="status online">
+      <i class="fa-solid fa-circle"></i> En ligne
+    </span>
+  </div>
+  <div class="friend-actions">
+    <button (click)="startConversation(getFriendId(friend))" class="filter-btn">
+      <i class="fa-solid fa-comment"></i> Message
+    </button>
+    <button (click)="removeFriend(friend)" class="filter-btn" style="color:#f97316;border-color:#f97316;">
+      <i class="fa-solid fa-user-minus"></i> Supprimer
+    </button>
+    <button (click)="blockUser(getFriendId(friend))" class="filter-btn block-btn">
+      <i class="fa-solid fa-ban"></i> Bloquer
+    </button>
+  </div>
+</div>
 
   </div>
 

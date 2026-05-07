@@ -176,10 +176,10 @@ export class SocialService {
   }
 
   // ===== SIGNALEMENT =====
-  reportPost(postId: number, reason: string): Observable<ApiResponse<void>> {
-    return this.http.post<ApiResponse<void>>(`${this.apiUrl}/reports`,
-      { contentId: postId, contentType: 'POST', reason });
-  }
+ reportPost(postId: number, reason: string, reportedUserId: string = ''): Observable<ApiResponse<void>> {
+  return this.http.post<ApiResponse<void>>(`${this.apiUrl}/reports`,
+    { contentId: postId, contentType: 'POST', reason, reportedUserId });
+}
 
   reportComment(commentId: number, reason: string): Observable<ApiResponse<void>> {
     return this.http.post<ApiResponse<void>>(`${this.apiUrl}/reports`,
@@ -220,11 +220,19 @@ export class SocialService {
       `${this.apiUrl}/friends/reject/${friendshipId}`);
   }
 
+ removeFriend(friendId: string): Observable<ApiResponse<void>> {
+  return this.http.delete<ApiResponse<void>>(
+    `${this.apiUrl}/friends/${friendId}`);
+}
   // ===== BLOCAGE =====
   blockUser(userId: string): Observable<ApiResponse<BlockList>> {
     return this.http.post<ApiResponse<BlockList>>(
       `${this.apiUrl}/users/${userId}/block`, {});
   }
+  deleteMessage(messageId: number): Observable<ApiResponse<void>> {
+  return this.http.delete<ApiResponse<void>>(
+    `${this.apiUrl}/messages/${messageId}`);
+}
 
   unblockUser(userId: string): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(

@@ -34,6 +34,8 @@ public class SecurityConfig {
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/courses/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/formations/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/formations/**").permitAll()
                         .anyRequest().authenticated()
                 )

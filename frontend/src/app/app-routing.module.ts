@@ -17,6 +17,7 @@ import { PromoteAdminComponent } from './components/setup/promote-admin/promote-
 import { AdminLayoutComponent } from './components/admin/layout/admin-layout/admin-layout.component';
 import { UsersManagementComponent } from './components/admin/users-management/users-management.component';
 import { ProfileComponent } from './components/admin/pages/profile/profile.component';
+import { ReportsComponent } from './components/admin/pages/reports/reports.component';
 
 // ✅ IMPORTS ADMIN MARKETPLACE
 import { AdminMarketplaceComponent } from './components/admin/marketplace/admin-marketplace/admin-marketplace.component';
@@ -131,6 +132,7 @@ const routes: Routes = [
     { path: 'users', component: UsersManagementComponent } ,
     { path: 'profile', component: ProfileComponent },
     { path: 'cours-formations', component: AdminCoursFormationsComponent },
+    { path: 'social/reports', component: ReportsComponent },
 
     // ✅ E-commerce Admin
       { path: 'ecommerce/products', component: AdminProductsComponent },

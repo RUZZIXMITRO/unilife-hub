@@ -18,14 +18,14 @@ public class FormationService {
     private final CategoryRepository categoryRepository;
     private final FavoriteRepository favoriteRepository;
 
-    public List<FormationResponse> getAllFormations(Integer userId) {
+    public List<FormationResponse> getAllFormations(String userId) {
         return formationRepository.findAll()
                 .stream()
                 .map(f -> toResponse(f, userId))
                 .collect(Collectors.toList());
     }
 
-    public FormationResponse getFormationById(Integer id, Integer userId) {
+    public FormationResponse getFormationById(Integer id, String userId) {
         Formation formation = formationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Formation non trouvée"));
         return toResponse(formation, userId);
@@ -34,14 +34,12 @@ public class FormationService {
     public FormationResponse createFormation(FormationRequest request) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Catégorie non trouvée"));
-
         Resource resource = Resource.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .category(category)
                 .build();
         resource = resourceRepository.save(resource);
-
         Formation formation = Formation.builder()
                 .resource(resource)
                 .provider(request.getProvider())
@@ -52,14 +50,12 @@ public class FormationService {
                 .isExternal(request.getIsExternal())
                 .clicksCount(0)
                 .build();
-
         return toResponse(formationRepository.save(formation), null);
     }
 
     public FormationResponse updateFormation(Integer id, FormationRequest request) {
         Formation formation = formationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Formation non trouvée"));
-
         formation.getResource().setTitle(request.getTitle());
         formation.getResource().setDescription(request.getDescription());
         formation.setProvider(request.getProvider());
@@ -67,7 +63,6 @@ public class FormationService {
         formation.setDuration(request.getDuration());
         formation.setLevel(request.getLevel());
         formation.setLanguage(request.getLanguage());
-
         return toResponse(formationRepository.save(formation), null);
     }
 
@@ -75,11 +70,7 @@ public class FormationService {
         formationRepository.deleteById(id);
     }
 
-    public List<FormationResponse> searchFormations(String keyword,
-                                                    String level,
-                                                    String language,
-                                                    Integer categoryId,
-                                                    Integer userId) {
+    public List<FormationResponse> searchFormations(String keyword, String level, String language, Integer categoryId, String userId) {
         return formationRepository.searchFormations(keyword, level, language, categoryId)
                 .stream()
                 .map(f -> toResponse(f, userId))
@@ -93,11 +84,9 @@ public class FormationService {
         formationRepository.save(formation);
     }
 
-    public FormationResponse toResponse(Formation formation, Integer userId) {
+    public FormationResponse toResponse(Formation formation, String userId) {
         boolean isFavorite = userId != null &&
-                favoriteRepository.existsByUserIdAndResourceId(
-                        userId, formation.getResource().getId());
-
+                favoriteRepository.existsByUserIdAndResourceId(userId, formation.getResource().getId());
         return FormationResponse.builder()
                 .id(formation.getId())
                 .title(formation.getResource().getTitle())

@@ -22,4 +22,21 @@ export class CloudinaryService {
       }).then(res => res.json())
     );
   }
+  uploadFile(file: File, folder: string = 'marketplace'): Observable<any> {
+  const isImage = file.type.startsWith('image/');
+  const uploadUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/${isImage ? 'image' : 'raw'}/upload`;
+  const preset = isImage ? this.uploadPreset : 'social';
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', preset);
+  formData.append('folder', `unilifehub/${folder}`);
+
+  return from(
+    fetch(uploadUrl, {
+      method: 'POST',
+      body: formData
+    }).then(res => res.json())
+  );
+}
 }

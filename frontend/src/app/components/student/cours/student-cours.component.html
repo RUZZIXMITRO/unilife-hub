@@ -19,6 +19,9 @@
     <button class="tab-btn" [class.active]="activeTab === 'mes-cours'" (click)="activeTab = 'mes-cours'; loadMesCours()">
   <i class="fa-solid fa-user"></i> Mes cours
 </button>
+<button class="tab-btn" [class.active]="activeTab === 'favoris'" (click)="activeTab = 'favoris'; loadMesFavoris()">
+  <i class="fa-solid fa-heart"></i> Mes favoris
+</button>
   </div>
   
 
@@ -155,11 +158,11 @@
             <i class="fa-solid fa-heart"></i>
           </button>
         </div>
-        <div class="card-body">
-          <span class="category-badge">{{ c.categoryName }}</span>
-          <h3>{{ c.title }}</h3>
-          <p class="card-desc">{{ c.description }}</p>
-        </div>
+       <div class="card-body" (click)="openDetail(c)" style="cursor:pointer;">
+  <span class="category-badge">{{ c.categoryName }}</span>
+  <h3>{{ c.title }}</h3>
+  <p class="card-desc">{{ c.description }}</p>
+</div>
         <div class="card-footer">
           <div class="card-stats">
             <span><i class="fa-solid fa-download"></i> {{ c.downloadsCount }}</span>
@@ -241,6 +244,68 @@
         </button>
       </div>
     </div>
+  </div>
+</div>
+<div *ngIf="activeTab === 'favoris'">
+  <div *ngIf="mesFavoris.length === 0" class="empty-state">
+    <i class="fa-solid fa-heart"></i>
+    <p>Aucun favori pour le moment.</p>
+  </div>
+  <div class="cours-grid">
+    <div *ngFor="let fav of mesFavoris" class="cours-card">
+      <div class="card-top">
+        <div class="file-icon pdf">
+          <i class="fa-solid fa-file-pdf"></i>
+        </div>
+        <span class="category-badge" style="font-size:0.7rem; padding:0.2rem 0.5rem;">
+          {{ fav.resourceType }}
+        </span>
+      </div>
+      <div class="card-body">
+<h3>{{ fav.resource?.title }}</h3>
+      </div>
+      <div class="card-footer">
+<button class="btn-download" style="background:#ef4444;" (click)="retirerFavori(fav.id)">
+    <i class="fa-solid fa-heart-crack"></i> Retirer
+</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL DETAIL COURS -->
+<div class="drawer-overlay" *ngIf="selectedCours" (click)="closeDetail()"></div>
+<div class="drawer" [class.open]="selectedCours">
+  <div class="drawer-header">
+    <div class="drawer-title">
+      <div class="drawer-title-icon">
+        <i class="fa-solid fa-book"></i>
+      </div>
+      <div>
+        <h3>{{ selectedCours?.title }}</h3>
+        <p>{{ selectedCours?.categoryName }}</p>
+      </div>
+    </div>
+    <button class="drawer-close" (click)="closeDetail()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-section">
+      <p class="drawer-section-label">Description</p>
+      <p>{{ selectedCours?.description || 'Aucune description disponible.' }}</p>
+    </div>
+    <div class="drawer-section">
+      <p class="drawer-section-label">Informations</p>
+      <p><i class="fa-solid fa-download"></i> Téléchargements : {{ selectedCours?.downloadsCount }}</p>
+      <p><i class="fa-solid fa-eye"></i> Vues : {{ selectedCours?.viewsCount }}</p>
+      <p><i class="fa-solid fa-file"></i> Taille : {{ formatSize(selectedCours?.fileSize) }}</p>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn-cancel" (click)="closeDetail()">Fermer</button>
+    <button class="drawer-btn-confirm" (click)="telecharger(selectedCours?.id); closeDetail()">
+      <i class="fa-solid fa-download"></i> Télécharger
+    </button>
   </div>
 </div>
 </div>

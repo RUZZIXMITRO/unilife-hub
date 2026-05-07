@@ -32,7 +32,7 @@ export class ReportsComponent implements OnInit {
     dismissed: 0
   };
 
-private apiUrl = 'http://localhost:5000/api/social';
+private apiUrl = 'http://localhost:7084/api/social';
 
   constructor(private http: HttpClient) {}
 

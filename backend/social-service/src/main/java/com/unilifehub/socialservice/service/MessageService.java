@@ -86,6 +86,24 @@ public class MessageService {
         message.setRead(true);
         messageRepository.save(message);
     }
+    @Transactional
+public void deleteMessage(Long messageId, String userId) {
+    Message message = messageRepository.findById(messageId)
+            .orElseThrow(() -> new RuntimeException("Message non trouvé"));
+
+    if (!message.getSenderId().equals(userId)) {
+        throw new RuntimeException("Non autorisé");
+    }
+
+    messageRepository.delete(message);
+
+    // Mettre à jour le lastMessage de la conversation
+    List<Message> remaining = messageRepository
+            .findConversation(message.getSenderId(), message.getReceiverId());
+    String lastContent = remaining.isEmpty() ? "" : 
+            remaining.get(remaining.size() - 1).getContent();
+    conversationService.updateLastMessage(message.getConversationId(), lastContent);
+}
 
     private MessageResponse mapToResponse(Message message) {
         return MessageResponse.builder()

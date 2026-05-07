@@ -87,15 +87,16 @@ public class PostService {
 
     // Supprimer un post
     public void deletePost(Long postId, String userId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post non trouvé"));
-
-        if (!post.getUserId().equals(userId)) {
-            throw new RuntimeException("Non autorisé");
-        }
-
-        postRepository.delete(post);
+    Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new RuntimeException("Post non trouvé"));
+    if (!post.getUserId().equals(userId)) {
+        throw new RuntimeException("Non autorisé");
     }
+    // Supprimer les likes liés au post
+    postLikeRepository.deleteByPostId(postId);
+    // Supprimer le post
+    postRepository.delete(post);
+}
 
     // Liker / Unliker un post
     @Transactional  // ✅ AJOUT Phase 3

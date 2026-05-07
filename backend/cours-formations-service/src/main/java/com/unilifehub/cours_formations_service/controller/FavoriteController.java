@@ -14,17 +14,15 @@ public class FavoriteController {
 
     private final FavoriteService favoriteService;
 
-    private Integer parseUserId(String userId) {
-        String uid = userId;
-        if (uid == null) {
-            var auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && !auth.getPrincipal().equals("anonymousUser"))
-                uid = auth.getPrincipal().toString();
-        }
-        if (uid == null) throw new RuntimeException("Utilisateur non authentifié");
-        try { return Integer.parseInt(uid); }
-        catch (NumberFormatException e) { return Math.abs(uid.hashCode()); }
+    private String parseUserId(String userId) {
+    if (userId == null) {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && !auth.getPrincipal().equals("anonymousUser"))
+            return auth.getPrincipal().toString();
+        throw new RuntimeException("Utilisateur non authentifié");
     }
+    return userId;
+}
 
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getMyFavorites(

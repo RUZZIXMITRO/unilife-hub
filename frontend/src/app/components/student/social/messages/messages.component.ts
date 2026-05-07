@@ -4,6 +4,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { UserService } from '../../../../services/user.service';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { CloudinaryService } from '../../../../services/cloudinary.service';
 
 @Component({
   selector: 'app-messages',
@@ -20,9 +21,13 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   messages: Message[] = [];
   newMessage = '';
   isLoading = false;
+  errorMessage = '';
   isLoadingConversations = false;
   currentUserId: string = '';
   shouldScroll = false;
+  showAttachMenu = false;
+showEmojiPicker = false;
+emojis = ['😀','😂','❤️','👍','🎉','😊','🙏','💪','🔥','✅','😅','🤔','👏','💯','😍','🥰','😎','🤝','👋','💬']
 
   // ✅ Cache des noms
   private userNameCache: { [userId: string]: string } = {};
@@ -30,7 +35,8 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   constructor(
     private socialService: SocialService,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private cloudinaryService: CloudinaryService
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +51,36 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
       this.shouldScroll = false;
     }
   }
-
+deleteMessage(messageId: number): void {
+  this.socialService.deleteMessage(messageId).subscribe({
+    next: (res: any) => {
+      if (res.success) {
+        this.messages = this.messages.filter(m => m.id !== messageId);
+      }
+    },
+    error: () => {}
+  });
+}
+addEmoji(emoji: string): void {
+  this.newMessage += emoji;
+  this.showEmojiPicker = false;
+}
+  openFile(url: string): void {
+  window.open(url, '_blank');
+}
+  onFileSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (!file) return;
+  this.cloudinaryService.uploadFile(file, 'social').subscribe({
+    next: (res: any) => {
+      if (res.secure_url) {
+        this.newMessage = res.secure_url;
+        this.sendMessage();
+      }
+    },
+    error: () => {}
+  });
+}
   // ===== CHARGER LES CONVERSATIONS =====
   loadConversations(): void {
     this.isLoadingConversations = true;
@@ -114,25 +149,29 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
 
   // ===== ENVOYER UN MESSAGE =====
   sendMessage(): void {
-    if (!this.newMessage.trim() || !this.selectedUserId) return;
-    const content = this.newMessage;
-    this.newMessage = '';
+  if (!this.newMessage.trim() || !this.selectedUserId) return;
+  const content = this.newMessage;
+  this.newMessage = '';
 
-    this.socialService.sendMessage(this.selectedUserId, content).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.messages.push(res.data);
-          this.shouldScroll = true;
-          if (this.selectedConversation) {
-            this.selectedConversation.lastMessage = content;
-            this.selectedConversation.lastMessageAt = new Date().toISOString();
-          }
-          // ✅ Recharger les conversations pour mettre à jour la sidebar
-          this.loadConversations();
+  this.socialService.sendMessage(this.selectedUserId, content).subscribe({
+    next: (res) => {
+      if (res.success) {
+        this.messages.push(res.data);
+        this.shouldScroll = true;
+        if (this.selectedConversation) {
+          this.selectedConversation.lastMessage = content;
+          this.selectedConversation.lastMessageAt = new Date().toISOString();
         }
+        this.loadConversations();
       }
-    });
-  }
+    },
+    error: () => {
+      this.newMessage = content;
+      this.errorMessage = 'Impossible d\'envoyer le message.';
+      setTimeout(() => this.errorMessage = '', 3000);
+    }
+  });
+}
 
   // ===== UTILITAIRES =====
   isMyMessage(message: Message): boolean {
@@ -169,13 +208,13 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   }
 
   getTimeAgo(dateString: string): string {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const now = new Date();
-    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-    if (diff < 60) return 'À l\'instant';
-    if (diff < 3600) return `${Math.floor(diff / 60)} min`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
-    return `${Math.floor(diff / 86400)}j`;
-  }
+  if (!dateString) return '';
+  const date = new Date(dateString + (dateString.endsWith('Z') ? '' : 'Z'));
+  const now = new Date();
+  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+  if (diff < 60) return 'À l\'instant';
+  if (diff < 3600) return `${Math.floor(diff / 60)} min`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
+  return `${Math.floor(diff / 86400)}j`;
+}
 }

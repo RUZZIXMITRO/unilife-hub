@@ -34,10 +34,13 @@
           <option value="FRIENDS">👥 Amis</option>
         </select>
       </div>
-      <button (click)="createPost()" class="btn-create"
-              [disabled]="!newPostContent.trim()">
-        <i class="fa-solid fa-paper-plane"></i> Publier
-      </button>
+      <button (click)="createPost()"
+        [disabled]="(!newPostContent.trim() && !selectedPhotoUrl) || isUploading"
+        class="btn-publish">
+  <i class="fa-solid fa-paper-plane" *ngIf="!isUploading"></i>
+  <i class="fa-solid fa-spinner fa-spin" *ngIf="isUploading"></i>
+  Publier
+</button>
     </div>
   </div>
 
@@ -83,9 +86,12 @@
       </div>
 
       <!-- Contenu -->
-      <div class="post-content">
-        <p>{{ post.content }}</p>
-      </div>
+     <div class="post-content">
+  <p *ngIf="getTextContent(post.content)">{{ getTextContent(post.content) }}</p>
+ <img *ngIf="getImageUrl(post.content)"
+     [src]="getImageUrl(post.content)"
+     style="max-width:100%;max-height:400px;object-fit:cover;border-radius:8px;margin-top:8px;display:block;" />
+</div>
 
       <!-- Compteurs -->
       <div class="post-counters">

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,11 +11,21 @@ export class CoursService {
 private apiUrl = 'http://localhost:8081/api';
   constructor(private http: HttpClient) {}
 
-  private getHeaders(): HttpHeaders {
-  const token = localStorage.getItem('access_token');  // ← 'access_token' pas 'token'
+ private getHeaders(): HttpHeaders {
+  const token = localStorage.getItem('access_token');
   return new HttpHeaders({
     'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json'
+  });
+}
+
+private getHeadersWithUserId(): HttpHeaders {
+  const token = localStorage.getItem('access_token');
+  const sub = token ? JSON.parse(atob(token.split('.')[1]))?.sub : '';
+  return new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json',
+    'X-User-Id': sub || ''
   });
 }
 
@@ -112,19 +123,19 @@ private apiUrl = 'http://localhost:8081/api';
 
   // ========== FAVORIS ==========
   getMesFavoris(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/favorites`,
-      { headers: this.getHeaders() });
-  }
+  return this.http.get(`${this.apiUrl}/favorites`,
+    { headers: this.getHeadersWithUserId() });
+}
 
-  ajouterFavori(resourceId: number, type: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/favorites/${resourceId}?type=${type}`, {},
-      { headers: this.getHeaders() });
-  }
+ajouterFavori(resourceId: number, type: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/favorites/${resourceId}?type=${type}`, {},
+    { headers: this.getHeadersWithUserId() });
+}
 
-  retirerFavori(resourceId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/favorites/${resourceId}`,
-      { headers: this.getHeaders() });
-  }
+retirerFavori(resourceId: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/favorites/${resourceId}`,
+    { headers: this.getHeadersWithUserId() });
+}
 
   // ========== LIKES & COMMENTAIRES ==========
   toggleLike(resourceId: number): Observable<any> {
@@ -152,4 +163,7 @@ private apiUrl = 'http://localhost:8081/api';
     return this.http.get(`${this.apiUrl}/admin/courses/pending`,
       { headers: this.getHeaders() });
   }
+  getCoursDetail(id: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/courses/${id}`, { headers: this.getHeaders() });
+}
 }

@@ -21,43 +21,34 @@ public class CourseService {
     private final DownloadRepository downloadRepository;
     private final FileStorageService fileStorageService;
 
-    public List<CourseResponse> getAllCourses(Integer userId) {
+    public List<CourseResponse> getAllCourses(String userId) {
         return courseRepository.findByIsApprovedTrueOrderByResource_CreatedAtDesc()
                 .stream()
                 .map(c -> toResponse(c, userId))
                 .collect(Collectors.toList());
     }
 
-    public CourseResponse getCourseById(Integer id, Integer userId) {
+    public CourseResponse getCourseById(Integer id, String userId) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cours non trouvé"));
-        // Incrémenter les vues
         course.setViewsCount(course.getViewsCount() + 1);
         courseRepository.save(course);
         return toResponse(course, userId);
     }
 
-    public CourseResponse uploadCourse(CourseRequest request,
-                                       MultipartFile file,
-                                       Integer userId) {
+    public CourseResponse uploadCourse(CourseRequest request, MultipartFile file, String userId) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Catégorie non trouvée"));
-
-        // Sauvegarder le fichier
         String fileUrl = fileStorageService.saveFile(file);
-
-        // Créer la resource
         Resource resource = Resource.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .category(category)
                 .build();
         resource = resourceRepository.save(resource);
-
-        // Créer le cours
         Course course = Course.builder()
                 .resource(resource)
-                .userId(userId)
+                .userId(Math.abs(userId.hashCode()))
                 .fileUrl(fileUrl)
                 .fileName(file.getOriginalFilename())
                 .fileSize(file.getSize())
@@ -66,7 +57,6 @@ public class CourseService {
                 .viewsCount(0)
                 .isApproved(false)
                 .build();
-
         return toResponse(courseRepository.save(course), userId);
     }
 
@@ -77,41 +67,36 @@ public class CourseService {
         return toResponse(courseRepository.save(course), null);
     }
 
-    public void deleteCourse(Integer id) {
-        courseRepository.deleteById(id);
-    }
+   public void deleteCourse(Integer id) {
+    downloadRepository.deleteByCourseId(id);
+    courseRepository.deleteById(id);
+}
 
-    public List<CourseResponse> searchCourses(String keyword,
-                                              Integer categoryId,
-                                              Integer userId) {
+    public List<CourseResponse> searchCourses(String keyword, Integer categoryId, String userId) {
         return courseRepository.searchCourses(keyword, categoryId)
                 .stream()
                 .map(c -> toResponse(c, userId))
                 .collect(Collectors.toList());
     }
 
-    public String downloadCourse(Integer id, Integer userId) {
+    public String downloadCourse(Integer id, String userId) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cours non trouvé"));
-
-        // Enregistrer le téléchargement
-        if (!downloadRepository.existsByUserIdAndCourseId(userId, id)) {
+        Integer uid = Math.abs(userId.hashCode());
+        if (!downloadRepository.existsByUserIdAndCourseId(uid, id)) {
             Download download = Download.builder()
                     .course(course)
-                    .userId(userId)
+                    .userId(uid)
                     .build();
             downloadRepository.save(download);
         }
-
-        // Incrémenter le compteur
         course.setDownloadsCount(course.getDownloadsCount() + 1);
         courseRepository.save(course);
-
         return course.getFileUrl();
     }
 
-    public List<CourseResponse> getMyCourses(Integer userId) {
-        return courseRepository.findByUserId(userId)
+    public List<CourseResponse> getMyCourses(String userId) {
+        return courseRepository.findByUserId(Math.abs(userId.hashCode()))
                 .stream()
                 .map(c -> toResponse(c, userId))
                 .collect(Collectors.toList());
@@ -125,11 +110,9 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
-    public CourseResponse toResponse(Course course, Integer userId) {
+    public CourseResponse toResponse(Course course, String userId) {
         boolean isFavorite = userId != null &&
-                favoriteRepository.existsByUserIdAndResourceId(
-                        userId, course.getResource().getId());
-
+                favoriteRepository.existsByUserIdAndResourceId(userId, course.getResource().getId());
         return CourseResponse.builder()
                 .id(course.getId())
                 .title(course.getResource().getTitle())

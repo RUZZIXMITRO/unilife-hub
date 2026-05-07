@@ -11,60 +11,62 @@ export class StudentCoursComponent implements OnInit {
   cours: any[] = [];
   formations: any[] = [];
   categories: any[] = [];
-activeTab: 'cours' | 'formations' | 'mes-cours' = 'cours';
+  activeTab: 'cours' | 'formations' | 'mes-cours' | 'favoris' = 'cours';
   isLoading = false;
   searchKeyword = '';
-selectedCategory: number | null = null;  
-selectedLevel = '';
+  selectedCategory: number | null = null;
+  selectedLevel = '';
   selectedLanguage = '';
   mesCours: any[] = [];
+  mesFavoris: any[] = [];
+  selectedCours: any = null;
 
 
-  constructor(private coursService: CoursService) {}
-// Propriétés upload
-showUploadModal = false;
-selectedFile: File | null = null;
-uploadData = { title: '', description: '', categoryId: null };
-isUploading = false;
-uploadSuccess = false;
-uploadError = '';
+  constructor(public coursService: CoursService) {}
 
-onFileSelected(event: any) {
-  this.selectedFile = event.target.files[0];
-}
+  showUploadModal = false;
+  selectedFile: File | null = null;
+  uploadData = { title: '', description: '', categoryId: null };
+  isUploading = false;
+  uploadSuccess = false;
+  uploadError = '';
 
-uploadCours() {
-  if (!this.uploadData.title || !this.uploadData.categoryId || !this.selectedFile) {
-    this.uploadError = 'Titre, catégorie et fichier sont obligatoires';
-    return;
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
   }
-  this.isUploading = true;
-  this.uploadError = '';
-
-  const formData = new FormData();
-  formData.append('file', this.selectedFile);
-  formData.append('data', new Blob(
-    [JSON.stringify(this.uploadData)],
-    { type: 'application/json' }
-  ));
-
-  this.coursService.uploadCours(formData).subscribe({
-    next: () => {
-      this.isUploading = false;
-      this.uploadSuccess = true;
-      this.uploadData = { title: '', description: '', categoryId: null };
-      this.selectedFile = null;
-      setTimeout(() => {
-        this.showUploadModal = false;
-        this.uploadSuccess = false;
-      }, 2000);
-    },
-    error: (err) => {
-      this.isUploading = false;
-      this.uploadError = 'Erreur lors de l\'upload';
-    }
+  openDetail(c: any): void {
+  this.selectedCours = c;
+  this.coursService.getCoursDetail(c.id).subscribe((res: any) => {
+    this.selectedCours = res.data || c;
   });
 }
+
+closeDetail(): void {
+  this.selectedCours = null;
+}
+
+  uploadCours() {
+    if (!this.uploadData.title || !this.uploadData.categoryId || !this.selectedFile) {
+      this.uploadError = 'Titre, catégorie et fichier sont obligatoires';
+      return;
+    }
+    this.isUploading = true;
+    this.uploadError = '';
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+    formData.append('data', new Blob([JSON.stringify(this.uploadData)], { type: 'application/json' }));
+    this.coursService.uploadCours(formData).subscribe({
+      next: () => {
+        this.isUploading = false;
+        this.uploadSuccess = true;
+        this.uploadData = { title: '', description: '', categoryId: null };
+        this.selectedFile = null;
+        setTimeout(() => { this.showUploadModal = false; this.uploadSuccess = false; }, 2000);
+      },
+      error: () => { this.isUploading = false; this.uploadError = 'Erreur lors de l\'upload'; }
+    });
+  }
+
   ngOnInit() {
     this.loadCategories();
     this.loadCours();
@@ -78,8 +80,23 @@ uploadCours() {
   }
 
   loadMesCours() {
-  this.coursService.getMesCours().subscribe((res: any) => {
-    this.mesCours = res.data || [];
+    this.coursService.getMesCours().subscribe((res: any) => {
+      this.mesCours = res.data || [];
+    });
+  }
+
+  loadMesFavoris() {
+    this.coursService.getMesFavoris().subscribe((res: any) => {
+      this.mesFavoris = res.data || [];
+    });
+  }
+
+ retirerFavori(favoriteId: number) {
+  this.coursService.retirerFavori(favoriteId).subscribe({
+    next: () => {
+      this.mesFavoris = this.mesFavoris.filter(f => f.id !== favoriteId);
+    },
+    error: (err) => console.error('Erreur:', err)
   });
 }
 
@@ -98,34 +115,32 @@ uploadCours() {
   }
 
   rechercher() {
-  if (this.activeTab === 'cours') {
-    if (!this.searchKeyword && !this.selectedCategory)  {
-      this.loadCours();
+    if (this.activeTab === 'cours') {
+      if (!this.searchKeyword && !this.selectedCategory) {
+        this.loadCours();
+      } else {
+        this.coursService.searchCours(this.searchKeyword, this.selectedCategory || undefined)
+          .subscribe((res: any) => { this.cours = res.data || []; });
+      }
     } else {
-      this.coursService.searchCours(this.searchKeyword, this.selectedCategory || undefined)
-        .subscribe((res: any) => { this.cours = res.data || []; });
-    }
-  } else {
-    if (!this.searchKeyword && !this.selectedCategory && !this.selectedLevel && !this.selectedLanguage) {
-      this.loadFormations();
-    } else {
-      this.coursService.searchFormations(
-        this.searchKeyword, this.selectedLevel,
-        this.selectedLanguage, this.selectedCategory || undefined
-      ).subscribe((res: any) => { this.formations = res.data || []; });
+      if (!this.searchKeyword && !this.selectedCategory && !this.selectedLevel && !this.selectedLanguage) {
+        this.loadFormations();
+      } else {
+        this.coursService.searchFormations(this.searchKeyword, this.selectedLevel, this.selectedLanguage, this.selectedCategory || undefined)
+          .subscribe((res: any) => { this.formations = res.data || []; });
+      }
     }
   }
-}
 
   telecharger(id: number) {
-  this.coursService.downloadCours(id).subscribe((res: any) => {
-    if (res.data) {
-      const path = res.data.replace('uploads//', 'uploads/');
-      const url = `http://localhost:8081/${encodeURI(path)}`;
-      window.open(url, '_blank');
-    }
-  });
-}
+    this.coursService.downloadCours(id).subscribe((res: any) => {
+      if (res.data) {
+        const path = res.data.replace('uploads//', 'uploads/');
+        const url = `http://localhost:8081/${encodeURI(path)}`;
+        window.open(url, '_blank');
+      }
+    });
+  }
 
   toggleFavori(item: any, type: string) {
     if (item.isFavorite) {
@@ -135,10 +150,11 @@ uploadCours() {
     }
   }
 
-  accederFormation(f: any) {
-    this.coursService.incrementerClics(f.id).subscribe();
-    window.open(f.linkUrl, '_blank');
-  }
+ accederFormation(f: any) {
+  this.coursService.incrementerClics(f.id).subscribe();
+  f.clicksCount = (f.clicksCount || 0) + 1;
+  window.open(f.linkUrl, '_blank');
+}
 
   getFileIcon(type: string): string {
     if (!type) return 'fa-file';

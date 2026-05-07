@@ -132,6 +132,23 @@ export class FriendsComponent implements OnInit {
     });
   }
 
+  // Retourne l'ID de l'autre utilisateur (pas le sien)
+getFriendId(friendship: Friendship): string {
+  const currentId = localStorage.getItem('user_id');
+  return friendship.requesterId === currentId ? friendship.addresseeId : friendship.requesterId;
+}
+
+removeFriend(friendship: any): void {
+  const friendId = this.getFriendId(friendship);
+  this.socialService.removeFriend(friendId).subscribe({
+    next: (res: any) => {
+      if (res.success) {
+        this.friends = this.friends.filter(f => f.id !== friendship.id);
+      }
+    },
+    error: () => {}
+  });
+}
   // ✅ Retourne le nom depuis le cache
   getUserName(credentialId: string): string {
     return this.userNameCache[credentialId] || 'Étudiant';
@@ -155,15 +172,22 @@ export class FriendsComponent implements OnInit {
   }
 
   acceptRequest(friendshipId: number): void {
-    this.socialService.acceptFriendRequest(friendshipId).subscribe({
-      next: (res: any) => {
-        if (res.success) {
-          this.pendingRequests = this.pendingRequests.filter(r => r.id !== friendshipId);
-          this.loadFriends();
+  this.socialService.acceptFriendRequest(friendshipId).subscribe({
+    next: (res: any) => {
+      if (res.success) {
+        this.pendingRequests = this.pendingRequests.filter(r => r.id !== friendshipId);
+        this.loadFriends();
+        
+        // Créer la conversation automatiquement
+        const request = this.pendingRequests.find(r => r.id === friendshipId) 
+                        || res.data;
+        if (res.data?.requesterId) {
+this.socialService.sendMessage(res.data.requesterId, 'Bonjour !').subscribe();
         }
       }
-    });
-  }
+    }
+  });
+}
 
   rejectRequest(friendshipId: number): void {
     this.socialService.rejectFriendRequest(friendshipId).subscribe({

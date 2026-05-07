@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SocialService, Post } from '../../../../services/social.service';
 import { AuthService } from '../../../../services/auth.service';
 import { UserService } from '../../../../services/user.service';
+import { CloudinaryService } from '../../../../services/cloudinary.service';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -26,6 +27,8 @@ export class FeedComponent implements OnInit {
   reportReason = '';
   currentUserId: string = '';
   selectedPhotoName = '';
+  selectedPhotoUrl = '';
+isUploading = false
 
   // Cache des noms pour éviter les appels répétés
   private userNameCache: { [userId: string]: string } = {};
@@ -33,7 +36,8 @@ export class FeedComponent implements OnInit {
   constructor(
     private socialService: SocialService,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private cloudinaryService: CloudinaryService
   ) {}
 
   ngOnInit(): void {
@@ -113,36 +117,61 @@ export class FeedComponent implements OnInit {
   }
 
   createPost(): void {
-    if (!this.newPostContent.trim()) return;
-    this.socialService.createPost(
-      this.newPostContent,
-      this.newPostVisibility
-    ).subscribe({
-      next: (res) => {
-        if (res.success) {
-          // Enrichir le nouveau post avant de l'ajouter
-          const newPost = {
-            ...res.data,
-            userName: this.userNameCache[res.data.userId]
-              || this.authService.getCurrentUser()?.email?.split('@')[0]
-              || 'Étudiant'
-          };
-          this.posts.unshift(newPost);
-          this.newPostContent = '';
-        }
+  if (!this.newPostContent.trim() && !this.selectedPhotoUrl) return;
+  const content = this.selectedPhotoUrl 
+    ? this.newPostContent + (this.newPostContent ? '\n' : '') + this.selectedPhotoUrl
+    : this.newPostContent;
+  
+  this.socialService.createPost(content, this.newPostVisibility).subscribe({
+    next: (res) => {
+      if (res.success) {
+        const newPost = {
+          ...res.data,
+          userName: this.userNameCache[res.data.userId]
+            || this.authService.getCurrentUser()?.email?.split('@')[0]
+            || 'Étudiant'
+        };
+        this.posts.unshift(newPost);
+        this.newPostContent = '';
+        this.selectedPhotoUrl = '';
+        this.selectedPhotoName = '';
       }
-    });
-  }
+    }
+  });
+}
+getTextContent(content: string): string {
+  if (!content) return '';
+  const lines = content.split('\n');
+  return lines.filter(l => !l.startsWith('https://')).join('\n').trim();
+}
+
+getImageUrl(content: string): string {
+  if (!content) return '';
+  const lines = content.split('\n');
+  const urlLine = lines.find(l => l.startsWith('https://res.cloudinary.com'));
+  return urlLine || '';
+}
 
   triggerPhotoPicker(fileInput: HTMLInputElement): void {
     fileInput.click();
   }
 
-  onPhotoSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files && input.files.length > 0 ? input.files[0] : null;
-    this.selectedPhotoName = file ? file.name : '';
-  }
+ onPhotoSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const file = input.files && input.files.length > 0 ? input.files[0] : null;
+  if (!file) return;
+  this.selectedPhotoName = file.name;
+  this.isUploading = true;
+  this.cloudinaryService.uploadFile(file, 'feed').subscribe({
+    next: (res: any) => {
+      if (res.secure_url) {
+        this.selectedPhotoUrl = res.secure_url;
+      }
+      this.isUploading = false;
+    },
+    error: () => { this.isUploading = false; }
+  });
+}
 
   toggleLike(post: Post): void {
     this.socialService.toggleLike(post.id).subscribe({
@@ -287,13 +316,15 @@ export class FeedComponent implements OnInit {
   }
 
   deletePost(postId: number): void {
-    if (!confirm('Supprimer ce post ?')) return;
-    this.socialService.deletePost(postId).subscribe({
-      next: (res) => {
-        if (res.success) this.posts = this.posts.filter(p => p.id !== postId);
+  this.socialService.deletePost(postId).subscribe({
+    next: (res: any) => {
+      if (res.success) {
+        this.posts = this.posts.filter(p => p.id !== postId);
       }
-    });
-  }
+    },
+    error: () => {}
+  });
+}
 
   sharePost(postId: number): void {
     this.socialService.sharePost(postId).subscribe({
@@ -316,30 +347,29 @@ export class FeedComponent implements OnInit {
     this.reportReason = '';
   }
 
-  submitReport(): void {
-    if (!this.reportReason.trim() || this.reportPostId === null) return;
-    this.socialService.reportPost(this.reportPostId, this.reportReason).subscribe({
-      next: () => {
-        alert('Signalement envoyé. Merci !');
-        this.closeReportModal();
-      },
-      error: () => {
-        alert('Erreur lors du signalement.');
-        this.closeReportModal();
-      }
-    });
-  }
+ submitReport(): void {
+  if (!this.reportReason.trim() || this.reportPostId === null) return;
+  const post = this.posts.find(p => p.id === this.reportPostId);
+  this.socialService.reportPost(
+    this.reportPostId, 
+    this.reportReason,
+    post?.userId || ''
+  ).subscribe({
+    next: () => this.closeReportModal(),
+    error: () => {}
+  });
+}
 
-  getTimeAgo(dateString: string): string {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-    if (diff < 60) return 'À l\'instant';
-    if (diff < 3600) return `Il y a ${Math.floor(diff / 60)} min`;
-    if (diff < 86400) return `Il y a ${Math.floor(diff / 3600)}h`;
-    return `Il y a ${Math.floor(diff / 86400)}j`;
-  }
-
+ getTimeAgo(dateString: string): string {
+  if (!dateString) return '';
+  const date = new Date(dateString + (dateString.endsWith('Z') ? '' : 'Z'));
+  const now = new Date();
+  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+  if (diff < 60) return 'À l\'instant';
+  if (diff < 3600) return `${Math.floor(diff / 60)} min`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
+  return `${Math.floor(diff / 86400)}j`;
+}
   getInitial(name: string): string {
     return name ? name[0].toUpperCase() : 'U';
   }

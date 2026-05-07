@@ -21,37 +21,27 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    private Integer getUserId(String userIdHeader) {
-    String uid = userIdHeader;
-    if (uid == null) {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
-            uid = auth.getPrincipal().toString();
-        } else {
+    private String getUserId(String userIdHeader) {
+        if (userIdHeader == null) {
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && !auth.getPrincipal().equals("anonymousUser"))
+                return auth.getPrincipal().toString();
             throw new RuntimeException("Utilisateur non authentifié");
         }
+        return userIdHeader;
     }
-    try {
-        return Integer.parseInt(uid);
-    } catch (NumberFormatException e) {
-        // UUID → hash stable positif
-        return Math.abs(uid.hashCode());
-    }
-}
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<CourseResponse>>> getAllCourses(
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
-        return ResponseEntity.ok(ApiResponse.success("Cours récupérés", courseService.getAllCourses(uid)));
+        return ResponseEntity.ok(ApiResponse.success("Cours récupérés", courseService.getAllCourses(userId)));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CourseResponse>> getCourseById(
             @PathVariable Integer id,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
-        return ResponseEntity.ok(ApiResponse.success("Cours récupéré", courseService.getCourseById(id, uid)));
+        return ResponseEntity.ok(ApiResponse.success("Cours récupéré", courseService.getCourseById(id, userId)));
     }
 
     @GetMapping("/search")
@@ -59,8 +49,7 @@ public class CourseController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Integer categoryId,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        Integer uid = userId != null ? Integer.parseInt(userId) : null;
-        return ResponseEntity.ok(ApiResponse.success("Résultats de recherche", courseService.searchCourses(keyword, categoryId, uid)));
+        return ResponseEntity.ok(ApiResponse.success("Résultats", courseService.searchCourses(keyword, categoryId, userId)));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -68,7 +57,7 @@ public class CourseController {
             @Valid @RequestPart("data") CourseRequest request,
             @RequestPart("file") MultipartFile file,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        return ResponseEntity.ok(ApiResponse.success("Cours uploadé avec succès",
+        return ResponseEntity.ok(ApiResponse.success("Cours uploadé",
                 courseService.uploadCourse(request, file, getUserId(userId))));
     }
 
@@ -76,7 +65,7 @@ public class CourseController {
     public ResponseEntity<ApiResponse<String>> downloadCourse(
             @PathVariable Integer id,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
-        return ResponseEntity.ok(ApiResponse.success("URL de téléchargement",
+        return ResponseEntity.ok(ApiResponse.success("URL",
                 courseService.downloadCourse(id, getUserId(userId))));
     }
 
@@ -94,7 +83,6 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable Integer id) {
         courseService.deleteCourse(id);
         return ResponseEntity.ok(ApiResponse.success("Cours supprimé", null));

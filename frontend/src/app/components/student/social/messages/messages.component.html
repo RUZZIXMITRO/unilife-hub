@@ -1,7 +1,7 @@
 <div class="messages-page">
   <div class="messages-layout">
 
-    <!-- ===== SIDEBAR CONVERSATIONS ✅ DYNAMIQUE ===== -->
+    <!-- ===== SIDEBAR CONVERSATIONS ===== -->
     <div class="conv-sidebar">
 
       <div class="sidebar-header">
@@ -11,22 +11,18 @@
         </button>
       </div>
 
-      <!-- Loading -->
       <div *ngIf="isLoadingConversations" class="empty-conv">
         <i class="fa-solid fa-spinner fa-spin"
            style="font-size:1.5rem;color:#2563eb;display:block;margin-bottom:0.5rem"></i>
         <p>Chargement...</p>
       </div>
 
-      <!-- Aucune conversation -->
-      <div *ngIf="!isLoadingConversations && conversations.length === 0"
-           class="empty-conv">
+      <div *ngIf="!isLoadingConversations && conversations.length === 0" class="empty-conv">
         <i class="fa-solid fa-comment-slash"
            style="font-size:1.5rem;color:#94a3b8;display:block;margin-bottom:0.5rem"></i>
         <p>Aucune conversation.<br>Démarrez depuis vos amis !</p>
       </div>
 
-      <!-- Liste des conversations ✅ DYNAMIQUE -->
       <div *ngFor="let conv of conversations"
            class="conv-item"
            [class.active]="selectedConversation?.id === conv.id"
@@ -39,9 +35,7 @@
 
         <div class="conv-info">
           <div class="conv-top">
-            <span class="conv-name">
-  {{ getConvName(conv) }}
-</span>
+            <span class="conv-name">{{ getConvName(conv) }}</span>
             <span class="conv-time" *ngIf="conv.lastMessageAt">
               {{ getTimeAgo(conv.lastMessageAt) }}
             </span>
@@ -58,7 +52,6 @@
     <!-- ===== ZONE CHAT ===== -->
     <div class="chat-area">
 
-      <!-- État vide -->
       <div *ngIf="!selectedUserId" class="no-chat">
         <div class="no-chat-icon">
           <i class="fa-solid fa-comments"></i>
@@ -67,10 +60,8 @@
         <p>Sélectionnez une conversation<br>pour commencer à discuter</p>
       </div>
 
-      <!-- Fenêtre de chat -->
       <div *ngIf="selectedUserId" class="chat-window">
 
-        <!-- En-tête -->
         <div class="chat-header">
           <div class="chat-avatar">
             <i class="fa-solid fa-user"></i>
@@ -104,36 +95,99 @@
           </div>
 
           <div *ngFor="let message of messages"
-               class="message-bubble"
-               [class.my-message]="isMyMessage(message)"
-               [class.other-message]="!isMyMessage(message)">
-            <p>{{ message.content }}</p>
-            <span class="message-time">
-              {{ getTimeAgo(message.createdAt) }}
-              <i class="fa-solid fa-check-double"
-                 *ngIf="isMyMessage(message)"
-                 [style.color]="message.read ? '#2563eb' : '#94a3b8'">
-              </i>
-            </span>
-          </div>
+     class="message-bubble"
+     [class.my-message]="isMyMessage(message)"
+     [class.other-message]="!isMyMessage(message)">
 
+  <!-- Image Cloudinary -->
+  <img *ngIf="message.content.startsWith('https://res.cloudinary.com') && !message.content.includes('/raw/')"
+       [src]="message.content"
+       style="max-width:200px;border-radius:8px;display:block;cursor:pointer;"
+       (click)="openFile(message.content)" />
+
+  <!-- PDF ou fichier raw Cloudinary -->
+  <a *ngIf="message.content.startsWith('https://res.cloudinary.com') && message.content.includes('/raw/')"
+     [href]="message.content" target="_blank"
+     style="display:flex;align-items:center;gap:8px;color:#2563eb;text-decoration:none;padding:8px;background:#eff6ff;border-radius:8px;">
+    <i class="fa-solid fa-file-pdf" style="font-size:1.5rem;color:#dc2626;"></i>
+    <span>Ouvrir le fichier</span>
+  </a>
+
+  <!-- Texte normal -->
+  <p *ngIf="!message.content.startsWith('https://')">{{ message.content }}</p>
+
+  <span class="message-time">
+    {{ getTimeAgo(message.createdAt) }}
+    <i class="fa-solid fa-check-double"
+       *ngIf="isMyMessage(message)"
+       [style.color]="message.read ? '#2563eb' : '#94a3b8'">
+    </i>
+  </span>
+
+  <!-- Bouton supprimer -->
+  <button *ngIf="isMyMessage(message)"
+          (click)="deleteMessage(message.id)"
+          style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:0.75rem;margin-top:4px;padding:0;">
+    <i class="fa-solid fa-trash"></i>
+  </button>
+
+</div>
         </div>
+
+    <!-- Message erreur -->
+<div *ngIf="errorMessage" 
+     style="background:#fee2e2;color:#dc2626;padding:8px 12px;font-size:0.875rem;text-align:center;border-radius:8px;margin:0 16px 8px;">
+  <i class="fa-solid fa-circle-exclamation"></i> {{ errorMessage }}
+</div>
 
         <!-- Input message -->
-        <div class="message-input-area">
-          <button class="attach-btn" title="Joindre un fichier">
-            <i class="fa-solid fa-paperclip"></i>
-          </button>
-          <input [(ngModel)]="newMessage"
-                 (keyup.enter)="sendMessage()"
-                 placeholder="Écrire un message..."
-                 class="message-input">
-          <button (click)="sendMessage()"
-                  [disabled]="!newMessage.trim()"
-                  class="btn-send">
-            <i class="fa-solid fa-paper-plane"></i>
-          </button>
-        </div>
+       <div class="message-input-area">
+  <!-- Bouton attachment avec menu -->
+  <div style="position:relative;">
+    <button class="attach-btn" (click)="showAttachMenu = !showAttachMenu" title="Joindre">
+      <i class="fa-solid fa-paperclip"></i>
+    </button>
+    <div *ngIf="showAttachMenu" style="position:absolute;bottom:48px;left:0;background:white;border:1px solid #dce4f0;border-radius:10px;padding:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:100;min-width:140px;">
+      <button (click)="imageInput.click(); showAttachMenu=false"
+              style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:8px 12px;width:100%;border-radius:6px;font-size:0.875rem;"
+              onmouseover="this.style.background='#f4f6fb'" onmouseout="this.style.background='none'">
+        <i class="fa-solid fa-image" style="color:#2563eb;"></i> Image
+      </button>
+      <button (click)="fileInput.click(); showAttachMenu=false"
+              style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:8px 12px;width:100%;border-radius:6px;font-size:0.875rem;"
+              onmouseover="this.style.background='#f4f6fb'" onmouseout="this.style.background='none'">
+        <i class="fa-solid fa-file-pdf" style="color:#dc2626;"></i> Fichier
+      </button>
+    </div>
+  </div>
+
+  <input #imageInput type="file" accept="image/*" style="display:none" (change)="onFileSelected($event)">
+  <input #fileInput type="file" accept=".pdf,.doc,.docx" style="display:none" (change)="onFileSelected($event)">
+
+  <!-- Bouton emoji -->
+  <div style="position:relative;">
+    <button class="attach-btn" (click)="showEmojiPicker = !showEmojiPicker" title="Emoji">
+      <i class="fa-regular fa-face-smile"></i>
+    </button>
+    <div *ngIf="showEmojiPicker" style="position:absolute;bottom:48px;left:0;background:white;border:1px solid #dce4f0;border-radius:10px;padding:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:100;display:flex;flex-wrap:wrap;gap:4px;width:200px;">
+      <button *ngFor="let emoji of emojis" (click)="addEmoji(emoji)"
+              style="background:none;border:none;cursor:pointer;font-size:1.25rem;padding:4px;border-radius:4px;"
+              onmouseover="this.style.background='#f4f6fb'" onmouseout="this.style.background='none'">
+        {{emoji}}
+      </button>
+    </div>
+  </div>
+
+  <input [(ngModel)]="newMessage"
+         (keyup.enter)="sendMessage()"
+         placeholder="Écrire un message..."
+         class="message-input">
+  <button (click)="sendMessage()"
+          [disabled]="!newMessage.trim()"
+          class="btn-send">
+    <i class="fa-solid fa-paper-plane"></i>
+  </button>
+</div>
 
       </div>
     </div>

@@ -51,4 +51,13 @@ public class MessageController {
         messageService.markAsRead(id, userId);
         return ResponseEntity.ok(ApiResponse.success("Message lu"));
     }
+    // DELETE /api/social/messages/{id} → supprimer message
+@DeleteMapping("/{id}")
+public ResponseEntity<ApiResponse<Void>> deleteMessage(
+        @PathVariable Long id,
+        Authentication auth) {
+    String userId = AuthUtils.getRequiredUserId(auth);
+    messageService.deleteMessage(id, userId);
+    return ResponseEntity.ok(ApiResponse.success("Message supprimé"));
+}
 }

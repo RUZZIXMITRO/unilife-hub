@@ -94,6 +94,7 @@ import { AdminReviewsComponent } from './components/admin/ecommerce/admin-review
 import { AdminInventoryComponent } from './components/admin/ecommerce/admin-inventory/admin-inventory.component';
 import { AdminCoursFormationsComponent } from './components/admin/cours-formations/cours-formations.component';
 import { StudentCoursComponent } from './components/student/cours/student-cours.component';
+import { ReportsComponent } from './components/admin/pages/reports/reports.component';
 
 registerLocaleData(localeFr);
 
@@ -174,6 +175,7 @@ registerLocaleData(localeFr);
     AdminInventoryComponent,
     AdminCoursFormationsComponent,
     StudentCoursComponent,
+    ReportsComponent,
   ],
   imports: [
     BrowserModule,

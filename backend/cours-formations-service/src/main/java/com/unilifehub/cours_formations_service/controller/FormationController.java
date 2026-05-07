@@ -18,11 +18,9 @@ public class FormationController {
 
     private final FormationService formationService;
 
-    private Integer parseUserId(String userId) {
-        if (userId == null) return null;
-        try { return Integer.parseInt(userId); }
-        catch (NumberFormatException e) { return Math.abs(userId.hashCode()); }
-    }
+    private String parseUserId(String userId) {
+    return userId;
+}
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<FormationResponse>>> getAllFormations(
