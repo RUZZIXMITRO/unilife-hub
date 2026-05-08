@@ -127,6 +127,17 @@
       <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Inventaire</span>
     </a>
 
+    <!-- ML PRÉDICTION -->
+<div class="nav-divider" *ngIf="!sidebarState.isCollapsed">
+  <span>Intelligence Artificielle</span>
+</div>
+<div class="nav-divider-line" *ngIf="sidebarState.isCollapsed"></div>
+
+<a href="http://localhost:8501" target="_blank" class="nav-item">
+  <div class="nav-icon-wrap"><i class="fa-solid fa-brain"></i></div>
+  <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Prédiction ML</span>
+</a>
+
     <!-- SYSTÈME -->
     <div class="nav-divider" *ngIf="!sidebarState.isCollapsed">
       <span>Système</span>
