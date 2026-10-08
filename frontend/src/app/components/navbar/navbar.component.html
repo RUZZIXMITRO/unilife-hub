@@ -1,1 +1,20 @@
-<p>navbar works!</p>
+<nav id="navbar" [class.scrolled]="isScrolled">
+    <div class="nav-container">
+        <div class="logo" (click)="navigateToHome()" style="cursor: pointer;">
+            <i class="fas fa-graduation-cap"></i>
+            UniLife Hub
+        </div>
+        <ul class="nav-links">
+            <li><a (click)="scrollToSection('accueil')">Accueil</a></li>
+            <li><a (click)="scrollToSection('about')">À propos</a></li>
+            <li><a (click)="scrollToSection('why')">Pourquoi nous</a></li>
+            <li><a (click)="scrollToSection('process')">Processus</a></li>
+            <li><a (click)="scrollToSection('features')">Fonctionnalités</a></li>
+            <li><a (click)="scrollToSection('advantages')">Avantages</a></li>
+            <li><a (click)="scrollToSection('contact')">Contact</a></li>
+        </ul>
+       <button class="nav-btn" (click)="openAuthPage()">
+    <i class="fas fa-user"></i> Se connecter / S'inscrire
+</button>
+    </div>
+</nav>

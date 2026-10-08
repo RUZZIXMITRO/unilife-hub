@@ -1,0 +1,5 @@
+apiVersion: v2
+name: payment-service
+description: UniLife Hub - Payment Service avec Stripe
+version: 1.0.0
+appVersion: "1.0.0"

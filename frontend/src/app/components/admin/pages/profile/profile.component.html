@@ -1,0 +1,150 @@
+<div class="profile-page" [class.dark]="isDark">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Mon Profil</h1>
+      <p class="page-subtitle">Gérez vos informations personnelles</p>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+
+    <!-- LEFT -->
+    <div class="left-col">
+
+      <div class="card avatar-card">
+        <div class="avatar-circle">{{ adminEmail.charAt(0).toUpperCase() }}</div>
+        <h2 class="avatar-name">{{ profileForm.firstName || adminEmail.split('@')[0] }}</h2>
+        <p class="avatar-role">Administrateur</p>
+        <p class="avatar-email">{{ adminEmail }}</p>
+        <div class="avatar-badges">
+          <span class="badge-item badge-admin"><i class="fa-solid fa-shield-halved"></i> Admin</span>
+          <span class="badge-item badge-active"><i class="fa-solid fa-circle"></i> Actif</span>
+        </div>
+      </div>
+
+      <div class="card stats-card">
+        <h3 class="card-title">Statistiques</h3>
+        <div class="stats-list">
+          <div class="stat-row" *ngFor="let stat of stats">
+            <div class="stat-icon" [style.background]="stat.bg">
+              <i class="fa-solid {{ stat.icon }}" [style.color]="stat.color"></i>
+            </div>
+            <div class="stat-info">
+              <p class="stat-label">{{ stat.label }}</p>
+              <p class="stat-value">{{ stat.value }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-col">
+
+      <!-- Infos personnelles -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Informations personnelles</h3>
+          <button class="btn-edit" (click)="editMode = !editMode">
+            <i class="fa-solid" [class.fa-pen]="!editMode" [class.fa-xmark]="editMode"></i>
+            {{ editMode ? 'Annuler' : 'Modifier' }}
+          </button>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" [(ngModel)]="profileForm.firstName"
+                   [disabled]="!editMode" [class.editable]="editMode" placeholder="Votre prénom">
+          </div>
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" [(ngModel)]="profileForm.lastName"
+                   [disabled]="!editMode" [class.editable]="editMode" placeholder="Votre nom">
+          </div>
+          <div class="form-group full">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="profileForm.email"
+                   [disabled]="!editMode" [class.editable]="editMode" placeholder="Votre email">
+          </div>
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input type="text" [(ngModel)]="profileForm.phone"
+                   [disabled]="!editMode" [class.editable]="editMode" placeholder="+212 6xx xxx xxx">
+          </div>
+          <div class="form-group">
+            <label>Université</label>
+            <input type="text" [(ngModel)]="profileForm.university"
+                   [disabled]="!editMode" [class.editable]="editMode" placeholder="Votre université">
+          </div>
+        </div>
+        <div class="form-actions" *ngIf="editMode">
+          <button class="btn-save" (click)="saveProfile()">
+            <i class="fa-solid fa-check"></i> Enregistrer
+          </button>
+        </div>
+        <div class="success-msg" *ngIf="profileSaved">
+          <i class="fa-solid fa-circle-check"></i> Profil mis à jour !
+        </div>
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Changer le mot de passe</h3>
+          <i class="fa-solid fa-lock card-icon"></i>
+        </div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Mot de passe actuel</label>
+            <div class="input-pwd">
+              <input [type]="showPwd.current ? 'text' : 'password'" [(ngModel)]="pwdForm.current" placeholder="••••••••">
+              <button class="eye-btn" (click)="showPwd.current = !showPwd.current">
+                <i class="fa-solid" [class.fa-eye]="!showPwd.current" [class.fa-eye-slash]="showPwd.current"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Nouveau</label>
+            <div class="input-pwd">
+              <input [type]="showPwd.new ? 'text' : 'password'" [(ngModel)]="pwdForm.new" placeholder="••••••••">
+              <button class="eye-btn" (click)="showPwd.new = !showPwd.new">
+                <i class="fa-solid" [class.fa-eye]="!showPwd.new" [class.fa-eye-slash]="showPwd.new"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Confirmer</label>
+            <div class="input-pwd">
+              <input [type]="showPwd.confirm ? 'text' : 'password'" [(ngModel)]="pwdForm.confirm" placeholder="••••••••">
+              <button class="eye-btn" (click)="showPwd.confirm = !showPwd.confirm">
+                <i class="fa-solid" [class.fa-eye]="!showPwd.confirm" [class.fa-eye-slash]="showPwd.confirm"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="pwd-strength" *ngIf="pwdForm.new">
+          <div class="strength-bars">
+            <span class="bar" [class.active]="pwdStrength >= 1" [class.weak]="pwdStrength===1" [class.medium]="pwdStrength===2" [class.strong]="pwdStrength>=3"></span>
+            <span class="bar" [class.active]="pwdStrength >= 2" [class.medium]="pwdStrength===2" [class.strong]="pwdStrength>=3"></span>
+            <span class="bar" [class.active]="pwdStrength >= 3" [class.strong]="pwdStrength>=3"></span>
+          </div>
+          <span class="strength-label">{{ pwdStrengthLabel }}</span>
+        </div>
+        <div class="error-msg" *ngIf="pwdError">
+          <i class="fa-solid fa-circle-exclamation"></i> {{ pwdError }}
+        </div>
+        <div class="form-actions">
+          <button class="btn-save" (click)="changePassword()">
+            <i class="fa-solid fa-key"></i> Mettre à jour
+          </button>
+        </div>
+        <div class="success-msg" *ngIf="pwdSaved">
+          <i class="fa-solid fa-circle-check"></i> Mot de passe mis à jour !
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

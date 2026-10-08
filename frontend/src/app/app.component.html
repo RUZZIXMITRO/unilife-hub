@@ -1,10 +1,20 @@
+<!-- Preloader (toujours visible au chargement) -->
 <app-preloader></app-preloader>
-<app-navbar></app-navbar>
 
+<!-- Navbar et Footer UNIQUEMENT pour le site public -->
+<ng-container *ngIf="showPublicLayout">
+  <app-navbar></app-navbar>
+</ng-container>
+
+<!-- Contenu de la page -->
 <router-outlet></router-outlet>
 
-<app-footer></app-footer>
-
-<button class="scroll-top" [class.visible]="showScrollTop" (click)="scrollToTop()">
+<!-- Footer UNIQUEMENT pour le site public -->
+<ng-container *ngIf="showPublicLayout">
+  <app-footer></app-footer>
+  
+  <!-- Scroll to top UNIQUEMENT pour le site public -->
+  <button class="scroll-top" [class.visible]="showScrollTop" (click)="scrollToTop()">
     <i class="fas fa-arrow-up"></i>
-</button>
+  </button>
+</ng-container>

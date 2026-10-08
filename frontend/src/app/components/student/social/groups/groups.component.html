@@ -1,0 +1,334 @@
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="section-header">
+    <h3><i class="fa-solid fa-people-group"></i> Groupes d'études</h3>
+    <div class="sh-right">
+      <button class="filter-btn" (click)="showCreateForm = !showCreateForm">
+        <i class="fa-solid fa-plus"></i> Nouveau groupe
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== CRÉER UN GROUPE ===== -->
+  <div *ngIf="showCreateForm" class="perf-card create-form">
+    <div class="pc-head">
+      <h4><i class="fa-solid fa-plus-circle"></i> Créer un groupe</h4>
+      <button class="filter-btn" (click)="showCreateForm = false">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="form-grid">
+      <input [(ngModel)]="newGroup.name" placeholder="Nom du groupe *" class="form-input">
+      <input [(ngModel)]="newGroup.subject" placeholder="Matière (ex: Mathématiques)" class="form-input">
+    </div>
+    <textarea [(ngModel)]="newGroup.description" placeholder="Description..." class="form-input" rows="3"></textarea>
+    <div class="form-footer">
+      <select [(ngModel)]="newGroup.type" class="filter-btn type-select">
+        <option value="PUBLIC"> Public</option>
+        <option value="PRIVATE"> Privé</option>
+      </select>
+      <button (click)="createGroup()" class="btn-create" [disabled]="!newGroup.name.trim()">
+        <i class="fa-solid fa-check"></i> Créer
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== RECHERCHE ===== -->
+  <div class="search-bar">
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <input [(ngModel)]="searchKeyword" (input)="searchGroups()"
+           placeholder="Rechercher un groupe..." class="search-input">
+  </div>
+
+  <!-- ===== LOADING ===== -->
+  <div *ngIf="isLoading" class="perf-card empty-card">
+    <i class="fa-solid fa-spinner fa-spin"></i> Chargement...
+  </div>
+
+  <!-- ===== LISTE GROUPES ===== -->
+  <div *ngIf="!isLoading && !selectedGroup">
+
+    <div *ngIf="groups.length === 0" class="perf-card empty-card">
+      <i class="fa-solid fa-people-group" style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+      <p>Aucun groupe disponible. Créez le premier !</p>
+    </div>
+
+    <div *ngFor="let group of groups" class="perf-card group-card">
+      <div class="group-icon"
+           [style.background]="group.type === 'PUBLIC' ? 'linear-gradient(135deg,#8b5cf6,#6d28d9)' : 'linear-gradient(135deg,#1e293b,#334155)'">
+        <i class="fa-solid fa-people-group"></i>
+      </div>
+<div class="group-info"
+     (click)="openGroup(group)"
+     [style.cursor]="(group.type === 'PRIVATE' && !group.isMember) || group.isPending ? 'default' : 'pointer'"
+     [style.opacity]="(group.type === 'PRIVATE' && !group.isMember) || group.isPending ? '0.7' : '1'">    
+         <div class="group-title-row">
+          <h4>{{ group.name }}</h4>
+          <span class="group-type-badge" [class.public]="group.type === 'PUBLIC'" [class.private]="group.type === 'PRIVATE'">
+            <i class="fa-solid fa-earth-africa" *ngIf="group.type === 'PUBLIC'"></i>
+            <i class="fa-solid fa-lock" *ngIf="group.type === 'PRIVATE'"></i>
+            {{ group.type === 'PUBLIC' ? 'Public' : 'Privé' }}
+          </span>
+        </div>
+        <p *ngIf="group.description">{{ group.description }}</p>
+        <div class="group-meta">
+          <span><i class="fa-solid fa-users"></i> {{ group.membersCount }} membres</span>
+          <span *ngIf="group.subject"><i class="fa-solid fa-book"></i> {{ group.subject }}</span>
+        </div>
+      </div>
+      <div class="group-action">
+        <!-- ✅ Après — 3 états : Rejoindre / En attente / Quitter -->
+<button *ngIf="!group.isMember && !group.isPending"
+        (click)="joinGroup(group.id)"
+        class="btn-join"
+        [disabled]="joiningGroupIds.has(group.id)">
+  <i class="fa-solid fa-right-to-bracket"></i>
+  {{ joiningGroupIds.has(group.id) ? 'En cours...' : 'Rejoindre' }}
+</button>
+
+<button *ngIf="group.isPending"
+        (click)="cancelJoinRequest(group.id)"
+        class="btn-pending"
+        title="Demande en attente — cliquer pour annuler">
+  <i class="fa-solid fa-clock"></i> En attente...
+</button>
+
+<button *ngIf="group.isMember && !group.isPending"
+        (click)="leaveGroup(group.id)"
+        class="btn-leave">
+  <i class="fa-solid fa-right-from-bracket"></i> Quitter
+</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== DÉTAILS GROUPE ===== -->
+  <div *ngIf="selectedGroup" class="group-detail">
+
+    <!-- Header détails -->
+    <!-- Remplace le detail-header par ceci -->
+<div class="perf-card detail-header">
+  <button (click)="closeGroup()" class="btn-back">
+    <i class="fa-solid fa-arrow-left"></i> Retour
+  </button>
+
+  <div class="detail-title">
+    <div class="group-icon-sm" ...>
+      <i class="fa-solid fa-people-group"></i>
+    </div>
+    <div>
+      <h3>{{ selectedGroup.name }}</h3>
+      <span class="group-meta">
+<i class="fa-solid fa-users"></i> {{ groupMembers.length }} membres
+        <span *ngIf="selectedGroup.subject"> · <i class="fa-solid fa-book"></i> {{ selectedGroup.subject }}</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ✅ Bouton à droite -->
+  <button *ngIf="isGroupAdmin()"
+          (click)="deleteGroup()"
+          class="btn-delete-group"
+          title="Supprimer le groupe">
+    <i class="fa-solid fa-trash"></i>
+  </button>
+</div>
+    
+
+    <!-- Onglets -->
+    <div class="tabs-row">
+      <button class="filter-btn" [class.active]="activeTab === 'posts'" (click)="setTab('posts')">
+        <i class="fa-solid fa-comments"></i> Discussion
+      </button>
+      <button class="filter-btn" [class.active]="activeTab === 'members'" (click)="setTab('members')">
+        <i class="fa-solid fa-users"></i> Membres ({{ groupMembers.length }})
+      </button>
+      <button *ngIf="isGroupAdmin()" class="filter-btn" [class.active]="activeTab === 'pending'" (click)="setTab('pending')">
+        <i class="fa-solid fa-clock"></i> En attente
+        <span *ngIf="pendingMembers.length > 0" class="badge-count">{{ pendingMembers.length }}</span>
+      </button>
+    </div>
+
+    <!-- ===== ONGLET DISCUSSION / CHAT ===== -->
+    <div *ngIf="activeTab === 'posts'">
+
+      <!-- Messages -->
+      <div class="chat-container perf-card">
+
+        <!-- Liste des messages -->
+        <div class="chat-messages">
+          <div *ngIf="groupPosts.length === 0" class="empty-chat">
+            <i class="fa-solid fa-comments" style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+            <p>Aucun message pour l'instant. Soyez le premier à écrire !</p>
+          </div>
+
+          <div *ngFor="let post of groupPosts"
+               class="chat-message"
+               [class.my-message]="post.postedBy === currentUserId">
+
+            <!-- Avatar -->
+            <div class="chat-avatar" *ngIf="post.postedBy !== currentUserId">
+              {{ getInitial(post.postedBy) }}
+            </div>
+
+            <div class="chat-bubble-wrapper">
+              <!-- Nom affiché uniquement pour les autres -->
+              <span class="chat-author" *ngIf="post.postedBy !== currentUserId">
+                {{ getUserName(post.postedBy) }}
+              </span>
+              <div class="chat-bubble">
+                {{ postContentCache[post.postId] || '...' }}
+              </div>
+               <!-- ✅ Bouton supprimer uniquement pour mes messages -->
+    <button *ngIf="post.postedBy === currentUserId"
+            (click)="deleteGroupMessage(post)"
+            class="btn-delete-msg"
+            title="Supprimer">
+      <i class="fa-solid fa-trash"></i>
+    </button>
+              <span class="chat-time">{{ getTimeAgo(post.postedAt) }}</span>
+            </div>
+
+            <!-- Avatar côté droit pour mes messages -->
+            <div class="chat-avatar my-avatar" *ngIf="post.postedBy === currentUserId">
+              {{ getInitial(currentUserId) }}
+            </div>
+
+          </div>
+          <!-- ✅ Modal confirmation suppression -->
+<div class="delete-modal-overlay" *ngIf="pendingDeletePost" (click)="cancelDeleteMessage()">
+  <div class="delete-modal" (click)="$event.stopPropagation()">
+    <i class="fa-solid fa-trash" style="color:#ef4444;font-size:1.5rem"></i>
+    <p>Supprimer ce message ?</p>
+    <div class="delete-modal-actions">
+      <button (click)="cancelDeleteMessage()" class="filter-btn">Annuler</button>
+      <button (click)="confirmDeleteMessage()" class="btn-reject">
+        <i class="fa-solid fa-trash"></i> Supprimer
+      </button>
+    </div>
+  </div>
+</div>
+        </div>
+
+        <!-- ✅ Zone de saisie du message -->
+        <div class="chat-input-row" *ngIf="selectedGroup.isMember">
+          <input
+            [(ngModel)]="newPostContent"
+            (keyup.enter)="sendGroupMessage()"
+            placeholder="Écrire un message..."
+            class="chat-input"
+            [disabled]="isPostingMessage">
+          <button
+            (click)="sendGroupMessage()"
+            class="btn-send"
+            [disabled]="!newPostContent.trim() || isPostingMessage">
+            <i class="fa-solid fa-paper-plane" *ngIf="!isPostingMessage"></i>
+            <i class="fa-solid fa-spinner fa-spin" *ngIf="isPostingMessage"></i>
+          </button>
+        </div>
+
+        <!-- Message si pas membre -->
+        <div class="chat-join-hint" *ngIf="!selectedGroup.isMember">
+          <i class="fa-solid fa-lock"></i>
+          Rejoignez ce groupe pour participer à la discussion.
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== ONGLET MEMBRES ===== -->
+    <div *ngIf="activeTab === 'members'">
+      <div *ngIf="groupMembers.length === 0" class="perf-card empty-card">
+        <p>Aucun membre.</p>
+      </div>
+      <div *ngFor="let member of groupMembers" class="perf-card member-card">
+        <div class="member-avatar">
+          <!-- ✅ Initiale du vrai nom -->
+          {{ getInitial(member.userId) }}
+        </div>
+        <div class="member-info">
+          <!-- ✅ Vrai nom -->
+          <h4>{{ getUserName(member.userId) }}</h4>
+          <span class="member-role" [class.admin-role]="member.role === 'ADMIN'">
+            <i class="fa-solid fa-crown" *ngIf="member.role === 'ADMIN'"></i>
+            <i class="fa-solid fa-user" *ngIf="member.role !== 'ADMIN'"></i>
+            {{ member.role === 'ADMIN' ? 'Admin' : 'Membre' }}
+          </span>
+        </div>
+        <div class="member-actions">
+          <button *ngIf="isGroupAdmin() && member.userId !== currentUserId"
+                  (click)="removeMember(member.userId)"
+                  class="filter-btn" style="color:#ef4444">
+            <i class="fa-solid fa-user-minus"></i> Retirer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ONGLET EN ATTENTE ===== -->
+    <div *ngIf="activeTab === 'pending' && isGroupAdmin()">
+      <div *ngIf="pendingMembers.length === 0" class="perf-card empty-card">
+        <i class="fa-regular fa-clock" style="font-size:2rem;color:#94a3b8;display:block;margin-bottom:0.75rem"></i>
+        <p>Aucune demande en attente.</p>
+      </div>
+      <div *ngFor="let member of pendingMembers" class="perf-card member-card">
+        <div class="member-avatar pending-avatar">
+          <!-- ✅ Initiale du vrai nom -->
+          {{ getInitial(member.userId) }}
+        </div>
+        <div class="member-info">
+          <!-- ✅ Vrai nom -->
+          <h4>{{ getUserName(member.userId) }}</h4>
+          <span style="color:#f59e0b;font-size:0.78rem">
+            <i class="fa-regular fa-clock"></i> Demande en attente
+          </span>
+        </div>
+        <div class="member-actions">
+          <button (click)="approveMember(member.userId)" class="btn-accept">
+            <i class="fa-solid fa-check"></i> Accepter
+          </button>
+          <button (click)="rejectMember(member.userId)" class="btn-reject">
+            <i class="fa-solid fa-xmark"></i> Refuser
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Toast -->
+<div class="toast-notif" *ngIf="toastVisible">
+  <i class="fa-solid fa-circle-info"></i> {{ toastMessage }}
+</div>
+
+<!-- Modal suppression message -->
+<div class="delete-modal-overlay" *ngIf="pendingDeletePost" (click)="cancelDeleteMessage()">
+  <div class="delete-modal" (click)="$event.stopPropagation()">
+    <i class="fa-solid fa-trash" style="color:#ef4444;font-size:1.5rem"></i>
+    <p>Supprimer ce message ?</p>
+    <div class="delete-modal-actions">
+      <button (click)="cancelDeleteMessage()" class="filter-btn">Annuler</button>
+      <button (click)="confirmDeleteMessage()" class="btn-reject">
+        <i class="fa-solid fa-trash"></i> Supprimer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal suppression groupe -->
+<div class="delete-modal-overlay" *ngIf="pendingDeleteGroup" (click)="cancelDeleteGroup()">
+  <div class="delete-modal" (click)="$event.stopPropagation()">
+    <i class="fa-solid fa-trash" style="color:#ef4444;font-size:1.5rem"></i>
+<p>Supprimer le groupe <strong>{{ selectedGroup!.name }}</strong> ?</p>
+    <span style="font-size:0.8rem;color:#94a3b8">Cette action est irréversible.</span>
+    <div class="delete-modal-actions">
+      <button (click)="cancelDeleteGroup()" class="filter-btn">Annuler</button>
+      <button (click)="confirmDeleteGroup()" class="btn-reject">
+        <i class="fa-solid fa-trash"></i> Supprimer
+      </button>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+</div>

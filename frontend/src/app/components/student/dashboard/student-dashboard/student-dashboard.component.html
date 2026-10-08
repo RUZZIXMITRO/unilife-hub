@@ -1,0 +1,403 @@
+<div class="page">
+
+  <!-- ===== SECTION 1 : BANNER + CTA ===== -->
+  <div class="banner-row">
+
+    <div class="banner-main">
+      <div class="banner-illo">
+        <!-- SVG illustration étudiant style image 1 -->
+        <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+          <!-- écran ordinateur -->
+          <rect x="10" y="15" width="80" height="55" rx="5" fill="#c8d9f5"/>
+          <rect x="14" y="19" width="72" height="43" rx="3" fill="#e8f0fe"/>
+          <rect x="18" y="23" width="64" height="6" rx="2" fill="#7c9fd4"/>
+          <rect x="18" y="32" width="50" height="3" rx="1" fill="#b0c4e8"/>
+          <rect x="18" y="38" width="40" height="3" rx="1" fill="#b0c4e8"/>
+          <rect x="18" y="44" width="55" height="3" rx="1" fill="#b0c4e8"/>
+          <rect x="40" y="70" width="20" height="6" rx="2" fill="#c8d9f5"/>
+          <rect x="25" y="76" width="50" height="4" rx="2" fill="#c8d9f5"/>
+          <!-- Personne 1 assis -->
+          <circle cx="130" cy="35" r="10" fill="#f5c5a3"/>
+          <rect x="120" y="44" width="20" height="30" rx="4" fill="#2c4a7c"/>
+          <rect x="115" y="48" width="10" height="18" rx="4" fill="#2c4a7c"/>
+          <rect x="135" y="48" width="10" height="18" rx="4" fill="#2c4a7c"/>
+          <rect x="122" y="72" width="7" height="20" rx="3" fill="#2c4a7c"/>
+          <rect x="131" y="72" width="7" height="20" rx="3" fill="#2c4a7c"/>
+          <!-- livre -->
+          <rect x="118" y="60" width="24" height="15" rx="2" fill="#d4a96a"/>
+          <!-- Personne 2 -->
+          <circle cx="158" cy="70" r="9" fill="#f5c5a3"/>
+          <rect x="149" y="78" width="18" height="25" rx="4" fill="#e07070"/>
+          <rect x="148" y="100" width="6" height="18" rx="3" fill="#e07070"/>
+          <rect x="157" y="100" width="6" height="18" rx="3" fill="#e07070"/>
+          <rect x="110" y="90" width="60" height="3" rx="1" fill="#c8d9f5"/>
+        </svg>
+      </div>
+      <div class="banner-text">
+        <h2>{{ getGreeting() }}, <span>{{ userName }}</span> !</h2>
+        <p>Bienvenue sur UniLife Hub — ta plateforme universitaire tout-en-un.</p>
+      </div>
+    </div>
+
+    <div class="banner-side">
+      <p>Tu veux partager tes connaissances ?</p>
+      <button class="btn-create" routerLink="/student/courses">
+        <i class="fa-solid fa-plus"></i> Créer un nouveau cours
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ===== SECTION 2 : MES COURS ===== -->
+  <div class="section-header">
+    <h3>Mes cours</h3>
+    <div class="sh-right">
+      <button class="filter-btn active">Les plus populaires</button>
+      <button class="filter-btn" routerLink="/student/courses">Voir tout</button>
+    </div>
+  </div>
+
+  <div class="courses-row">
+
+    <div class="course-card" *ngFor="let c of activeCourses">
+      <div class="cc-top">
+        <div class="cc-badges">
+          <span class="badge" [ngClass]="c.status === 'active' ? 'badge-active' : c.status === 'finished' ? 'badge-finished' : 'badge-paused'">
+            {{ c.status === 'active' ? 'Actif' : c.status === 'finished' ? 'Terminé' : 'En pause' }}
+          </span>
+          <span class="badge-ico"><i class="fa-solid fa-lock"></i></span>
+          <span class="badge-ico" *ngIf="c.status === 'active'"><i class="fa-regular fa-clock"></i></span>
+        </div>
+        <button class="cc-more"><i class="fa-solid fa-ellipsis"></i></button>
+      </div>
+      <div class="cc-body">
+        <div class="cc-info">
+          <h4>{{ c.name }}</h4>
+          <p>{{ c.daysLeft }} jours restants</p>
+          <div class="cc-prog">
+            <div class="cc-prog-fill" [style.width.%]="c.progress" [style.background]="c.color"></div>
+          </div>
+        </div>
+        <div class="cc-illo">
+          <!-- Mini illustration étudiant diplômé -->
+          <svg viewBox="0 0 70 90" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="35" cy="18" r="11" fill="#f5c5a3"/>
+            <rect x="20" y="15" width="30" height="8" rx="3" fill="#2c4a7c"/>
+            <line x1="50" y1="15" x2="55" y2="12" stroke="#2c4a7c" stroke-width="2"/>
+            <circle cx="55" cy="11" r="3" fill="#d4a96a"/>
+            <rect x="22" y="28" width="26" height="32" rx="5" [attr.fill]="c.color"/>
+            <rect x="12" y="32" width="12" height="20" rx="5" [attr.fill]="c.color"/>
+            <rect x="46" y="32" width="12" height="20" rx="5" [attr.fill]="c.color"/>
+            <rect x="24" y="58" width="9" height="28" rx="4" fill="#3d3d3d"/>
+            <rect x="37" y="58" width="9" height="28" rx="4" fill="#3d3d3d"/>
+            <rect x="14" y="86" width="14" height="4" rx="2" fill="#555"/>
+            <rect x="42" y="86" width="14" height="4" rx="2" fill="#555"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== SECTION 3 : STATS ROW ===== -->
+  <div class="stats-row">
+
+    <!-- Donut total cours -->
+    <div class="stat-card">
+      <p class="stat-label">Total Cours</p>
+      <div class="stat-big">
+        <span class="stat-num">{{ activeCourses.length }}</span>
+        <span class="stat-up"><i class="fa-solid fa-arrow-up"></i> 2 nouveaux</span>
+      </div>
+      <div class="donut-wrap">
+        <svg viewBox="0 0 120 120" class="donut">
+          <circle class="d-bg"  cx="60" cy="60" r="46"/>
+          <circle class="d-c1" cx="60" cy="60" r="46" stroke-dasharray="115 289" stroke-dashoffset="0"/>
+          <circle class="d-c2" cx="60" cy="60" r="46" stroke-dasharray="58 289"  stroke-dashoffset="-115"/>
+          <circle class="d-c3" cx="60" cy="60" r="46" stroke-dasharray="116 289" stroke-dashoffset="-173"/>
+        </svg>
+      </div>
+      <div class="donut-legend">
+        <span><i class="fa-solid fa-circle" style="color:#2563eb"></i> En cours</span>
+        <span><i class="fa-solid fa-circle" style="color:#f59e0b"></i> Terminés</span>
+        <span><i class="fa-solid fa-circle" style="color:#e2e8f0"></i> À débuter</span>
+      </div>
+    </div>
+
+    <!-- Graphique barres heures -->
+    <div class="stat-card wide">
+      <div class="sh-inline">
+        <div>
+          <p class="stat-label">Heures d'étude</p>
+          <div class="stat-big">
+            <span class="stat-num">21 h 30 min</span>
+            <span class="stat-down"><i class="fa-solid fa-arrow-down"></i> 15%</span>
+          </div>
+        </div>
+      </div>
+      <div class="bar-chart">
+        <div class="bar-group" *ngFor="let b of weekBars">
+          <div class="bar-col">
+            <div class="bar-fill"  [style.height.%]="b.value"></div>
+            <div class="bar-ghost" [style.height.%]="100 - b.value"></div>
+          </div>
+          <span class="bar-lbl">{{ b.label }}</span>
+        </div>
+      </div>
+      <div class="bar-ylabels">
+        <span>10</span><span>8</span><span>6</span><span>4</span><span>2</span>
+      </div>
+    </div>
+
+    <!-- Working hours donut -->
+    <div class="stat-card">
+      <div class="sh-inline">
+        <p class="stat-label">Heures de travail</p>
+        <button class="filter-btn small">Aujourd'hui</button>
+      </div>
+      <div class="wh-donut-wrap">
+        <svg viewBox="0 0 130 130" class="wh-donut">
+          <circle cx="65" cy="65" r="50" fill="none" stroke="#f1f5f9" stroke-width="14"/>
+          <circle cx="65" cy="65" r="50" fill="none" stroke="#2563eb" stroke-width="14"
+                  stroke-dasharray="220 314" stroke-dashoffset="78" stroke-linecap="round"/>
+          <circle cx="65" cy="65" r="50" fill="none" stroke="#f59e0b" stroke-width="14"
+                  stroke-dasharray="60 314"  stroke-dashoffset="-142" stroke-linecap="round"/>
+        </svg>
+        <div class="wh-mid">
+          <span class="wh-pct">77%</span>
+        </div>
+        <button class="wh-fab"><i class="fa-solid fa-bolt"></i></button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== SECTION 4 : PERFORMANCE + LESSONS + CALENDRIER ===== -->
+  <div class="section-header">
+    <h3>Performance & Statistiques</h3>
+    <div class="sh-right">
+      <button class="filter-btn active">Tous types</button>
+      <button class="filter-btn">Voir tout</button>
+    </div>
+  </div>
+
+  <div class="perf-row">
+
+    <!-- Course completion -->
+    <div class="perf-card">
+      <div class="pc-head">
+        <h4>Progression des cours</h4>
+        <button class="filter-btn small">Voir tout</button>
+      </div>
+      <div class="completion-list">
+        <div class="compl-item">
+          <div class="compl-bar-wrap">
+            <div class="compl-fill" style="width:40%;background:#2563eb"></div>
+          </div>
+          <span class="compl-pct">40%</span>
+          <div class="compl-info"><span class="compl-lbl" style="color:#2563eb">En cours</span><span class="compl-count">117 étudiants</span></div>
+        </div>
+        <div class="compl-item">
+          <div class="compl-bar-wrap">
+            <div class="compl-fill" style="width:20%;background:#10b981"></div>
+          </div>
+          <span class="compl-pct">20%</span>
+          <div class="compl-info"><span class="compl-lbl" style="color:#10b981">Terminés</span><span class="compl-count">74 étudiants</span></div>
+        </div>
+        <div class="compl-item">
+          <div class="compl-bar-wrap">
+            <div class="compl-fill" style="width:18%;background:#f59e0b"></div>
+          </div>
+          <span class="compl-pct">18%</span>
+          <div class="compl-info"><span class="compl-lbl" style="color:#f59e0b">Inactifs</span><span class="compl-count">58 étudiants</span></div>
+        </div>
+        <div class="compl-item">
+          <div class="compl-bar-wrap">
+            <div class="compl-fill" style="width:7%;background:#ef4444"></div>
+          </div>
+          <span class="compl-pct">07%</span>
+          <div class="compl-info"><span class="compl-lbl" style="color:#ef4444">Expirés</span><span class="compl-count">11 étudiants</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lessons / Services -->
+    <div class="perf-card wide">
+      <div class="pc-head">
+        <h4>Mes services</h4>
+        <button class="filter-btn small">Voir tout</button>
+      </div>
+      <div class="lessons-list">
+
+        <div class="lesson-item" routerLink="/student/courses">
+          <div class="li-ico" style="background:linear-gradient(135deg,#f59e0b,#f97316)">
+            <i class="fa-solid fa-book-open"></i>
+          </div>
+          <div class="li-body">
+            <p>Mes cours</p>
+            <span>6 cours actifs</span>
+          </div>
+          <i class="fa-solid fa-chevron-right li-arr"></i>
+        </div>
+
+        <div class="lesson-item" routerLink="/student/agenda">
+          <div class="li-ico" style="background:linear-gradient(135deg,#2563eb,#1e40af)">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <div class="li-body">
+            <p>Agenda</p>
+            <span>3 tâches en attente</span>
+          </div>
+          <i class="fa-solid fa-chevron-right li-arr"></i>
+        </div>
+
+        <div class="lesson-item" routerLink="/student/ecommerce">
+          <div class="li-ico" style="background:linear-gradient(135deg,#ef4444,#dc2626)">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+          <div class="li-body">
+            <p>E-Commerce</p>
+            <span>Boutique étudiante</span>
+          </div>
+          <i class="fa-solid fa-chevron-right li-arr"></i>
+        </div>
+
+        <div class="lesson-item" routerLink="/student/marketplace">
+          <div class="li-ico" style="background:linear-gradient(135deg,#10b981,#059669)">
+            <i class="fa-solid fa-store"></i>
+          </div>
+          <div class="li-body">
+            <p>Marketplace</p>
+            <span>Achète &amp; vends</span>
+          </div>
+          <i class="fa-solid fa-chevron-right li-arr"></i>
+        </div>
+
+        <div class="lesson-item" routerLink="/student/social">
+          <div class="li-ico" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div class="li-body">
+            <p>Réseau Social</p>
+            <span>3 amis connectés</span>
+          </div>
+          <i class="fa-solid fa-chevron-right li-arr"></i>
+        </div>
+
+        <div class="lesson-item" routerLink="/student/chatbot">
+          <div class="li-ico" style="background:linear-gradient(135deg,#06b6d4,#0284c7)">
+            <i class="fa-solid fa-robot"></i>
+          </div>
+          <div class="li-body">
+            <p>Assistant IA</p>
+            <span>Pose ta question</span>
+          </div>
+          <i class="fa-solid fa-chevron-right li-arr"></i>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Calendrier grand -->
+    <div class="perf-card cal-big">
+      <div class="pc-head">
+        <h4>{{ currentDate | date:'MMMM yyyy' | titlecase }}</h4>
+        <div class="cal-nav-btns">
+          <button class="cal-nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="cal-nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+      <div class="big-cal">
+        <div class="bc-head">
+          <span *ngFor="let d of ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam']">{{ d }}</span>
+        </div>
+        <div class="bc-grid">
+          <span class="bc-empty" *ngFor="let e of calendarPadding"></span>
+          <span class="bc-day"
+            *ngFor="let day of calendarDays"
+            [class.bc-today]="isToday(day)"
+            [class.bc-event]="hasEvent(day)">
+            {{ day }}
+            <span class="bc-ev-label" *ngIf="hasEvent(day) && isToday(day)">{{ getEventLabel(day) }}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== SECTION 5 : MEDIA TABLE + CONTACT ===== -->
+  <div class="bottom-row">
+
+    <div class="media-card">
+      <div class="pc-head">
+        <h4>Activité récente</h4>
+        <button class="filter-btn small">Voir tout</button>
+      </div>
+      <table class="media-table">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Action</th>
+            <th>Statut</th>
+            <th>Membres</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="mt-ico" style="background:#ef4444">A1</div><strong>Cours Algorithmes</strong></td>
+            <td class="gray">StarterReplacement.pdf</td>
+            <td><span class="mt-status blue"><i class="fa-solid fa-circle"></i> Actif</span></td>
+            <td class="gray">78 membres</td>
+            <td class="gray">Il y a 2h</td>
+          </tr>
+          <tr>
+            <td><div class="mt-ico" style="background:#06b6d4">B1</div><strong>Marketplace</strong></td>
+            <td class="gray">Article publié</td>
+            <td><span class="mt-status orange"><i class="fa-solid fa-circle"></i> En vente</span></td>
+            <td class="gray">12 vues</td>
+            <td class="gray">Il y a 5h</td>
+          </tr>
+          <tr>
+            <td><div class="mt-ico" style="background:#2563eb">C1</div><strong>Réseau Social</strong></td>
+            <td class="gray">Nouveau post</td>
+            <td><span class="mt-status blue"><i class="fa-solid fa-circle"></i> Publié</span></td>
+            <td class="gray">48 vues</td>
+            <td class="gray">Hier</td>
+          </tr>
+          <tr>
+            <td><div class="mt-ico" style="background:#10b981">A2</div><strong>E-Commerce</strong></td>
+            <td class="gray">Livre Python livré</td>
+            <td><span class="mt-status green"><i class="fa-solid fa-circle"></i> Livré</span></td>
+            <td class="gray">1 colis</td>
+            <td class="gray">Il y a 2j</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="contact-col">
+      <div class="contact-card orange" routerLink="/student/ecommerce">
+        <div class="cc-ico-wrap">
+          <div class="cc-ico"><i class="fa-solid fa-cart-shopping"></i></div>
+        </div>
+        <div>
+          <p class="cc-title">Boutique</p>
+          <span class="cc-sub">E-Commerce étudiant</span>
+        </div>
+      </div>
+      <div class="contact-card blue" routerLink="/student/chatbot">
+        <div class="cc-ico-wrap">
+          <div class="cc-ico"><i class="fa-solid fa-robot"></i></div>
+        </div>
+        <div>
+          <p class="cc-title">Assistant IA</p>
+          <span class="cc-sub">Disponible 24h/24</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

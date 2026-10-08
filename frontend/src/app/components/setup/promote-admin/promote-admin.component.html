@@ -1,0 +1,68 @@
+<div class="setup-wrapper">
+  <div class="setup-card">
+
+    <div class="setup-logo">
+      <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="10" fill="#1f618d"/>
+        <polygon points="18,7 30,13 18,17 6,13" fill="#fff" opacity="0.95"/>
+        <rect x="6" y="13" width="24" height="3" rx="1.5" fill="#aed6f1" opacity="0.4"/>
+        <rect x="11" y="19" width="14" height="9" rx="3" fill="#fff" opacity="0.85"/>
+      </svg>
+      <span>UniLife Hub</span>
+    </div>
+
+    <div class="setup-badge">
+      <i class="fas fa-lock"></i>
+      Accès restreint
+    </div>
+
+    <h1 class="setup-title">Accès Administrateur</h1>
+    <p class="setup-subtitle">
+      Entre ton email et le code secret pour obtenir les droits administrateur sur la plateforme.
+    </p>
+
+    <div class="alert-success" *ngIf="success">
+      <i class="fas fa-check-circle"></i>
+      {{ success }}
+    </div>
+
+    <div class="alert-error" *ngIf="error">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ error }}
+    </div>
+
+    <div class="setup-form">
+
+      <div class="field">
+        <label>Adresse email</label>
+        <div class="input-wrap">
+          <input type="email" [(ngModel)]="email"
+                 placeholder="ton@email.com" />
+          <i class="fas fa-envelope"></i>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Code secret</label>
+        <div class="input-wrap">
+          <input type="password" [(ngModel)]="secretCode"
+                 placeholder="••••••••••" />
+          <i class="fas fa-key"></i>
+        </div>
+      </div>
+
+      <button class="btn-submit" (click)="submit()" [disabled]="loading">
+        <i class="fas fa-shield-alt" *ngIf="!loading"></i>
+        <div class="mini-spin" *ngIf="loading"></div>
+        {{ loading ? 'Traitement en cours...' : 'Obtenir les droits admin' }}
+      </button>
+
+    </div>
+
+    <div class="setup-footer">
+      <i class="fas fa-lock"></i>
+      Page réservée à l'équipe de développement
+    </div>
+
+  </div>
+</div>

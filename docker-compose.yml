@@ -1,0 +1,213 @@
+services:
+  # ========== SQL SERVER ==========
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: unilifehub-sqlserver
+    user: "0:0"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${SA_PASSWORD}
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql/data
+      - ./sql-scripts/init-databases.sql:/init.sql
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        /opt/mssql/bin/sqlservr &
+        echo "Waiting for SQL Server to start..."
+        sleep 20
+        /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD}" -C -i /init.sql
+        echo "Init script executed!"
+        wait
+    networks:
+      - unilifehub-network
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD}" -Q "SELECT 1" -C || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 40s
+
+# ========== MYSQL ==========
+  mysql:
+    image: mysql:8.0
+    container_name: unilifehub-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=marketplace_db
+      - MYSQL_USER=yousra
+      - MYSQL_PASSWORD=Youssy@123!
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - unilifehub-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  # ========== MARKETPLACE ==========
+  marketplace:
+    build:
+      context: ./backend/Commerce/Marketplace/MarketplaceService
+      dockerfile: Dockerfile
+    container_name: unilifehub-marketplace
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=prod
+      - DATABASE_URL=mysql://yousra:Youssy@123!@mysql:3306/marketplace_db?serverVersion=8.0&charset=utf8mb4
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+
+      # ========== API GATEWAY ==========
+  apigateway:
+    build:
+      context: ./backend/ApiGateway
+      dockerfile: Dockerfile
+    container_name: unilifehub-gateway
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=UniLifeHub
+      - Jwt__Audience=UniLifeHubUsers
+    depends_on:
+      - authservice
+      - userservice
+      - socialservice
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+
+  # ========== AUTHENTICATION SERVICE ==========
+  authservice:
+    build:
+      context: ./backend/AuthenticationService
+      dockerfile: Dockerfile
+    container_name: unilifehub-auth
+    ports:
+      - "7076:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=${AUTH_DB}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=UniLifeHub
+      - Jwt__Audience=UniLifeHubUsers
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+
+  # ========== USER SERVICE ==========
+  userservice:
+    build:
+      context: ./backend/UserService
+      dockerfile: Dockerfile
+    container_name: unilifehub-users
+    ports:
+      - "7212:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=${USER_DB}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=UniLifeHub
+      - Jwt__Audience=UniLifeHubUsers
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+
+  # ========== SOCIAL SERVICE ==========
+  socialservice:
+    build:
+      context: ./backend/social-service
+      dockerfile: Dockerfile
+    container_name: unilifehub-social
+    ports:
+      - "7084:8084"
+    environment:
+      - SPRING_DATASOURCE_URL=${SOCIAL_DB}
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=${SA_PASSWORD}
+      - JWT_SECRET=${JWT_KEY}
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+
+
+  # ========== AGENDA TODO SERVICE ==========
+  agendaservice:
+    build:
+      context: ./services/agenda-todo
+      dockerfile: Dockerfile
+    container_name: unilifehub-agenda-todo
+    ports:
+      - "5254:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=agenda_todo_db;User Id=sa;Password=UniLife@2024!Strong;TrustServerCertificate=True;Encrypt=False;
+      - Jwt__Key=SuperSecretKeyForJWTAuthentication2024VeryLongAndComplexKey!@#$%^&*()
+      - Jwt__Issuer=UniLifeHub
+      - Jwt__Audience=UniLifeHubUsers
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+networks:
+  unilifehub-network:
+    driver: bridge
+
+# ========== COURS FORMATIONS SERVICE ==========
+  cours-formations-service:
+    build:
+      context: ./backend/cours-formations-service
+      dockerfile: Dockerfile
+    container_name: unilifehub-cours-formations
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;databaseName=courses_formations_db;encrypt=false;trustServerCertificate=true
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=UniLife@2024!Strong
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.microsoft.sqlserver.jdbc.SQLServerDriver
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.SQLServerDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    volumes:
+      - cours_uploads:/app/uploads
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - unilifehub-network
+    restart: unless-stopped
+
+volumes:
+  sqldata:
+  mysqldata:
+  cours_uploads:

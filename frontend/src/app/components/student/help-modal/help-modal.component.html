@@ -1,0 +1,100 @@
+<div class="modal-overlay" (click)="close()">
+  <div class="modal-container" (click)="stopPropagation($event)">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="header-title">
+        <i class="fa-solid fa-circle-question header-icon"></i>
+        <h2>Aide & Support</h2>
+      </div>
+      <button class="close-btn" (click)="close()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content">
+      <!-- Search Bar -->
+      <div class="search-section">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery"
+            placeholder="Rechercher dans l'aide..."
+            class="search-input">
+          <button class="clear-btn" *ngIf="searchQuery" (click)="clearSearch()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Categories -->
+      <div class="categories-section">
+        <button 
+          *ngFor="let category of categories"
+          class="category-btn"
+          [class.active]="selectedCategory === category.id"
+          (click)="selectCategory(category.id)">
+          <i [class]="category.icon"></i>
+          <span>{{ category.name }}</span>
+        </button>
+      </div>
+
+      <!-- FAQ List -->
+      <div class="faq-section">
+        <h3 class="section-title">
+          <i class="fa-solid fa-list-check"></i>
+          Questions fréquentes
+          <span class="faq-count">({{ filteredFAQ.length }})</span>
+        </h3>
+
+        <div class="faq-list" *ngIf="filteredFAQ.length > 0">
+          <div 
+            *ngFor="let item of filteredFAQ"
+            class="faq-item"
+            [class.expanded]="item.expanded">
+            
+            <button class="faq-question" (click)="toggleFAQ(item)">
+              <div class="question-left">
+                <i [class]="item.icon + ' question-icon'"></i>
+                <span class="question-text">{{ item.question }}</span>
+              </div>
+              <i class="fa-solid fa-chevron-down expand-icon"></i>
+            </button>
+
+            <div class="faq-answer" *ngIf="item.expanded">
+              <p>{{ item.answer }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="filteredFAQ.length === 0">
+          <i class="fa-solid fa-magnifying-glass empty-icon"></i>
+          <p>Aucun résultat trouvé</p>
+          <button class="btn-secondary" (click)="clearSearch(); selectCategory('all')">
+            Réinitialiser la recherche
+          </button>
+        </div>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="contact-section">
+        <div class="contact-card">
+          <div class="contact-icon">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <div class="contact-info">
+            <h4>Besoin d'aide supplémentaire ?</h4>
+            <p>Notre équipe de support est là pour vous aider</p>
+          </div>
+          <button class="btn-primary" (click)="sendEmail()">
+            <i class="fa-solid fa-envelope"></i>
+            Nous contacter
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>

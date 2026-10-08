@@ -1,0 +1,31 @@
+# Build results
+**/bin/
+**/obj/
+**/out/
+**/publish/
+
+# Node modules
+**/node_modules/
+
+# Visual Studio
+**/.vs/
+**/.vscode/
+**/*.user
+**/*.suo
+**/.DS_Store
+
+# Docker
+.env
+docker-compose.override.yml
+
+# Frontend build
+**/dist/
+**/.angular/
+
+# Logs
+**/*.log
+
+# Database
+**/*.db
+**/*.mdf
+**/*.ldf

@@ -1,0 +1,282 @@
+/* =============================================
+   FRIENDS COMPONENT — Cohérent avec dashboard
+   ============================================= */
+
+.page {
+  min-height: 100vh;
+  padding: 1.5rem 2rem 3rem;
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ============ SECTION HEADER ============ */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.sh-right {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ============ FILTER BUTTONS ============ */
+.filter-btn {
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.filter-btn.active {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+}
+
+.filter-btn:hover { border-color: #2563eb; color: #2563eb; }
+
+/* ============ BADGE COUNT ============ */
+.badge-count {
+  background: #ef4444;
+  color: #fff;
+  border-radius: 20px;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+/* ============ CARDS ============ */
+.perf-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.4rem;
+  box-shadow: 0 2px 10px rgba(15,23,42,0.06);
+}
+
+/* ============ EMPTY / LOADING ============ */
+.empty-card {
+  text-align: center;
+  padding: 2.5rem;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+/* ============ FRIEND CARD ============ */
+.friend-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.4rem;
+  transition: box-shadow 0.2s;
+}
+
+.friend-card:hover {
+  box-shadow: 0 6px 20px rgba(15,23,42,0.1);
+}
+
+.friend-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.friend-avatar.pending {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.blocked-avatar {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.friend-info { flex: 1; }
+
+.friend-info h4 {
+  margin: 0 0 0.2rem;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.status.online { color: #10b981; }
+.status.online i { font-size: 0.5rem; }
+.pending-status { color: #f59e0b; }
+
+.friend-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* ============ ACTION BUTTONS ============ */
+.btn-accept {
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s;
+}
+
+.btn-accept:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.btn-reject {
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  border: 1px solid #fee2e2;
+  background: #fff;
+  color: #ef4444;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s;
+}
+
+.btn-reject:hover { background: #fee2e2; }
+
+/* Bouton bloquer */
+.block-btn { color: #ef4444; border-color: #fee2e2; }
+.block-btn:hover { background: #fee2e2; border-color: #ef4444; }
+
+/* ============ SEARCH ============ */
+.search-card h4 {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.search-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  color: #1e293b;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus { border-color: #2563eb; }
+
+.btn-create {
+  padding: 0.6rem 1.2rem;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-create:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+}
+
+.btn-create:disabled {
+  background: #94a3b8;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Label demande envoyée */
+.sent-label {
+  color: #10b981;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* ============ DARK MODE ============ */
+:host-context(body.dark-theme) .page { background: #0d1525; }
+:host-context(body.dark-theme) .perf-card,
+:host-context(body.dark-theme) .friend-card { background: #1e293b; border: 1px solid #334155; }
+:host-context(body.dark-theme) .section-header h3,
+:host-context(body.dark-theme) .friend-info h4,
+:host-context(body.dark-theme) .search-card h4 { color: #f1f5f9; }
+:host-context(body.dark-theme) .filter-btn { background: #1e293b; border-color: #334155; color: #94a3b8; }
+:host-context(body.dark-theme) .filter-btn.active { background: #1e3a5f; color: #7cb9f8; border-color: #1e40af; }
+:host-context(body.dark-theme) .search-input { background: #0f172a; border-color: #334155; color: #f1f5f9; }
+:host-context(body.dark-theme) .btn-reject { background: #1e293b; border-color: #7f1d1d; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 600px) {
+  .page { padding: 1rem; }
+  .section-header { flex-direction: column; align-items: flex-start; }
+  .friend-card { flex-wrap: wrap; }
+  .search-row { flex-direction: column; }
+  .search-input { width: 100%; }
+}

@@ -1,0 +1,155 @@
+<aside class="sidebar" [class.collapsed]="sidebarState.isCollapsed">
+
+  <div class="sidebar-bg-decor">
+    <svg viewBox="0 0 260 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="200" cy="120" rx="120" ry="120" fill="rgba(46,79,138,0.15)"/>
+      <ellipse cx="-20" cy="400" rx="100" ry="100" fill="rgba(122,168,255,0.08)"/>
+      <ellipse cx="180" cy="700" rx="90" ry="90" fill="rgba(46,79,138,0.1)"/>
+    </svg>
+  </div>
+
+  <div class="sidebar-header">
+    <div class="admin-profile" *ngIf="!sidebarState.isCollapsed">
+      <div class="avatar-wrap">
+        <div class="admin-avatar">{{ adminEmail.charAt(0).toUpperCase() }}</div>
+        <span class="avatar-status"></span>
+      </div>
+      <div class="admin-info">
+        <p class="admin-name">{{ adminEmail.split('@')[0] }}</p>
+        <p class="admin-role">Administrateur</p>
+      </div>
+      <button class="toggle-btn" (click)="toggle()">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+    </div>
+    <div class="collapsed-header" *ngIf="sidebarState.isCollapsed">
+      <div class="avatar-wrap" (click)="toggle()">
+        <div class="admin-avatar sm">{{ adminEmail.charAt(0).toUpperCase() }}</div>
+        <span class="avatar-status"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-search" *ngIf="!sidebarState.isCollapsed">
+    <div class="search-wrap">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Rechercher..."/>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <a routerLink="/admin/dashboard" [class.active]="isActive('/admin/dashboard')" class="nav-item">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-chart-line"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Vue d'ensemble</span>
+    </a>
+
+    <a routerLink="/admin/users" [class.active]="isActive('/admin/users')" class="nav-item">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-users"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Utilisateurs</span>
+      <span class="nav-badge blue" *ngIf="!sidebarState.isCollapsed">14</span>
+    </a>
+
+    <a routerLink="/admin/marketplace" [class.active]="isActive('/admin/marketplace')" class="nav-item">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-store"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Marketplace</span>
+    </a>
+
+    <a routerLink="/admin/courses" [class.active]="isActive('/admin/courses')" class="nav-item">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-graduation-cap"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Cours &amp; Formation</span>
+    </a>
+
+    <a routerLink="/admin/reports" [class.active]="isActive('/admin/reports')" class="nav-item">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-flag"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Signalements</span>
+      <span class="nav-badge red" *ngIf="!sidebarState.isCollapsed">12</span>
+    </a>
+
+    <a routerLink="/admin/chat" [class.active]="isActive('/admin/chat')" class="nav-item">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-comments"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Messages</span>
+    </a>
+
+    <a routerLink="/admin/analytics" [class.active]="isActive('/admin/analytics')" class="nav-item">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-chart-pie"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Statistiques</span>
+    </a>
+
+    <a routerLink="/admin/payments" [class.active]="isActive('/admin/payments')" class="nav-item">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-credit-card"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Paiements</span>
+    </a>
+
+    <!-- E-COMMERCE SECTION -->
+    <div class="nav-divider" *ngIf="!sidebarState.isCollapsed">
+      <span>E-Commerce</span>
+    </div>
+    <div class="nav-divider-line" *ngIf="sidebarState.isCollapsed"></div>
+
+    <a routerLink="/admin/ecommerce/products"
+       [class.active]="isActive('/admin/ecommerce/products')"
+       class="nav-item"
+       [class.ecom-item]="!sidebarState.isCollapsed">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-box"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Produits</span>
+    </a>
+
+    <a routerLink="/admin/ecommerce/orders"
+       [class.active]="isActive('/admin/ecommerce/orders')"
+       class="nav-item"
+       [class.ecom-item]="!sidebarState.isCollapsed">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-clipboard-list"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Commandes</span>
+    </a>
+
+    <a routerLink="/admin/ecommerce/promotions"
+       [class.active]="isActive('/admin/ecommerce/promotions')"
+       class="nav-item"
+       [class.ecom-item]="!sidebarState.isCollapsed">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-tag"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Promotions</span>
+    </a>
+
+    <a routerLink="/admin/ecommerce/reviews"
+       [class.active]="isActive('/admin/ecommerce/reviews')"
+       class="nav-item"
+       [class.ecom-item]="!sidebarState.isCollapsed">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-star"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Avis</span>
+    </a>
+
+    <a routerLink="/admin/ecommerce/inventory"
+       [class.active]="isActive('/admin/ecommerce/inventory')"
+       class="nav-item"
+       [class.ecom-item]="!sidebarState.isCollapsed">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-warehouse"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Inventaire</span>
+    </a>
+
+    <!-- SYSTÈME -->
+    <div class="nav-divider" *ngIf="!sidebarState.isCollapsed">
+      <span>Système</span>
+    </div>
+    <div class="nav-divider-line" *ngIf="sidebarState.isCollapsed"></div>
+
+    <a routerLink="/admin/settings" [class.active]="isActive('/admin/settings')" class="nav-item">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-gear"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Paramètres</span>
+    </a>
+
+    <a routerLink="/admin/help" [class.active]="isActive('/admin/help')" class="nav-item">
+      <div class="nav-icon-wrap"><i class="fa-solid fa-circle-question"></i></div>
+      <span class="nav-label" *ngIf="!sidebarState.isCollapsed">Aide</span>
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="logout-btn" (click)="logout()">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span *ngIf="!sidebarState.isCollapsed">Déconnexion</span>
+    </button>
+  </div>
+
+</aside>

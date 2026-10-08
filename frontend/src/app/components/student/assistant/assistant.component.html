@@ -1,0 +1,177 @@
+<div class="assistant-wrap" [class.dark]="isDarkMode">
+  <!-- ===== SIDEBAR ===== -->
+  <div class="aside" [class.aside-hidden]="!showSidebar">
+    <div class="aside-header">
+      <div class="aside-brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <span class="brand-name">UniAssist</span>
+        <span class="status-dot"></span>
+      </div>
+      <button class="btn-new-conv" (click)="newConversation()">
+        <i class="fa-solid fa-plus"></i>
+        Nouvelle discussion
+      </button>
+    </div>
+
+    <div class="aside-body">
+      <ng-container *ngIf="conversations.length > 0">
+        <p class="conv-section-label">Historique</p>
+        <div class="conv-list">
+          <div
+            class="conv-item"
+            *ngFor="let conv of conversations"
+            [class.conv-active]="conversationId === conv._id"
+            (click)="loadConversation(conv)"
+          >
+            <div class="conv-item-icon">
+              <i class="fa-regular fa-message"></i>
+            </div>
+            <div class="conv-item-info">
+              <p class="conv-preview">{{ getConversationPreview(conv) }}</p>
+              <span class="conv-date">{{ getConversationDate(conv) }}</span>
+            </div>
+            <button class="btn-del" (click)="deleteConversation(conv._id, $event)">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="no-conv" *ngIf="conversations.length === 0">
+        <i class="fa-regular fa-comment-dots"></i>
+        <p>Aucune conversation</p>
+      </div>
+    </div>
+
+    <div class="aside-footer">
+      <button class="btn-theme" (click)="toggleDarkMode()">
+        <i class="fa-solid fa-moon" *ngIf="!isDarkMode"></i>
+        <i class="fa-solid fa-sun" *ngIf="isDarkMode"></i>
+        <span>{{ isDarkMode ? 'Mode clair' : 'Mode sombre' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== CHAT ===== -->
+  <div class="chat-area">
+
+    <!-- Topbar -->
+    <div class="chat-topbar">
+      <button class="btn-icon" (click)="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="topbar-title">
+        <span class="topbar-dot"></span>
+        <span>Assistant IA Étudiant</span>
+      </div>
+      <button class="btn-icon" (click)="newConversation()" title="Nouvelle discussion">
+        <i class="fa-solid fa-pen-to-square"></i>
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div class="messages-area">
+      <div class="messages-inner">
+
+        <div
+          class="msg-row"
+          *ngFor="let msg of messages"
+          [class.msg-user]="msg.role === 'user'"
+          [class.msg-ai]="msg.role === 'assistant'"
+        >
+          <!-- Avatar AI -->
+          <div class="avatar avatar-ai" *ngIf="msg.role === 'assistant'">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+
+          <!-- Bubble -->
+          <div class="bubble" [class.bubble-ai]="msg.role === 'assistant'" [class.bubble-user]="msg.role === 'user'">
+
+            <!-- Intent badge -->
+            <div class="intent-badge" *ngIf="msg.intent && msg.intent !== 'general'">
+              <i class="fa-solid fa-file-lines" *ngIf="msg.intent === 'exam_reminder'"></i>
+              <i class="fa-solid fa-check-square" *ngIf="msg.intent === 'create_task'"></i>
+              <i class="fa-solid fa-book" *ngIf="msg.intent === 'course_info'"></i>
+              <span>{{ msg.intent === 'exam_reminder' ? 'Examen détecté' : msg.intent === 'create_task' ? 'Tâche suggérée' : 'Info cours' }}</span>
+            </div>
+
+            <p class="bubble-text" [innerHTML]="formatMessage(msg.content)"></p>
+            <span class="bubble-time">{{ msg.timestamp | date:'HH:mm' }}</span>
+
+            <!-- Suggestions -->
+        <div class="suggestions" *ngIf="msg.role === 'assistant' && (msg.suggestions?.length || 0) > 0">
+              <button
+                class="suggestion-chip"
+                *ngFor="let s of msg.suggestions"
+                (click)="sendMessage(s)"
+              >
+                {{ s }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Avatar User -->
+          <div class="avatar avatar-user" *ngIf="msg.role === 'user'">
+            <i class="fa-solid fa-user"></i>
+          </div>
+        </div>
+
+        <!-- Typing -->
+        <div class="msg-row msg-ai" *ngIf="isTyping">
+          <div class="avatar avatar-ai">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="bubble bubble-ai typing-bubble">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+
+        <div #messagesEnd></div>
+      </div>
+    </div>
+
+    <!-- Quick questions -->
+    <div class="quick-area" *ngIf="messages.length <= 1">
+      <div class="quick-grid">
+        <button
+          class="quick-card"
+          *ngFor="let q of quickQuestions"
+          (click)="sendMessage(q)"
+        >
+          <span>{{ q }}</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-area">
+      <div class="input-box" [class.input-focused]="inputFocused">
+        <textarea
+          #messageInput
+          [(ngModel)]="inputMessage"
+          (keydown)="onKeyDown($event)"
+          (focus)="inputFocused = true"
+          (blur)="inputFocused = false"
+          placeholder="Posez votre question... (Entrée pour envoyer)"
+          rows="1"
+          [disabled]="isTyping"
+        ></textarea>
+        <button
+          class="btn-send"
+          (click)="sendMessage()"
+          [disabled]="!inputMessage.trim() || isTyping"
+        >
+          <i class="fa-solid fa-paper-plane" *ngIf="!isTyping"></i>
+          <i class="fa-solid fa-spinner fa-spin" *ngIf="isTyping"></i>
+        </button>
+      </div>
+      <p class="input-hint">UniAssist peut faire des erreurs. Vérifiez les informations importantes.</p>
+    </div>
+
+  </div>
+</div>

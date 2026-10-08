@@ -1,0 +1,9 @@
+replicaCount: 2
+image:
+  repository: yousra00/favorite-service
+  tag: "latest"
+service:
+  type: ClusterIP
+  port: 8083
+env:
+  CATALOG_SERVICE_URL: "http://catalogservice:8081"

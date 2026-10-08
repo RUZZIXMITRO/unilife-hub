@@ -1,1 +1,13 @@
-<p>features works!</p>
+<section class="features" id="features">
+    <div class="container">
+        <h2 class="section-title">Fonctionnalités Principales</h2>
+        <p class="section-subtitle">Tous les outils dont vous avez besoin pour réussir</p>
+        <div class="features-grid">
+            <div class="feature-card" *ngFor="let feature of features">
+                <div class="feature-icon"><i [class]="feature.icon"></i></div>
+                <h3>{{ feature.title }}</h3>
+                <p>{{ feature.description }}</p>
+            </div>
+        </div>
+    </div>
+</section>

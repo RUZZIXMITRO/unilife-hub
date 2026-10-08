@@ -1,1 +1,15 @@
-<p>process works!</p>
+<section class="process" id="process">
+    <div class="container">
+        <h2 class="section-title">Comment ça fonctionne ?</h2>
+        <p class="section-subtitle">Un processus simple en 4 étapes</p>
+        <div class="timeline">
+            <div class="timeline-item" #timelineItem *ngFor="let item of timelineData">
+                <div class="timeline-content">
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.description }}</p>
+                </div>
+                <div class="timeline-icon"><i [class]="item.icon"></i></div>
+            </div>
+        </div>
+    </div>
+</section>

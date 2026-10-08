@@ -1,0 +1,91 @@
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2><i class="fa-solid fa-star"></i> Mes Avis</h2>
+      <p>{{ reviews.length }} avis soumis</p>
+    </div>
+    <button class="btn-shop" (click)="goToShop()">
+      <i class="fa-solid fa-store"></i> Boutique
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-col" *ngIf="loading">
+    <div class="skeleton" *ngFor="let i of [1,2,3]"></div>
+  </div>
+
+  <!-- Empty -->
+  <div class="empty-state" *ngIf="!loading && reviews.length === 0">
+    <div class="empty-icon">
+      <i class="fa-regular fa-star"></i>
+    </div>
+    <h3>Aucun avis</h3>
+    <p>Vous n'avez pas encore laissé d'avis sur nos produits</p>
+    <button class="btn-shop-empty" (click)="goToShop()">
+      <i class="fa-solid fa-store"></i> Explorer la boutique
+    </button>
+  </div>
+
+  <!-- Reviews list -->
+  <div class="reviews-list" *ngIf="!loading && reviews.length > 0">
+    <div class="review-card" *ngFor="let review of reviews">
+
+      <div class="review-header">
+        <div class="product-info" (click)="goToProduct(review.productId)">
+          <div class="product-icon">
+            <i class="fa-solid fa-box"></i>
+          </div>
+          <div>
+            <p class="product-id">Produit #{{ review.productId | slice:0:8 }}...</p>
+            <span class="view-product">Voir le produit →</span>
+          </div>
+        </div>
+
+        <div class="status-badge" [ngClass]="getStatusClass(review.status)">
+          <i class="fa-solid fa-circle"></i>
+          {{ getStatusLabel(review.status) }}
+        </div>
+
+        <div class="review-date">
+          <i class="fa-regular fa-calendar"></i>
+          {{ review.createdAt | date:'dd/MM/yyyy' }}
+        </div>
+      </div>
+
+      <div class="review-body">
+        <div class="stars-row">
+          <span
+            *ngFor="let s of getStars(review.rating)"
+            class="star"
+            [class.filled]="s === 1"
+          >★</span>
+          <span class="rating-num">{{ review.rating }}/5</span>
+        </div>
+        <p class="comment">{{ review.comment }}</p>
+
+        <div class="badges-row">
+          <span class="verified-badge" *ngIf="review.verifiedPurchase">
+            <i class="fa-solid fa-circle-check"></i> Achat vérifié
+          </span>
+          <span class="helpful-badge" *ngIf="review.helpfulCount > 0">
+            <i class="fa-regular fa-thumbs-up"></i>
+            {{ review.helpfulCount }} personne(s) ont trouvé cet avis utile
+          </span>
+        </div>
+
+        <div class="admin-response" *ngIf="review.adminResponse">
+          <div class="admin-header">
+            <i class="fa-solid fa-store"></i>
+            <strong>Réponse de l'équipe UniLife</strong>
+            <span>{{ review.adminResponse.respondedAt | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <p>{{ review.adminResponse.response }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

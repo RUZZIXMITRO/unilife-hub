@@ -1,0 +1,489 @@
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div>
+      <h1>Vue d'ensemble</h1>
+      <p class="subtitle">Tableau de bord administrateur — UniLife Hub</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-secondary">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>30 derniers jours</span>
+      </button>
+      <button class="btn-primary" (click)="openAddUserModal()">
+        <i class="fa-solid fa-user-plus"></i>
+        <span>Ajouter utilisateur</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-top">
+        <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-info">
+          <p class="stat-label">Utilisateurs Actifs</p>
+          <h2 class="stat-value" *ngIf="!isLoadingStats">{{ stats[0].value }}</h2>
+          <h2 class="stat-value" *ngIf="isLoadingStats"><i class="fa-solid fa-spinner fa-spin"></i></h2>
+        </div>
+      </div>
+      <div class="stat-footer">
+        <span class="stat-trend positive"><i class="fa-solid fa-arrow-up"></i> {{ stats[0].change }}</span>
+        <span class="stat-period">ce mois</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-top">
+        <div class="stat-icon green"><i class="fa-solid fa-store"></i></div>
+        <div class="stat-info">
+          <p class="stat-label">Ventes Marketplace</p>
+          <h2 class="stat-value">{{ stats[1].value }}</h2>
+        </div>
+      </div>
+      <div class="stat-footer">
+        <span class="stat-trend positive"><i class="fa-solid fa-arrow-up"></i> {{ stats[1].change }}</span>
+        <span class="stat-period">ce mois</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-top">
+        <div class="stat-icon navy"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div class="stat-info">
+          <p class="stat-label">Cours Publiés</p>
+          <h2 class="stat-value">{{ stats[2].value }}</h2>
+        </div>
+      </div>
+      <div class="stat-footer">
+        <span class="stat-trend positive"><i class="fa-solid fa-arrow-up"></i> {{ stats[2].change }}</span>
+        <span class="stat-period">ce mois</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-top">
+        <div class="stat-icon red"><i class="fa-solid fa-flag"></i></div>
+        <div class="stat-info">
+          <p class="stat-label">Signalements</p>
+          <h2 class="stat-value">{{ stats[3].value }}</h2>
+        </div>
+      </div>
+      <div class="stat-footer">
+        <span class="stat-trend negative"><i class="fa-solid fa-arrow-down"></i> {{ stats[3].change }}</span>
+        <span class="stat-period">ce mois</span>
+      </div>
+    </div>
+
+    <div class="stat-card add-card">
+      <p class="add-card-label">Actions rapides</p>
+      <div class="add-card-actions">
+        <button class="add-btn" (click)="openAddUserModal()">
+          <i class="fa-solid fa-user-plus"></i><span>Utilisateur</span>
+        </button>
+        <button class="add-btn">
+          <i class="fa-solid fa-graduation-cap"></i><span>Cours</span>
+        </button>
+        <button class="add-btn">
+          <i class="fa-solid fa-box"></i><span>Produit</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- COLONNE GAUCHE -->
+    <div class="left-col">
+
+      <!-- Charts -->
+      <div class="charts-row">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>Répartition Utilisateurs</h3>
+              <p class="card-subtitle">Actifs vs Inactifs</p>
+            </div>
+          </div>
+          <div class="card-body chart-body">
+            <div class="donut-wrap">
+              <svg viewBox="0 0 36 36" class="donut-svg">
+                <circle class="donut-bg" cx="18" cy="18" r="15.9" fill="none" stroke-width="3.5"/>
+                <circle class="donut-segment" cx="18" cy="18" r="15.9" fill="none" stroke-width="3.5"
+                  stroke-dasharray="77 23" stroke-dashoffset="25"/>
+              </svg>
+              <div class="donut-center">
+                <span class="donut-value" *ngIf="!isLoadingStats">{{ stats[0].value }}</span>
+                <span class="donut-value" *ngIf="isLoadingStats">...</span>
+                <span class="donut-label">utilisateurs</span>
+              </div>
+            </div>
+            <div class="donut-legend">
+              <div class="legend-item">
+                <span class="legend-dot navy-dot"></span>
+                <span class="legend-text">Actifs</span>
+                <span class="legend-val" *ngIf="!isLoadingStats">{{ stats[0].value }}</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot light-dot"></span>
+                <span class="legend-text">Inactifs</span>
+                <span class="legend-val">~23%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card chart-wide">
+          <div class="card-header">
+            <div>
+              <h3>Activité Mensuelle</h3>
+              <p class="card-subtitle">Connexions par mois</p>
+            </div>
+          </div>
+          <div class="card-body chart-body">
+            <div class="bar-chart">
+              <div class="bar-group" *ngFor="let bar of monthlyBars">
+                <div class="bar-wrap">
+                  <div class="bar" [style.height.%]="bar.pct"></div>
+                </div>
+                <span class="bar-label">{{ bar.label }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cours populaires -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3>Cours les Plus Populaires</h3>
+            <p class="card-subtitle">Classement par inscriptions</p>
+          </div>
+          <button class="link-btn">Voir tout <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div class="card-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cours</th>
+                <th>Instructeur</th>
+                <th>Étudiants</th>
+                <th>Note</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let course of topCourses; let i = index">
+                <td><span class="rank-badge">{{ i + 1 }}</span></td>
+                <td><span class="course-title">{{ course.title }}</span></td>
+                <td><span class="course-instructor">{{ course.instructor }}</span></td>
+                <td><span class="students-count"><i class="fa-solid fa-users"></i> {{ course.students }}</span></td>
+                <td><span class="rating-badge"><i class="fa-solid fa-star"></i> {{ course.rating }}</span></td>
+                <td><span class="course-status">Gratuit</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Activités récentes -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3>Activités Récentes</h3>
+            <p class="card-subtitle">Dernières actions des utilisateurs</p>
+          </div>
+          <button class="link-btn">Voir tout <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="activities-list">
+            <div *ngFor="let activity of recentActivities" class="activity-item">
+              <div class="activity-avatar" [class]="activity.color">{{ activity.avatar }}</div>
+              <div class="activity-content">
+                <p class="activity-text"><strong>{{ activity.user }}</strong> {{ activity.action }}</p>
+                <p class="activity-detail">{{ activity.title }}</p>
+              </div>
+              <div class="activity-meta">
+                <span class="activity-time">{{ activity.time }}</span>
+                <div class="activity-icon" [class]="activity.color">
+                  <i class="fa-solid {{ activity.icon }}"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aperçu global modules -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3>Aperçu Global</h3>
+            <p class="card-subtitle">Performance des modules ce mois</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="overview-grid">
+            <div class="overview-item">
+              <div class="overview-icon blue"><i class="fa-solid fa-store"></i></div>
+              <div class="overview-info">
+                <span class="overview-value">477</span>
+                <span class="overview-label">Ventes Marketplace</span>
+              </div>
+              <span class="overview-trend positive">+18%</span>
+            </div>
+            <div class="overview-item">
+              <div class="overview-icon indigo"><i class="fa-solid fa-users"></i></div>
+              <div class="overview-info">
+                <span class="overview-value">240</span>
+                <span class="overview-label">Posts Réseau Social</span>
+              </div>
+              <span class="overview-trend positive">+12%</span>
+            </div>
+            <div class="overview-item">
+              <div class="overview-icon teal"><i class="fa-solid fa-calendar-check"></i></div>
+              <div class="overview-info">
+                <span class="overview-value">142</span>
+                <span class="overview-label">Tâches complétées</span>
+              </div>
+              <span class="overview-trend positive">+9%</span>
+            </div>
+            <div class="overview-item">
+              <div class="overview-icon orange"><i class="fa-solid fa-cart-shopping"></i></div>
+              <div class="overview-info">
+                <span class="overview-value">89</span>
+                <span class="overview-label">Commandes E-commerce</span>
+              </div>
+              <span class="overview-trend positive">+24%</span>
+            </div>
+            <div class="overview-item">
+              <div class="overview-icon navy"><i class="fa-solid fa-graduation-cap"></i></div>
+              <div class="overview-info">
+                <span class="overview-value">3,366</span>
+                <span class="overview-label">Inscriptions cours</span>
+              </div>
+              <span class="overview-trend positive">+7%</span>
+            </div>
+            <div class="overview-item">
+              <div class="overview-icon red"><i class="fa-solid fa-flag"></i></div>
+              <div class="overview-info">
+                <span class="overview-value">{{ stats[3].value }}</span>
+                <span class="overview-label">Signalements actifs</span>
+              </div>
+              <span class="overview-trend negative">-15%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COLONNE DROITE -->
+    <div class="right-col">
+
+      <!-- Services actifs -->
+      <div class="card">
+        <div class="card-header"><h3>Services Actifs</h3></div>
+        <div class="card-body">
+          <div class="service-list">
+            <div class="service-item">
+              <div class="service-icon blue"><i class="fa-solid fa-store"></i></div>
+              <div class="service-info"><h4>Marketplace</h4><p>477 ventes actives</p></div>
+              <span class="service-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+            </div>
+            <div class="service-item">
+              <div class="service-icon navy"><i class="fa-solid fa-graduation-cap"></i></div>
+              <div class="service-info"><h4>Cours & Formation</h4><p>{{ stats[2].value }} cours publiés</p></div>
+              <span class="service-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+            </div>
+            <div class="service-item">
+              <div class="service-icon teal"><i class="fa-solid fa-calendar-check"></i></div>
+              <div class="service-info"><h4>Agenda & To-do</h4><p>Synchronisé</p></div>
+              <span class="service-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+            </div>
+            <div class="service-item">
+              <div class="service-icon indigo"><i class="fa-solid fa-users"></i></div>
+              <div class="service-info"><h4>Réseau Social</h4><p>{{ recentActivities.length }} posts aujourd'hui</p></div>
+              <span class="service-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+            </div>
+            <div class="service-item">
+              <div class="service-icon orange"><i class="fa-solid fa-robot"></i></div>
+              <div class="service-info"><h4>AI Shopping Assistant</h4><p>Module e-commerce</p></div>
+              <span class="service-badge beta">Beta</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marketplace -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3>Marketplace</h3>
+            <p class="card-subtitle">Ventes par catégorie</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="marketplace-list">
+            <div *ngFor="let item of marketplaceStats" class="marketplace-item">
+              <div class="marketplace-icon" [class]="item.color"><i class="fa-solid fa-tag"></i></div>
+              <div class="marketplace-info">
+                <h4>{{ item.category }}</h4>
+                <p class="sales-count">{{ item.sales }} ventes</p>
+              </div>
+              <div class="marketplace-revenue">
+                <p class="revenue-amount">{{ item.revenue }}</p>
+                <span class="revenue-trend positive">{{ item.trend }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Réseau Social -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3>Réseau Social</h3>
+            <p class="card-subtitle">Aperçu activité</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="social-stats">
+            <div class="social-stat-item">
+              <div class="social-icon indigo"><i class="fa-solid fa-comment"></i></div>
+              <div class="social-info"><h4>Posts publiés</h4><p>{{ recentActivities.length }} aujourd'hui</p></div>
+              <span class="social-trend positive">+12%</span>
+            </div>
+            <div class="social-stat-item">
+              <div class="social-icon blue"><i class="fa-solid fa-heart"></i></div>
+              <div class="social-info"><h4>Interactions</h4><p>248 cette semaine</p></div>
+              <span class="social-trend positive">+8%</span>
+            </div>
+            <div class="social-stat-item">
+              <div class="social-icon teal"><i class="fa-solid fa-user-group"></i></div>
+              <div class="social-info">
+                <h4>Membres actifs</h4>
+                <p *ngIf="!isLoadingStats">{{ stats[0].value }} en ligne</p>
+              </div>
+              <span class="social-trend positive">+5%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alertes -->
+      <div class="card">
+        <div class="card-header"><h3>Alertes Système</h3></div>
+        <div class="card-body">
+          <div class="alerts-list">
+            <div class="alert-item warning">
+              <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+              <div><p class="alert-title">Serveur de paiement</p><p class="alert-message">Latence élevée détectée</p></div>
+            </div>
+            <div class="alert-item success">
+              <div class="alert-icon"><i class="fa-solid fa-circle-check"></i></div>
+              <div><p class="alert-title">Sauvegarde complétée</p><p class="alert-message">Données sécurisées à 14:30</p></div>
+            </div>
+            <div class="alert-item info">
+              <div class="alert-icon"><i class="fa-solid fa-circle-info"></i></div>
+              <div><p class="alert-title">Mise à jour disponible</p><p class="alert-message">Version 2.1.0 prête</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DRAWER ADD USER -->
+  <div class="drawer-overlay" *ngIf="showAddUserModal" (click)="closeAddUserModal()"></div>
+  <div class="drawer" [class.open]="showAddUserModal">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <div class="drawer-title-icon"><i class="fa-solid fa-user-plus"></i></div>
+        <div><h3>Ajouter un utilisateur</h3><p>Créer un nouveau compte étudiant</p></div>
+      </div>
+      <button class="drawer-close" (click)="closeAddUserModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <p class="drawer-section-label">Informations principales</p>
+        <div class="drawer-field">
+          <label>Nom complet <span class="required">*</span></label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" [(ngModel)]="newUser.name" placeholder="Ex: Yousra Benchouat" class="drawer-input"/>
+          </div>
+        </div>
+        <div class="drawer-field">
+          <label>Email <span class="required">*</span></label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" [(ngModel)]="newUser.email" placeholder="email@exemple.com" class="drawer-input"/>
+          </div>
+        </div>
+        <div class="drawer-field">
+          <label>Mot de passe <span class="required">*</span></label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" [(ngModel)]="newUser.password" placeholder="Minimum 8 caractères" class="drawer-input"/>
+          </div>
+        </div>
+      </div>
+      <div class="drawer-section">
+        <p class="drawer-section-label">Informations académiques</p>
+        <div class="drawer-field">
+          <label>Université</label>
+          <div class="field-input-wrap">
+            <i class="fa-solid fa-building-columns"></i>
+            <input type="text" [(ngModel)]="newUser.university" placeholder="Ex: EHEI Oujda" class="drawer-input"/>
+          </div>
+        </div>
+        <div class="drawer-row">
+          <div class="drawer-field">
+            <label>Numéro étudiant</label>
+            <div class="field-input-wrap">
+              <i class="fa-solid fa-id-card"></i>
+              <input type="text" [(ngModel)]="newUser.studentId" placeholder="STU12345" class="drawer-input"/>
+            </div>
+          </div>
+          <div class="drawer-field">
+            <label>Année</label>
+            <div class="field-input-wrap">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <select [(ngModel)]="newUser.academicYear" class="drawer-input">
+                <option value="">-- Année --</option>
+                <option value="1ère année">1ère année</option>
+                <option value="2ème année">2ème année</option>
+                <option value="3ème année">3ème année</option>
+                <option value="4ème année">4ème année</option>
+                <option value="5ème année">5ème année</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="add-user-error" *ngIf="addUserError">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ addUserError }}
+      </div>
+      <div class="add-user-success" *ngIf="addUserSuccess">
+        <i class="fa-solid fa-circle-check"></i> {{ addUserSuccess }}
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="drawer-btn-cancel" (click)="closeAddUserModal()">Annuler</button>
+      <button class="drawer-btn-confirm" (click)="addUser()" [disabled]="isAddingUser">
+        <i class="fa-solid fa-spinner fa-spin" *ngIf="isAddingUser"></i>
+        <i class="fa-solid fa-user-plus" *ngIf="!isAddingUser"></i>
+        {{ isAddingUser ? 'Création...' : 'Créer le compte' }}
+      </button>
+    </div>
+  </div>
+
+</div>

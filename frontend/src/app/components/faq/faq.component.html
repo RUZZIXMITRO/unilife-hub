@@ -1,1 +1,19 @@
-<p>faq works!</p>
+<section class="faq" id="faq">
+    <div class="container">
+        <h2 class="section-title">Questions Fréquentes</h2>
+        <p class="section-subtitle">Trouvez les réponses à vos questions</p>
+        <div class="faq-container">
+            <div class="faq-item" *ngFor="let faq of faqs; let i = index" 
+                 [class.active]="faq.isOpen"
+                 [style.animation-delay]="(i * 0.1) + 's'">
+                <div class="faq-question" (click)="toggleFaq(i)">
+                    <span>{{ faq.question }}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    {{ faq.answer }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

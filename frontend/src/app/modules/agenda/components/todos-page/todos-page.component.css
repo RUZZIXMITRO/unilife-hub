@@ -1,0 +1,193 @@
+:host { display: block; }
+.todos-page { padding: 1.5rem 2rem; font-family: 'Poppins', sans-serif; }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #dde3ef;
+}
+
+.page-header h1 { font-size: 1.5rem; color: #0d1a30; margin: 0; }
+.subtitle { color: #7a90b0; font-size: 0.85rem; margin: 0.2rem 0 0; }
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-secondary {
+  background: #eef0f6;
+  color: #3a4d6a;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.form-card {
+  background: white;
+  border: 1px solid #dde3ef;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.full-width { grid-column: 1 / -1; }
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #3a4d6a;
+  margin-bottom: 0.4rem;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #dde3ef;
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid #dde3ef;
+  padding-top: 1rem;
+}
+
+.filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.search {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 1px solid #dde3ef;
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.sort {
+  padding: 0.6rem 1rem;
+  border: 1px solid #dde3ef;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #dde3ef;
+  background: white;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: inherit;
+  color: #3a4d6a;
+}
+
+.tabs button.active { background: #1a2d55; color: white; border-color: #1a2d55; }
+
+.empty {
+  padding: 3rem;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  color: #7a90b0;
+}
+
+.todos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.todo-card {
+  background: white;
+  border: 1px solid #dde3ef;
+  border-radius: 12px;
+  padding: 1.25rem;
+  border-left: 4px solid #2563eb;
+}
+
+.todo-card.completed { opacity: 0.6; }
+.todo-card.completed h4 { text-decoration: line-through; }
+.todo-card.overdue { border-left-color: #ef4444; background: #fef2f2; }
+
+.todo-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prio {
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.prio-high { background: #fee2e2; color: #b91c1c; }
+.prio-medium { background: #fef3c7; color: #b45309; }
+.prio-low { background: #d1fae5; color: #047857; }
+
+.actions { margin-left: auto; display: flex; gap: 0.25rem; }
+
+.actions button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #dde3ef;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.actions button.del:hover { background: #fde8ec; border-color: #e03150; }
+
+.todo-card h4 { font-size: 0.95rem; color: #0d1a30; margin-bottom: 0.4rem; }
+.todo-card p { font-size: 0.8rem; color: #7a90b0; margin-bottom: 0.75rem; line-height: 1.4; }
+
+.meta { display: flex; gap: 0.4rem; flex-wrap: wrap; font-size: 0.7rem; }
+
+.meta span {
+  background: #eef0f6;
+  color: #3a4d6a;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.overdue-badge { background: #fee2e2 !important; color: #b91c1c !important; font-weight: 700 !important; }

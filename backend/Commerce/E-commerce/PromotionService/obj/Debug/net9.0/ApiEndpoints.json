@@ -1,0 +1,146 @@
+[
+  {
+    "ContainingType": "PromotionService.Controllers.PromotionController",
+    "Method": "Create",
+    "RelativePath": "api/promotions",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PromotionService.DTOs.Requests.CreatePromotionRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromotionService.DTOs.Responses.ApiResponse\u00601[[PromotionService.DTOs.Responses.PromotionResponse, PromotionService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromotionService.Controllers.PromotionController",
+    "Method": "GetAll",
+    "RelativePath": "api/promotions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "PromotionService.DTOs.Responses.ApiResponse\u00601[[System.Collections.Generic.List\u00601[[PromotionService.DTOs.Responses.PromotionResponse, PromotionService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromotionService.Controllers.PromotionController",
+    "Method": "Deactivate",
+    "RelativePath": "api/promotions/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromotionService.DTOs.Responses.ApiResponse\u00601[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromotionService.Controllers.PromotionController",
+    "Method": "GetActive",
+    "RelativePath": "api/promotions/active",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "PromotionService.DTOs.Responses.ApiResponse\u00601[[System.Collections.Generic.List\u00601[[PromotionService.DTOs.Responses.PromotionResponse, PromotionService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromotionService.Controllers.PromotionController",
+    "Method": "Apply",
+    "RelativePath": "api/promotions/apply",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PromotionService.DTOs.Requests.ApplyPromoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromotionService.DTOs.Responses.ApiResponse\u00601[[PromotionService.DTOs.Responses.ApplyPromoResponse, PromotionService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PromotionService.Controllers.PromotionController",
+    "Method": "Use",
+    "RelativePath": "api/promotions/use",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PromotionService.DTOs.Requests.UsePromoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PromotionService.DTOs.Responses.ApiResponse\u00601[[PromotionService.DTOs.Responses.ApplyPromoResponse, PromotionService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]

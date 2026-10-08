@@ -1,0 +1,128 @@
+<div class="page">
+
+  <!-- Toast notification -->
+  <div class="toast-success" *ngIf="successMessage">
+    <i class="fa-solid fa-circle-check"></i> {{ successMessage }}
+  </div>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2>Boutique Étudiants</h2>
+      <p>Découvrez nos produits sélectionnés pour vous</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-cart" routerLink="/student/ecommerce/cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        Mon Panier
+      </button>
+      <button class="btn-orders" routerLink="/student/ecommerce/orders">
+        <i class="fa-solid fa-box"></i>
+        Mes Commandes
+      </button>
+    </div>
+  </div>
+
+  <!-- Search + Filters -->
+  <div class="filters-row">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        type="text"
+        placeholder="Rechercher un produit..."
+        [(ngModel)]="searchKeyword"
+        (input)="onSearch()"
+      />
+    </div>
+    <div class="category-tabs">
+      <button
+        class="cat-tab"
+        [class.active]="selectedCategory === 'all'"
+        (click)="filterByCategory('all')"
+      >
+        Tous
+      </button>
+      <button
+        *ngFor="let cat of categories"
+        class="cat-tab"
+        [class.active]="selectedCategory === cat.id"
+        (click)="filterByCategory(cat.id)"
+      >
+        {{ cat.name }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-row" *ngIf="loading">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6,7,8]"></div>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid" *ngIf="!loading">
+
+    <div class="product-card" *ngFor="let product of filteredProducts">
+
+      <!-- Image -->
+      <div class="product-img-wrap" (click)="goToDetail(product.id)">
+        <img [src]="getPrimaryImage(product)" [alt]="product.title" class="product-img" />
+        <button
+          class="btn-fav"
+          [class.active]="isFavorite(product.id)"
+          (click)="$event.stopPropagation(); toggleFavorite(product)"
+        >
+          <i class="fa-solid fa-heart" *ngIf="isFavorite(product.id)"></i>
+          <i class="fa-regular fa-heart" *ngIf="!isFavorite(product.id)"></i>
+        </button>
+        <span class="badge-condition">{{ product.condition }}</span>
+      </div>
+
+      <!-- Info -->
+      <div class="product-info">
+        <p class="product-category">{{ product.categoryName || 'Général' }}</p>
+        <h4 class="product-title" (click)="goToDetail(product.id)">{{ product.title }}</h4>
+
+        <!-- Stars -->
+        <div class="stars-row" *ngIf="product.averageRating">
+          <span
+            *ngFor="let star of getStars(product.averageRating || 0)"
+            class="star"
+            [class.filled]="star === 1"
+          >★</span>
+          <span class="reviews-count">({{ product.totalReviews }})</span>
+        </div>
+
+        <!-- Price + Stock -->
+        <div class="price-row">
+          <span class="price">{{ product.price | number:'1.2-2' }} EUR</span>
+          <span class="stock" *ngIf="product.stockQuantity !== null">
+            <i class="fa-solid fa-circle" [style.color]="product.stockQuantity! > 0 ? '#10b981' : '#ef4444'"></i>
+            {{ product.stockQuantity! > 0 ? 'En stock' : 'Rupture' }}
+          </span>
+        </div>
+
+        <!-- Add to cart -->
+        <button
+          class="btn-add-cart"
+          (click)="addToCart(product)"
+          [disabled]="addingToCart === product.id || product.stockQuantity === 0"
+        >
+          <i class="fa-solid fa-spinner fa-spin" *ngIf="addingToCart === product.id"></i>
+          <i class="fa-solid fa-cart-plus" *ngIf="addingToCart !== product.id"></i>
+          {{ addingToCart === product.id ? 'Ajout...' : 'Ajouter au panier' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="filteredProducts.length === 0">
+      <i class="fa-solid fa-box-open"></i>
+      <p>Aucun produit trouvé</p>
+      <button class="btn-reset" (click)="filterByCategory('all'); searchKeyword=''">
+        Voir tous les produits
+      </button>
+    </div>
+
+  </div>
+
+</div>

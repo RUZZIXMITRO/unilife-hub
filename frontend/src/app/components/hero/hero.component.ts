@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./hero.component.css']
 })
 export class HeroComponent {
-
+  scrollToAbout() {
+    const element = document.getElementById('about');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 }
